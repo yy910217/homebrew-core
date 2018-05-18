@@ -1,15 +1,15 @@
 class Monero < Formula
   desc "Official monero wallet and cpu miner"
   homepage "https://getmonero.org/"
-  url "https://github.com/monero-project/monero/archive/v0.12.0.0.tar.gz"
-  sha256 "5e8303900a39e296c4ebaa41d957ab9ee04e915704e1049f82a9cbd4eedc8ffb"
-  revision 1
+  url "https://github.com/monero-project/monero.git",
+      :tag => "v0.12.0.0",
+      :revision => "c29890c2c03f7f24aa4970b3ebbfe2dbb95b24eb"
+  revision 2
 
   bottle do
-    cellar :any
-    sha256 "ad90379b8d68cf142427d10934377672f51ceb9af3aba9e6bb93e9582b40ee98" => :high_sierra
-    sha256 "234b5c6719a1c899972ad43ee5afac208473930c242d8a46c73eb8078cd1d232" => :sierra
-    sha256 "9c97ac2f8c316a18a991ec492e631f637018a45bb86d766614b95ec6cdb8b0f1" => :el_capitan
+    sha256 "7b46a56bcb031b17d3a797c2ed867d56c1deaed9ed1aaa8f94990c0e422eada9" => :high_sierra
+    sha256 "307880ddf49338dc47aae782dce07f38933edae01937e47023978e5c3709dc37" => :sierra
+    sha256 "acbabbefedf0fad2b0aa863585f48c0aefc4e0dfd99c662b3b7cb11e3d331fa3" => :el_capitan
   end
 
   depends_on "cmake" => :build
@@ -17,14 +17,14 @@ class Monero < Formula
   depends_on "boost"
   depends_on "miniupnpc"
   depends_on "openssl"
-  depends_on "unbound"
+  depends_on "readline"
   depends_on "zeromq"
 
   # Fix "fatal error: 'boost/thread/v2/thread.hpp' file not found"
-  # Upstream PR from 19 Apr 2018 "Unbreak build against Boost 1.67"
+  # https://github.com/monero-project/monero/pull/3667
   patch do
-    url "https://github.com/monero-project/monero/pull/3667.patch?full_index=1"
-    sha256 "797f356c4d512fed1964352ddf502e2bdddf196c2c47ba4ae99665da4ddaaae0"
+    url "https://github.com/monero-project/monero/commit/53a1962da18f952f6eb4683a846e52fe122520e2.patch?full_index=1"
+    sha256 "c5869f9da9429047fdad4386d0310cd88aae499a9ff148120612ab52c5a20b74"
   end
 
   resource "cppzmq" do
@@ -34,7 +34,9 @@ class Monero < Formula
 
   def install
     (buildpath/"cppzmq").install resource("cppzmq")
-    system "cmake", ".", "-DZMQ_INCLUDE_PATH=#{buildpath}/cppzmq", *std_cmake_args
+    system "cmake", ".", "-DZMQ_INCLUDE_PATH=#{buildpath}/cppzmq",
+                         "-DReadline_ROOT_DIR=#{Formula["readline"].opt_prefix}",
+                         *std_cmake_args
     system "make", "install"
   end
 
