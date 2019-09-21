@@ -1,28 +1,28 @@
 class Terragrunt < Formula
   desc "Thin wrapper for Terraform e.g. for locking state"
   homepage "https://github.com/gruntwork-io/terragrunt"
-  url "https://github.com/gruntwork-io/terragrunt/archive/v0.14.10.tar.gz"
-  sha256 "088eaeacd965ade353fa98bdb4e7be0348df00f8850b0299756e269b663a739a"
-  head "https://github.com/gruntwork-io/terragrunt.git"
+  url "https://github.com/gruntwork-io/terragrunt.git",
+    :tag      => "v0.19.25",
+    :revision => "60039badc1ec6cf0e5e960fe1c226b49fbb61f4f"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "8c5e34e5f22d9d8561d72bb95ac87545bb24d675ff59fc364f82279d6a954f5c" => :high_sierra
-    sha256 "ad446a9a4c63f5593341c066fb03816c8cf61173e9069c89adb693f36b88da3a" => :sierra
-    sha256 "5c9cd2dd3c5edccda345c6d85b17f67f46fcd2f23613bb384306cbab819f4156" => :el_capitan
+    sha256 "dcc058aa0fbe6dd507dacaf814144d388dd0d931c0ed7600cc4aef11bcc8599e" => :mojave
+    sha256 "8d244a71cddb26dbc81729ef5d344a25f65770ecb5bddb5e86ad545281505c7a" => :high_sierra
+    sha256 "bbc6405baae5ae4ecf101cd58f12d4f643f9523b0b356c84ce8cf12288b771fc" => :sierra
   end
 
-  depends_on "glide" => :build
+  depends_on "dep" => :build
   depends_on "go" => :build
   depends_on "terraform"
 
   def install
     ENV["GOPATH"] = buildpath
-    ENV["GLIDE_HOME"] = HOMEBREW_CACHE/"glide_home/#{name}"
-    mkdir_p buildpath/"src/github.com/gruntwork-io/"
-    ln_s buildpath, buildpath/"src/github.com/gruntwork-io/terragrunt"
-    system "glide", "install"
-    system "go", "build", "-o", bin/"terragrunt", "-ldflags", "-X main.VERSION=v#{version}"
+    (buildpath/"src/github.com/gruntwork-io/terragrunt").install buildpath.children
+    cd "src/github.com/gruntwork-io/terragrunt" do
+      system "dep", "ensure", "-vendor-only"
+      system "go", "build", "-o", bin/"terragrunt", "-ldflags", "-X main.VERSION=v#{version}"
+    end
   end
 
   test do

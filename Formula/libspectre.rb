@@ -3,13 +3,13 @@ class Libspectre < Formula
   homepage "https://wiki.freedesktop.org/www/Software/libspectre/"
   url "https://libspectre.freedesktop.org/releases/libspectre-0.2.8.tar.gz"
   sha256 "65256af389823bbc4ee4d25bfd1cc19023ffc29ae9f9677f2d200fa6e98bc7a8"
-  revision 4
+  revision 8
 
   bottle do
     cellar :any
-    sha256 "5d4409361dfe7ff5da24015a349ea06427de2f53619e7a970fa028bb0a6a5144" => :high_sierra
-    sha256 "763d2771dc3bb190961cb4dadca99f233568f8520179be01c7d01c0f279276c9" => :sierra
-    sha256 "a2dcff59a6f432ee7e070ccff8963a5c9681f803ac0187b83f240f7f09382899" => :el_capitan
+    sha256 "1a798aea82249189e4f54684279b8f6b077c8aa2bf3aafc66627270688169488" => :mojave
+    sha256 "15e69692be7208dce904de97c3386cbb306ddde707a8ee077d270760cd4330da" => :high_sierra
+    sha256 "e1420e4a0de83c9fc587ec8a072b65e59ac7de789b2b31435b0f71e70aa7ac6e" => :sierra
   end
 
   depends_on "ghostscript"

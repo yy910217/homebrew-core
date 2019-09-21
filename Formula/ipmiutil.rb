@@ -6,22 +6,20 @@ class Ipmiutil < Formula
 
   bottle do
     cellar :any
-    sha256 "50cce938979cf77f307cb2e17e08fe6a1402b1f785561a578360d75308138288" => :high_sierra
-    sha256 "896eea4929dcd86ede955f0657424d1bb40e9a08e1aeb4d42658f4a8c00a9095" => :sierra
-    sha256 "25f46961b538e12edffb311b07cd90af6ad7e4dc323431b6e512375f243e9f21" => :el_capitan
-    sha256 "9fe09553dea21a6ea088bf0d571400da32b9826ab07263e6f9f618c34c2980b4" => :yosemite
-    sha256 "b1372295d77f7d211372bb496c856778369397fea35db58aba7262ad157e191e" => :mavericks
-    sha256 "debbe1e403702b0ee6178ca9674f7c05c4db8f1e68256152eb1c91482eaeda2d" => :mountain_lion
+    rebuild 1
+    sha256 "83d9f7ccbc8950dcc3a653dc3f35ed742129d1eaaf547585bbc76b8d195eda64" => :mojave
+    sha256 "a0119f2e672668e9792c2d6bd6cfedc4797612e4b2b98fa691b74f936b4198ee" => :high_sierra
+    sha256 "8e136064d7075e847c87bc7f7e1e9bc583259f51205dd69ddafb0708fdff3f66" => :sierra
   end
 
-  depends_on "openssl"
+  depends_on "openssl" # no OpenSSL 1.1 support
+
+  conflicts_with "renameutils", :because => "both install `icmd` binaries"
 
   # Ensure ipmiutil does not try to link against (disabled) OpenSSL's MD2
   # support. Patch submitted upstream in
   # https://sourceforge.net/p/ipmiutil/mailman/message/33373858/
   patch :DATA
-
-  conflicts_with "renameutils", :because => "both install `icmd` binaries"
 
   def install
     system "./configure", "--disable-debug", "--disable-dependency-tracking",

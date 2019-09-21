@@ -1,17 +1,16 @@
 class Abcm2ps < Formula
   desc "ABC music notation software"
   homepage "http://moinejf.free.fr"
-  url "https://github.com/leesavide/abcm2ps/archive/v8.13.21.tar.gz"
-  sha256 "2c3f9bdac281feddc384e5719e3cd29f85c88cb326077516760425ebd0be6cd1"
+  url "https://github.com/leesavide/abcm2ps/archive/v8.14.5.tar.gz"
+  sha256 "09bc9d6df221521ae4ad70a5721552a6d443ab1df29193c732f45854f88ad7c0"
 
   bottle do
-    sha256 "fecc68642aa55935a287aeedc2bb9a2d4cc4b4636a0c5115d4758733959d9017" => :high_sierra
-    sha256 "e545a3be9a66e75aa8ae21cf4280783a7cff006c08187f92ba239fa15329c391" => :sierra
-    sha256 "69accbb26b98f014107d898cb9c354faf8c8a0be966a9e8d0266a160bf53987a" => :el_capitan
+    sha256 "18f4f1bf474fb2e9c928143748adbe006039eb19ca1f5c10c813724266259c59" => :mojave
+    sha256 "b44fecce969653acece26c73ce21ac0f81592ce7435c6413d3c5b260cc58cf88" => :high_sierra
+    sha256 "0ee03d6f973cc74b0611ae7867f94fa24168ba236422728342ab2bd60b9231bd" => :sierra
   end
 
   depends_on "pkg-config" => :build
-  depends_on "pango" => :optional
 
   def install
     system "./configure", "--prefix=#{prefix}"

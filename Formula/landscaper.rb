@@ -2,15 +2,15 @@ class Landscaper < Formula
   desc "Manage the application landscape in a Kubernetes cluster"
   homepage "https://github.com/Eneco/landscaper"
   url "https://github.com/Eneco/landscaper.git",
-      :tag => "v1.0.16",
-      :revision => "6dc5d9e1c5b776ae149996cc8efd7e106a51cc70"
+      :tag      => "v1.0.24",
+      :revision => "1199b098bcabc729c885007d868f38b2cf8d2370"
   head "https://github.com/Eneco/landscaper.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "305292c99f152d24ccca43c5ca8150f0fc9acd31735f4463e324faa37f2c7258" => :high_sierra
-    sha256 "b7896f24549f0fcbef55873942c6a3f54d4b42d8d377a55329c85572376d6bd1" => :sierra
-    sha256 "c9f74d230ffc461cfb146fccab8028b4ad947bc60306c787840915c55d6d36ae" => :el_capitan
+    sha256 "d178824d2e212c303d702137ad51e9df746cd0b65d53e1e3c80aa69268965cb2" => :mojave
+    sha256 "7394b4d8cef65cff64ad929b623a4eb8e0dc4eb7541e919d7eb128ec811b104b" => :high_sierra
+    sha256 "c231a80ae46932dd67361637ffb2efb1a9906d6e11ff9cf73fae7ea855533649" => :sierra
   end
 
   depends_on "dep" => :build
@@ -20,10 +20,8 @@ class Landscaper < Formula
 
   def install
     ENV["GOPATH"] = buildpath
-    ENV["GLIDE_HOME"] = HOMEBREW_CACHE/"glide_home/#{name}"
     ENV.prepend_create_path "PATH", buildpath/"bin"
-    arch = MacOS.prefer_64_bit? ? "amd64" : "x86"
-    ENV["TARGETS"] = "darwin/#{arch}"
+    ENV["TARGETS"] = "darwin/amd64"
     dir = buildpath/"src/github.com/eneco/landscaper"
     dir.install buildpath.children - [buildpath/".brew_home"]
 

@@ -1,26 +1,26 @@
 class Rocksdb < Formula
   desc "Embeddable, persistent key-value store for fast storage"
   homepage "https://rocksdb.org/"
-  url "https://github.com/facebook/rocksdb/archive/v5.13.1.tar.gz"
-  sha256 "a99bf51e1da76d8b6487c1dd694311f4e26031071be7802e76fb926154ff33d2"
+  url "https://github.com/facebook/rocksdb/archive/v6.1.2.tar.gz"
+  sha256 "df93f3b66caa1cbe1c2862c99c33e18a5c5b24a64fb51dfe8ef805e3c9fd1cad"
 
   bottle do
     cellar :any
-    sha256 "8f64ede29f4a9e3350a19991151051a25855903184b97d9bdfae5618ddcfa679" => :high_sierra
-    sha256 "b13e6f9856795aa927ce85251cef0a63f2f50edcf01aa1cd92166fca41169074" => :sierra
-    sha256 "4b82040c09d2fae88c90865e7ea6d67ef2649bec65e2368cb1606df9195fd32a" => :el_capitan
+    sha256 "c4263cba90140e0353fa89120e37ee541c6a65d89d79bc5ad94314e782262e30" => :mojave
+    sha256 "952b3fd45590fc8592cf6f5d945ac27f82126730c02ccc61efe86d7911554206" => :high_sierra
+    sha256 "86792cf15a7d20c03f15d1e2dfb40e3abe8407ace76a9436ec47db7f349b52ef" => :sierra
   end
 
-  needs :cxx11
-  depends_on "snappy"
-  depends_on "lz4"
   depends_on "gflags"
+  depends_on "lz4"
+  depends_on "snappy"
 
   def install
     ENV.cxx11
-    ENV["PORTABLE"] = "1" if build.bottle?
+    ENV["PORTABLE"] = "1"
     ENV["DEBUG_LEVEL"] = "0"
     ENV["USE_RTTI"] = "1"
+    ENV["ROCKSDB_DISABLE_ALIGNED_NEW"] = "1" if MacOS.version <= :sierra
     ENV["DISABLE_JEMALLOC"] = "1" # prevent opportunistic linkage
 
     # build regular rocksdb

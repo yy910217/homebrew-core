@@ -1,15 +1,15 @@
 class LibbitcoinClient < Formula
   desc "Bitcoin Client Query Library"
   homepage "https://github.com/libbitcoin/libbitcoin-client"
-  url "https://github.com/libbitcoin/libbitcoin-client/archive/v3.5.0.tar.gz"
-  sha256 "bafa26647f334ecad04fc4bbef507a1954d7e0682f07bd38b90ab66dba5fe0d2"
-  revision 1
+  url "https://github.com/libbitcoin/libbitcoin-client/archive/v3.6.0.tar.gz"
+  sha256 "75969ac0a358458491b101cae784de90452883b5684199d3e3df619707802420"
+  revision 2
 
   bottle do
     cellar :any
-    sha256 "6396b1cd3bf1f9a017f90b90831cf2f7d9428ddce2792b5a788e3c8dfcde12a7" => :high_sierra
-    sha256 "cbddbdfcca8192a17d872c2c88ffe91a3f57c273b5f5a40b5e6bca1472abd0ef" => :sierra
-    sha256 "ea910a747fab11114454b5a4b646dfc8c7a33dab3ce8ec39f63c9c59344dc66d" => :el_capitan
+    sha256 "4dbcca399cd43cb845edac0cf63a158225b1f3fb40b9f48c11e12075099ea316" => :mojave
+    sha256 "1a0523b5f60efb58a6f4686ce98eaf023054823abddb4c485015df2235f95b17" => :high_sierra
+    sha256 "440e593fbe96d541212c8ce2f00f006c2f78ac05bbd116508e5a8baccde376bd" => :sierra
   end
 
   depends_on "autoconf" => :build
@@ -85,10 +85,10 @@ class LibbitcoinClient < Formula
         assert(libbitcoin::encode_base16(capture.out[2]) == "f85beb6356d0813ddb0dbb14230a249fe931a13578563412");
       }
     EOS
-    system ENV.cxx, "-std=c++11", "test.cpp",
-                    "-I#{libexec}/include",
-                    "-lbitcoin", "-lbitcoin-client", "-lboost_system",
-                    "-o", "test"
+    system ENV.cxx, "-std=c++11", "test.cpp", "-o", "test",
+                    "-L#{Formula["libbitcoin"].opt_lib}", "-lbitcoin",
+                    "-L#{lib}", "-lbitcoin-client",
+                    "-L#{Formula["boost"].opt_lib}", "-lboost_system"
     system "./test"
   end
 end

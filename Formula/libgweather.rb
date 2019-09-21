@@ -1,34 +1,32 @@
 class Libgweather < Formula
   desc "GNOME library for weather, locations and timezones"
   homepage "https://wiki.gnome.org/Projects/LibGWeather"
-  url "https://download.gnome.org/sources/libgweather/3.28/libgweather-3.28.1.tar.xz"
-  sha256 "157a8388532a751b36befff424b11ed913b2c43689b62cd2060f6847eb730be3"
+  url "https://download.gnome.org/sources/libgweather/3.32/libgweather-3.32.2.tar.xz"
+  sha256 "28ed5ff00d6faf1dc885c4252a538e43ff3f614fcf6a0f20c3b63604295d3c02"
 
   bottle do
-    sha256 "b96a79ab676438c7e657c17e0fbaacae2e3db041fc66254aae58dadf32b11d70" => :high_sierra
-    sha256 "9655e4d9cba44c13e48fa5b661c0c5a121d266ce002e8bcdf32c3c5f30d20b71" => :sierra
-    sha256 "9e5e4cd5ae1384d401cde7b3ec8b098b914230fdc3bbd584b382cd5fda0c181e" => :el_capitan
+    rebuild 1
+    sha256 "ca2baee1404a6ed57b383f8e7db30a3996ec30a7d037c51b2ba6c3279b1469fa" => :mojave
+    sha256 "1ca19968b2fa7a1f652a7175f98a2a02c4c0a1f5ef0893cdc4c20940bb973573" => :high_sierra
+    sha256 "2d146f273cdb420e70f45983e1c9ed5aa1f3647ffd991708d94e3bc9e2809fd8" => :sierra
   end
 
   depends_on "gobject-introspection" => :build
-  depends_on "pkg-config" => :build
-  depends_on "meson-internal" => :build
+  depends_on "meson" => :build
   depends_on "ninja" => :build
+  depends_on "pkg-config" => :build
   depends_on "python" => :build
-  depends_on "gtk+3"
   depends_on "geocode-glib"
+  depends_on "gtk+3"
   depends_on "libsoup"
-  depends_on "vala" => :optional
 
   def install
-    ENV.refurbish_args
-    ENV["DESTDIR"] = ""
-    inreplace "meson/meson_post_install.py", "if not os.environ.get('DESTDIR'):", "if 'DESTDIR' not in os.environ:"
+    ENV["DESTDIR"] = "/"
 
     mkdir "build" do
       system "meson", "--prefix=#{prefix}", ".."
-      system "ninja"
-      system "ninja", "install"
+      system "ninja", "-v"
+      system "ninja", "install", "-v"
     end
   end
 
@@ -54,6 +52,7 @@ class Libgweather < Formula
     gettext = Formula["gettext"]
     glib = Formula["glib"]
     gtkx3 = Formula["gtk+3"]
+    harfbuzz = Formula["harfbuzz"]
     libepoxy = Formula["libepoxy"]
     libpng = Formula["libpng"]
     libsoup = Formula["libsoup"]
@@ -70,6 +69,7 @@ class Libgweather < Formula
       -I#{glib.opt_include}/glib-2.0
       -I#{glib.opt_lib}/glib-2.0/include
       -I#{gtkx3.opt_include}/gtk-3.0
+      -I#{harfbuzz.opt_include}/harfbuzz
       -I#{include}/libgweather-3.0
       -I#{libepoxy.opt_include}
       -I#{libpng.opt_include}/libpng16

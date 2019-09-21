@@ -1,13 +1,13 @@
 class P11Kit < Formula
   desc "Library to load and enumerate PKCS#11 modules"
   homepage "https://p11-glue.freedesktop.org"
-  url "https://github.com/p11-glue/p11-kit/releases/download/0.23.10/p11-kit-0.23.10.tar.gz"
-  sha256 "f9212a3f225ef543e13fae9945527d66c0cbb67246320035dd94fab2bce5ae43"
+  url "https://github.com/p11-glue/p11-kit/releases/download/0.23.17/p11-kit-0.23.17.tar.gz"
+  sha256 "5447b25d66c05f86cce5bc8856f7a074be84c186730e32c74069ca03386d7c1e"
 
   bottle do
-    sha256 "d1a28a27c565eb0b14687b64f4bb3a643e1289bd3e59e8f82b2e73bac021eea2" => :high_sierra
-    sha256 "d32f3d5d34f52c274a749d62bcaf3ce1814cc133fad89d09cec74f2227c43702" => :sierra
-    sha256 "82e3ee6e9dcafad244f0a0509500afbc714d35beba303fda57bbda00e2cf7fe9" => :el_capitan
+    sha256 "6eef561b7f7159a96ae5d161fe0177e84fa0f929bbb89e799039cb1162d11387" => :mojave
+    sha256 "f4035d5739c5bb31e6db0d523ee9b44e18a35f22bb73bf49fc2f1dd8035fac3f" => :high_sierra
+    sha256 "de9ed5f549f2cb54e6228868a7724be6a1395ad5027ca753bb00068828c7a592" => :sierra
   end
 
   head do
@@ -19,8 +19,8 @@ class P11Kit < Formula
     depends_on "libtool" => :build
   end
 
-  depends_on "libffi"
   depends_on "pkg-config" => :build
+  depends_on "libffi"
 
   def install
     # https://bugs.freedesktop.org/show_bug.cgi?id=91602#c1

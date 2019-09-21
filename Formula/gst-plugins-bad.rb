@@ -1,14 +1,15 @@
 class GstPluginsBad < Formula
   desc "GStreamer plugins less supported, not fully tested"
   homepage "https://gstreamer.freedesktop.org/"
-  url "https://gstreamer.freedesktop.org/src/gst-plugins-bad/gst-plugins-bad-1.14.0.tar.xz"
-  sha256 "ed5e2badb6f2858f60017b93334d91fe58a0e3f85ed2f37f2e931416fafb4f9f"
-  revision 1
+  url "https://gstreamer.freedesktop.org/src/gst-plugins-bad/gst-plugins-bad-1.16.0.tar.xz"
+  sha256 "22139de35626ada6090bdfa3423b27b7fc15a0198331d25c95e6b12cb1072b05"
+  revision 4
 
   bottle do
-    sha256 "308d9c4c72913fc8765a01448ca32570df1bc502440ff44fbffc340964348b54" => :high_sierra
-    sha256 "84f80a511ddcb9943756c51b7ae6590d1edd56dca35db1db80ec3a525c0de29e" => :sierra
-    sha256 "1d376f912b04d799e2fc4a23c272540520737134995ac5025fd1312946b7a8a6" => :el_capitan
+    rebuild 1
+    sha256 "f30e77a4b1c12ded28e03b5f81872851a2eae39ffaa0bdc7bde18eb57a9ff14b" => :mojave
+    sha256 "d05e4f98f79be7ce023ae6fe9c0fbdd7d0cd23f70dd9c6db382e3539a125e17d" => :high_sierra
+    sha256 "df79f8536dd67412947a56fec82d95df9acdc3f844d1a3fc8d582e2bf9a83559" => :sierra
   end
 
   head do
@@ -18,29 +19,20 @@ class GstPluginsBad < Formula
     depends_on "automake" => :build
   end
 
+  depends_on "gobject-introspection" => :build
   depends_on "libtool" => :build
   depends_on "pkg-config" => :build
+  depends_on "faac"
+  depends_on "faad2"
   depends_on "gettext"
   depends_on "gst-plugins-base"
-  depends_on "openssl"
-  depends_on "jpeg" => :recommended
-  depends_on "orc" => :recommended
-  depends_on "dirac" => :optional
-  depends_on "faac" => :optional
-  depends_on "faad2" => :optional
-  depends_on "fdk-aac" => :optional
-  depends_on "gnutls" => :optional
-  depends_on "libdvdread" => :optional
-  depends_on "libexif" => :optional
-  depends_on "libmms" => :optional
-  depends_on "libnice" => :optional
-  depends_on "libvo-aacenc" => :optional
-  depends_on "opencv@2" => :optional
-  depends_on "opus" => :optional
-  depends_on "rtmpdump" => :optional
-  depends_on "schroedinger" => :optional
-  depends_on "sound-touch" => :optional
-  depends_on "srt" => :optional
+  depends_on "jpeg"
+  depends_on "libmms"
+  depends_on "libnice"
+  depends_on "openssl@1.1"
+  depends_on "opus"
+  depends_on "orc"
+  depends_on "srtp"
 
   def install
     args = %W[
@@ -49,6 +41,7 @@ class GstPluginsBad < Formula
       --disable-examples
       --disable-debug
       --disable-dependency-tracking
+      --enable-introspection=yes
     ]
 
     if build.head?

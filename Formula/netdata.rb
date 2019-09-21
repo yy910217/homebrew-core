@@ -1,26 +1,34 @@
 class Netdata < Formula
   desc "Distributed real-time performance and health monitoring"
   homepage "https://my-netdata.io/"
-  url "https://github.com/firehol/netdata/releases/download/v1.10.0/netdata-1.10.0.tar.bz2"
-  sha256 "70cb42277427b79689f12f3d98b91b500232f8d8a4ad37ee109551352674dd9b"
+  url "https://github.com/netdata/netdata/releases/download/v1.17.1/netdata-v1.17.1.tar.gz"
+  sha256 "fce02e4b2d9d6d050bc5eac0c30c802124af29f6d8dbb9196331ad9284ae894c"
 
   bottle do
-    sha256 "f8b4439a962447ce1435e77941f0dba37efa7d157f4a4549accc7aec46a487af" => :high_sierra
-    sha256 "412b5f85c4a716130452cfe34c19042cfaebcf7dd1cca6941ae19dfca770412d" => :sierra
-    sha256 "209d7fdd11939267f8a28a5171a55703b3f9588cdbe909bbe2a7800a958d6f98" => :el_capitan
+    sha256 "41344f785165c7fe8c0d9b7d7da355e7688d4ea4ede71a4f48451a908f6c1546" => :mojave
+    sha256 "d7a808e24ce6327e8be7f39ee26834bb802120442eabca8168365264bb905449" => :high_sierra
+    sha256 "36dfa8970a83de43101e138e591e840a736ff57d371c9e1050c97c59d9098da6" => :sierra
   end
 
   depends_on "autoconf" => :build
   depends_on "automake" => :build
   depends_on "pkg-config" => :build
-  depends_on "ossp-uuid"
+  depends_on "openssl@1.1" if MacOS.version <= :sierra
 
   def install
+    system "autoreconf", "-ivf"
     system "./configure", "--disable-dependency-tracking",
                           "--disable-silent-rules",
                           "--prefix=#{prefix}",
                           "--sysconfdir=#{etc}",
-                          "--localstatedir=#{var}"
+                          "--localstatedir=#{var}",
+                          "--libexecdir=#{libexec}",
+                          "--with-math",
+                          "--with-zlib",
+                          "--with-user=netdata",
+                          "UUID_CFLAGS=-I/usr/include",
+                          "UUID_LIBS=-lc"
+    system "make", "clean"
     system "make", "install"
 
     (etc/"netdata").install "system/netdata.conf"
@@ -32,6 +40,7 @@ class Netdata < Formula
       s.gsub!(/web files owner = .*/, "web files owner = #{ENV["USER"]}")
       s.gsub!(/web files group = .*/, "web files group = #{Etc.getgrgid(prefix.stat.gid).name}")
     end
+    (var/"netdata").mkpath
   end
 
   plist_options :manual => "#{HOMEBREW_PREFIX}/sbin/netdata -D"
@@ -54,12 +63,14 @@ class Netdata < Formula
         <string>#{var}</string>
       </dict>
     </plist>
-    EOS
+  EOS
   end
 
   test do
     system "#{sbin}/netdata", "-W", "set", "registry", "netdata unique id file",
                               "#{testpath}/netdata.unittest.unique.id",
+                              "-W", "set", "registry", "netdata management api key file",
+                              "#{testpath}/netdata.api.key",
                               "-W", "unittest"
   end
 end

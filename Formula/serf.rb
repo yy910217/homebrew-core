@@ -2,16 +2,15 @@ class Serf < Formula
   desc "Service orchestration and management tool"
   homepage "https://serfdom.io/"
   url "https://github.com/hashicorp/serf.git",
-      :tag => "v0.8.1",
-      :revision => "d6574a5bb1226678d7010325fb6c985db20ee458"
+      :tag      => "v0.8.4",
+      :revision => "d0144799968225d12af441bef64e45c9740b95eb"
   head "https://github.com/hashicorp/serf.git"
 
   bottle do
     cellar :any_skip_relocation
-    rebuild 1
-    sha256 "fbd6c27169ceec3d52843b137d39313c59bd3495c26c7b88ff1eb29847971d31" => :high_sierra
-    sha256 "62f1e4030ba05b8f3fe8d40b185941cf9f0dbc1b02f043e5629281f03dbdb147" => :sierra
-    sha256 "45e961e406465c73fd72bcf7bd573ab3de740ab297c90287a02c5d4f6c38ebb0" => :el_capitan
+    sha256 "cd88e3a0f3d7e3cbca0d4f3d37fa9c5de8db2690ec7e7f8823181b144cbc614b" => :mojave
+    sha256 "007c72e77f6f1167686c82cb5f25f7439544e3711878c617f3ff407fb5dc67cc" => :high_sierra
+    sha256 "80c69509ae669bdcbad424d9fb72c2e97a444b702f551b4de602875b134229d6" => :sierra
   end
 
   depends_on "go" => :build
@@ -24,8 +23,7 @@ class Serf < Formula
     (gopath/"src/github.com/hashicorp/serf").install contents
 
     ENV["GOPATH"] = gopath
-    arch = MacOS.prefer_64_bit? ? "amd64" : "386"
-    ENV["XC_ARCH"] = arch
+    ENV["XC_ARCH"] = "amd64"
     ENV["XC_OS"] = "darwin"
 
     (gopath/"bin").mkpath

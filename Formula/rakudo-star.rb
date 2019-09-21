@@ -1,21 +1,19 @@
 class RakudoStar < Formula
   desc "Perl 6 compiler"
   homepage "https://rakudo.org/"
-  url "https://rakudo.perl6.org/downloads/star/rakudo-star-2018.04.tar.gz"
-  sha256 "7c20b3f711675ec597d94470cb8212b44eedcd3ab2e7e47430aa4329aa16761a"
+  url "https://rakudostar.com/files/star/rakudo-star-2019.03.tar.gz"
+  sha256 "640a69de3a2b4f6c49e75a01040e8770de3650ea1d5bb61057e3dfa3c79cc008"
 
   bottle do
-    sha256 "ba565600debebff47366065d27b9e6183d3873d0f509899af5ee35661431e659" => :high_sierra
-    sha256 "5367a84f4151f7980d4b5f0cc893eefe73c10c5593722c63c58232e919ca05f6" => :sierra
-    sha256 "30301527dba2bbcfc034f5a4da0bb542ce842cba6729cadad28d2109bb6e41ca" => :el_capitan
+    sha256 "0254663db2347c6002b4402ddbb7ed64bf29068b15e196e6fe011e9b027081ee" => :mojave
+    sha256 "dd67fdfc69505bae6b7e1a30f5c6908bba312e3673ca81c415d3a626387ed8be" => :high_sierra
+    sha256 "773b28e24f2893e23307c818b49f8517a6fb4a3af3be4eee468e4c2e1ff70555" => :sierra
   end
 
-  option "with-jvm", "Build also for jvm as an alternate backend."
-
-  depends_on "gmp" => :optional
-  depends_on "icu4c" => :optional
-  depends_on "pcre" => :optional
+  depends_on "gmp"
+  depends_on "icu4c"
   depends_on "libffi"
+  depends_on "pcre"
 
   conflicts_with "parrot"
 
@@ -26,13 +24,12 @@ class RakudoStar < Formula
 
     ENV.deparallelize # An intermittent race condition causes random build failures.
 
-    backends = ["moar"]
-    generate = ["--gen-moar"]
-
-    backends << "jvm" if build.with? "jvm"
-
-    system "perl", "Configure.pl", "--prefix=#{prefix}", "--backends=" + backends.join(","), *generate
+    system "perl", "Configure.pl", "--prefix=#{prefix}",
+                   "--backends=moar", "--gen-moar"
     system "make"
+    # make install runs tests that can hang on sierra
+    # set this variable to skip those tests
+    ENV["NO_NETWORK_TESTING"] = "1"
     system "make", "install"
 
     # Panda is now in share/perl6/site/bin, so we need to symlink it too.

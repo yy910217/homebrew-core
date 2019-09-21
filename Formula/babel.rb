@@ -1,26 +1,35 @@
 require "language/node"
+require "json"
 
 class Babel < Formula
   desc "Compiler for writing next generation JavaScript"
   homepage "https://babeljs.io/"
-  url "https://registry.npmjs.org/babel-cli/-/babel-cli-6.24.1.tgz"
-  sha256 "d69a00bdb4f35184cda1f5bfe8075cd4d569600b8e61d864d1f08e360367933b"
+  url "https://registry.npmjs.org/@babel/core/-/core-7.6.0.tgz"
+  sha256 "b00e8114526e29be8a7c1db6f538043ed47903a7e4d3c2dedf84799b441f03ac"
 
   bottle do
-    rebuild 1
-    sha256 "fa63837b3f1351ef2d0307ab556e40bbd91c1bc383c6d4ada3a072471cb01b40" => :high_sierra
-    sha256 "102dda22f4541c686da92112bf3b7c91da7ace61e04633d19a9874ee6c3d8935" => :sierra
-    sha256 "7dde27b4e0d9901fa2b2f3051fbe5b11baa3635e7bfac15ae4a0690e0270f067" => :el_capitan
-  end
-
-  devel do
-    url "https://registry.npmjs.org/babel-cli/-/babel-cli-7.0.0-alpha.12.tgz"
-    sha256 "a81e2421486ca48d3961c4ab1fada8acd3bb3583ccfb28822cbb0b16a2635144"
+    sha256 "fb13d4318d26c10fe5b0691e0691ee9ceab6298697f17a590379c5ab657debab" => :mojave
+    sha256 "5b9c707dc4a4119210f2bd3c6fb7914f3b1b0747ec0dcd6bc15973b8f5332951" => :high_sierra
+    sha256 "97e81463707dd95b9984ab732e7b35c95fd445fa5b6c3b12a01d8a0c0ad837ae" => :sierra
   end
 
   depends_on "node"
 
+  resource "babel-cli" do
+    url "https://registry.npmjs.org/@babel/cli/-/cli-7.5.5.tgz"
+    sha256 "fa78e5e4ebef7eccb0274fed059b8fea80921018368bd5b8d17904b5a8a26f4f"
+  end
+
   def install
+    (buildpath/"node_modules/@babel/core").install Dir["*"]
+    buildpath.install resource("babel-cli")
+
+    # declare babel-core as a bundledDependency of babel-cli
+    pkg_json = JSON.parse(IO.read("package.json"))
+    pkg_json["dependencies"]["@babel/core"] = version
+    pkg_json["bundledDependencies"] = ["@babel/core"]
+    IO.write("package.json", JSON.pretty_generate(pkg_json))
+
     system "npm", "install", *Language::Node.std_npm_install_args(libexec)
     bin.install_symlink Dir["#{libexec}/bin/*"]
   end

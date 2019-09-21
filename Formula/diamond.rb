@@ -1,17 +1,18 @@
 class Diamond < Formula
   desc "Accelerated BLAST compatible local sequence aligner"
   homepage "https://ab.inf.uni-tuebingen.de/software/diamond/"
-  url "https://github.com/bbuchfink/diamond/archive/v0.9.22.tar.gz"
-  sha256 "35e518cfa0ac2fbc57e422d380bdb5123c6335742dd7965b76c34c95f241b729"
+  url "https://github.com/bbuchfink/diamond/archive/v0.9.25.tar.gz"
+  sha256 "65298f60cf9421dcc7669ce61642611cd9eeffc32f66fd39ebfa25dd64416808"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "469c7756dc9eca0ed7ebd8a156af03da9352ac0358f2bcfd0eb3d346d00b6d51" => :high_sierra
-    sha256 "607d100998ea30e170cf8660efd0db2ada0cf2aff0fc01d753b8f562780f1066" => :sierra
-    sha256 "6b5c96a2c5847c0e6ecef931175082b90c4436d91fbcd7331cda92a9bb682bb5" => :el_capitan
+    sha256 "d67e3246f8a06a2791446e584bbc732d489d87b37f08c093de1b936beef49593" => :mojave
+    sha256 "7f390e12983dceccc640ef4c2121da20b7baf89a920bfd9dec56bf7a39f418c9" => :high_sierra
+    sha256 "3e7b49eab32d6594ca27b54a9034ea07f3b95bfa65b26396a7978d2468fea809" => :sierra
   end
 
   depends_on "cmake" => :build
+  uses_from_macos "zlib"
 
   def install
     system "cmake", ".", *std_cmake_args
@@ -39,7 +40,7 @@ class Diamond < Formula
       ffetesrsvaqagvqwrdlgslqapppgftpfsclslpsswdyrrppprpanfcifsrdg
       vspcXpgwsrspdlvirpprppkvlglqaXatapg
     EOS
-    output = shell_output("#{bin}/diamond makedb --in nr.faa -d nr")
+    output = shell_output("#{bin}/diamond makedb --in nr.faa -d nr 2>&1")
     assert_match "Processed 6 sequences, 572 letters.", output
   end
 end

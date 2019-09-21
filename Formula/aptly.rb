@@ -1,15 +1,15 @@
 class Aptly < Formula
   desc "Swiss army knife for Debian repository management"
   homepage "https://www.aptly.info/"
-  url "https://github.com/aptly-dev/aptly/archive/v1.3.0.tar.gz"
-  sha256 "4d993dd790345e54dd963467a475ae160a7133bae7ee42844f15d5e82c1fb36e"
+  url "https://github.com/aptly-dev/aptly/archive/v1.4.0.tar.gz"
+  sha256 "d124541c928ad35681b82e8554c4ca56bea04518c648ad44a995f319db53cdb2"
   head "https://github.com/aptly-dev/aptly.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "8ee9d2d3b4c072cad39487f6dfcf37189c4258eed4496845d20d8621806ae0db" => :high_sierra
-    sha256 "6425b01749d2cd2c6e9e748e59b71f26a47945d43a300858a305179dc370d61c" => :sierra
-    sha256 "64ad68557e92d24163204792cee94b606c30f3ca584979a1f4158cdec102bb9a" => :el_capitan
+    sha256 "3a745c910d6d3bf19602b8802c27699405aef1bce208430d0b3c7ac10847575c" => :mojave
+    sha256 "d4d197b4b9269cea1f0f86d6e7711e2547931de3fff413ce12e2817f72c11e42" => :high_sierra
+    sha256 "301a22114bd639602d1ec97fba77a06d7952e123532fe4a35a347ca026a93994" => :sierra
   end
 
   depends_on "go" => :build
@@ -21,6 +21,8 @@ class Aptly < Formula
     cd "src/github.com/aptly-dev/aptly" do
       system "make", "VERSION=#{version}", "install"
       prefix.install_metafiles
+      bash_completion.install "completion.d/aptly"
+      zsh_completion.install "completion.d/_aptly"
     end
   end
 

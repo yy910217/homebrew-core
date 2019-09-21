@@ -5,21 +5,21 @@ class Hlint < Formula
 
   desc "Haskell source code suggestions"
   homepage "https://github.com/ndmitchell/hlint"
-  url "https://hackage.haskell.org/package/hlint-2.1.5/hlint-2.1.5.tar.gz"
-  sha256 "41f21566627d02f69f5715d883ebffd54e64e8f2af1d2376830b6880565a7102"
+  url "https://hackage.haskell.org/package/hlint-2.2.2/hlint-2.2.2.tar.gz"
+  sha256 "d717f06091d4b651671ffa3c3d88115d353a595b7853f9860af3b74d3eeb20ec"
   head "https://github.com/ndmitchell/hlint.git"
 
   bottle do
-    sha256 "ff9b646d4ce979cbe13556614f8b41a93086c6a392bf49d9e5110c0fa90df6bd" => :high_sierra
-    sha256 "c4790a5371f6c0d27e401981bd587bb9648a6ca0cf825623c2727cad9862d9e0" => :sierra
-    sha256 "3189b39e20a2dcb12176bbe554a58418effdba0cc9f25ee007f6efeb5e6b8fc4" => :el_capitan
+    sha256 "a1e444d105c5cd0dd5e702dcc491a7041e3425f987accc2d878ac3f05c6040fa" => :mojave
+    sha256 "8c83f7ab9a17c11f4e4a3593401e01c347b00966abbcf1130d995102533432dd" => :high_sierra
+    sha256 "e55d0462d86eb3e09e8cda93980afbc742954127bf1ef4310d7faefaaf3858af" => :sierra
   end
 
   depends_on "cabal-install" => :build
   depends_on "ghc" => :build
 
   def install
-    install_cabal_package :using => "happy"
+    install_cabal_package :using => ["alex", "happy"]
     man1.install "data/hlint.1"
   end
 

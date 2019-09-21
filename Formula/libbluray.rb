@@ -1,14 +1,14 @@
 class Libbluray < Formula
   desc "Blu-Ray disc playback library for media players like VLC"
   homepage "https://www.videolan.org/developers/libbluray.html"
-  url "https://download.videolan.org/pub/videolan/libbluray/1.0.2/libbluray-1.0.2.tar.bz2"
-  sha256 "6d9e7c4e416f664c330d9fa5a05ad79a3fb39b95adfc3fd6910cbed503b7aeff"
+  url "https://download.videolan.org/pub/videolan/libbluray/1.1.2/libbluray-1.1.2.tar.bz2"
+  sha256 "a3dd452239b100dc9da0d01b30e1692693e2a332a7d29917bf84bb10ea7c0b42"
 
   bottle do
     cellar :any
-    sha256 "5bca035002a063c9c99a08e3e15f0f15ebac30a94dce6e57116b7d8d44d690c2" => :high_sierra
-    sha256 "af79492225913a9b9be4653fa8f755183c8775c4be95458fd2a2f9dbb967a9c3" => :sierra
-    sha256 "d07c0b951f2a4a43e1ca3c349ecac84e7916fc7806100191fba8316b3d1973d5" => :el_capitan
+    sha256 "25de56ece940908d1be482b234b5c6fc5ec2bc8d24aaf9c75d67718ea5770605" => :mojave
+    sha256 "152dd759f3c3170eecf59f095c6b8dde3a9fc8dcf317846b50fbd85644bc3296" => :high_sierra
+    sha256 "de230a76a5a163cf704b150ebcb2c1347bb64a41c5f68b0487ae83dbf48c13ac" => :sierra
   end
 
   head do
@@ -23,7 +23,7 @@ class Libbluray < Formula
   depends_on :java => ["1.8", :build]
   depends_on "pkg-config" => :build
   depends_on "fontconfig"
-  depends_on "freetype" => :recommended
+  depends_on "freetype"
 
   def install
     # Need to set JAVA_HOME manually since ant overrides 1.8 with 1.8+
@@ -34,7 +34,6 @@ class Libbluray < Formula
     ENV.append_to_cflags "-D_DARWIN_C_SOURCE"
 
     args = %W[--prefix=#{prefix} --disable-dependency-tracking]
-    args << "--without-freetype" if build.without? "freetype"
 
     system "./bootstrap" if build.head?
     system "./configure", *args

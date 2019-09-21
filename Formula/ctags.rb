@@ -17,6 +17,7 @@ class Ctags < Formula
 
   bottle do
     rebuild 1
+    sha256 "2812884a8f1217767103dc5e0ceb9c7048b5a4d9a34071f76e3c8f9b0f00895c" => :mojave
     sha256 "497e0220e354a9ec7e0735d3ba68a27892f1f69973d6992e36667ea197a236bc" => :high_sierra
     sha256 "56bc233d09bc3591ad1f3a9c5282f9f9cf0729b0d5a0ee001d4ea6f68f2b0ab7" => :sierra
     sha256 "a17ee0cd08909484aeeca9177b356e14655d5f75ecaa4b36a3bd2e2248d8ac91" => :el_capitan
@@ -48,11 +49,6 @@ class Ctags < Formula
       emacs provides an executable `ctags` that would conflict with the
       executable of the same name that ctags provides. To prevent this,
       Homebrew removes the emacs `ctags` and its manpage before linking.
-
-      However, if you install emacs with the `--keep-ctags` option, then
-      the `ctags` emacs provides will not be removed. In that case, you
-      won't be able to install ctags successfully. It will build but not
-      link.
     EOS
   end
 
@@ -114,3 +110,14 @@ diff -ur a/ctags-5.8/read.h b/ctags-5.8/read.h
  
  /*
  *   FUNCTION PROTOTYPES
+--- a/ctags-5.8/general.h	2007-05-02 23:21:08.000000000 -0400
++++ b/ctags-5.8/general.h	2019-07-18 19:09:43.000000000 -0400
+@@ -56,7 +56,7 @@
+ /*  This is a helpful internal feature of later versions (> 2.7) of GCC
+  *  to prevent warnings about unused variables.
+  */
+-#if (__GNUC__ > 2  ||  (__GNUC__ == 2  &&  __GNUC_MINOR__ >= 7)) && !defined (__GNUG__)
++#if 0
+ # define __unused__  __attribute__((unused))
+ # define __printf__(s,f)  __attribute__((format (printf, s, f)))
+ #else

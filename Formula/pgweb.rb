@@ -1,14 +1,14 @@
 class Pgweb < Formula
   desc "Web-based PostgreSQL database browser"
   homepage "https://sosedoff.github.io/pgweb/"
-  url "https://github.com/sosedoff/pgweb/archive/v0.9.12.tar.gz"
-  sha256 "4c625bad8312dacf9bc9d64d40c2dea1e840175db9c60667a641c62289f9f174"
+  url "https://github.com/sosedoff/pgweb/archive/v0.11.3.tar.gz"
+  sha256 "6d9606ce5c609e774781f588e5802108abb6355f706b6245e26906521799d9e2"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "31ef10e4430148ed0b70f32d1f6edf7c8741e02f4f2fbe21fd7c49783b3e0594" => :high_sierra
-    sha256 "1f85f4bdf34399632b1a64a79ef39810909ba5faa3022def736caed9a898ff9a" => :sierra
-    sha256 "640b9e3819d9915f00f39bb4319326a5d2f04ed75df4907f9a79db5231015812" => :el_capitan
+    sha256 "f8e7024aaee40bb2141b7ce7d3b03c161d938f744fbe8a8a50049cc80cf37ba3" => :mojave
+    sha256 "56e54c598658c4cbc9e42104661bfb2cd36ac9c076aa4febae944f68eea60a9b" => :high_sierra
+    sha256 "8184607026c1f3179f379b0c7d4050e4b3cba53e3aa9afdb906ae3b645663516" => :sierra
   end
 
   depends_on "go" => :build
@@ -37,10 +37,12 @@ class Pgweb < Formula
 
     begin
       pid = fork do
-        exec bin/"pgweb", "--listen=#{port}", "--skip-open"
+        exec bin/"pgweb", "--listen=#{port}",
+                          "--skip-open",
+                          "--sessions"
       end
       sleep 2
-      assert_match "pgweb", shell_output("curl http://localhost:#{port}")
+      assert_match "\"version\":\"#{version}\"", shell_output("curl http://localhost:#{port}/api/info")
     ensure
       Process.kill("TERM", pid)
     end

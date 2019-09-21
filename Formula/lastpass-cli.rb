@@ -1,30 +1,38 @@
 class LastpassCli < Formula
   desc "LastPass command-line interface tool"
   homepage "https://github.com/lastpass/lastpass-cli"
-  url "https://github.com/lastpass/lastpass-cli/archive/v1.3.1.tar.gz"
-  sha256 "25dc9a0c99a10ee70b5b3991d525448c25f312cc69fa0216d7ac70c4ae384b1b"
+  url "https://github.com/lastpass/lastpass-cli/releases/download/v1.3.3/lastpass-cli-1.3.3.tar.gz"
+  sha256 "b94f591627e06c9fed3bc38007b1adc6ea77127e17c7175c85d497096768671b"
+  revision 1
   head "https://github.com/lastpass/lastpass-cli.git"
 
   bottle do
     cellar :any
-    sha256 "8307f9a9616147fdac48ee9b0b60e8bd1fad3836d1664bd046badc2281d1af39" => :high_sierra
-    sha256 "437a386cc38276851bc30137c1bfd1dbd11a21859dbad071d2f6253878e50bc6" => :sierra
-    sha256 "94b4ee3c3bdd30c356926b5b3102c87a8ac2abc6d93206ed897cf6d4cb2ca2aa" => :el_capitan
+    rebuild 1
+    sha256 "a24ff2d326dd4f445f492c788d7d8a28d3b3a853be9454c6418f340ed85505d8" => :mojave
+    sha256 "34fa4da7396fd076d9b0c02b1ea092701c3a2fe09447f818718eb66bb4c389d9" => :high_sierra
+    sha256 "508c481d28158c3e2f2f7aa69cc8b4048d56417a157d990208f2393297b60dc7" => :sierra
   end
 
   depends_on "asciidoc" => :build
   depends_on "cmake" => :build
   depends_on "docbook-xsl" => :build
   depends_on "pkg-config" => :build
-  depends_on "openssl"
-  depends_on "pinentry" => :optional
+  # Avoid crashes on Mojave's version of libcurl (https://github.com/lastpass/lastpass-cli/issues/427)
+  depends_on "curl" if MacOS.version >= :mojave
+  depends_on "openssl@1.1"
+  depends_on "pinentry"
 
   def install
     ENV["XML_CATALOG_FILES"] = etc/"xml/catalog"
-    system "make", "PREFIX=#{prefix}", "install"
-    system "make", "MANDIR=#{man}", "install-doc"
+
+    mkdir "build" do
+      system "cmake", "..", *std_cmake_args, "-DCMAKE_INSTALL_MANDIR:PATH=#{man}"
+      system "make", "all", "lpass-test", "test", "install", "install-doc"
+    end
 
     bash_completion.install "contrib/lpass_bash_completion"
+    zsh_completion.install "contrib/lpass_zsh_completion" => "_lpass"
     fish_completion.install "contrib/completions-lpass.fish"
   end
 

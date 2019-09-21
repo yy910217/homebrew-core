@@ -1,8 +1,8 @@
 class Rabbitmq < Formula
   desc "Messaging broker"
   homepage "https://www.rabbitmq.com"
-  url "https://dl.bintray.com/rabbitmq/all/rabbitmq-server/3.7.5/rabbitmq-server-generic-unix-3.7.5.tar.xz"
-  sha256 "2480356636f3fc54ac5df13d9e1814d627f46c1c37c9944b1ee667de5b76d37d"
+  url "https://github.com/rabbitmq/rabbitmq-server/releases/download/v3.7.16/rabbitmq-server-generic-unix-3.7.16.tar.xz"
+  sha256 "a34011f8ff1682a1601d4b8e0167ad39b91fd8f0fb35b484c41efde9f104ed08"
 
   bottle :unneeded
 
@@ -51,14 +51,15 @@ class Rabbitmq < Formula
 
   def caveats; <<~EOS
     Management Plugin enabled by default at http://localhost:15672
-    EOS
+  EOS
   end
 
   def rabbitmq_env; <<~EOS
     CONFIG_FILE=#{etc}/rabbitmq/rabbitmq
     NODE_IP_ADDRESS=127.0.0.1
     NODENAME=rabbit@localhost
-    EOS
+    RABBITMQ_LOG_BASE=#{var}/log/rabbitmq
+  EOS
   end
 
   plist_options :manual => "rabbitmq-server"
@@ -84,9 +85,13 @@ class Rabbitmq < Formula
           <key>CONF_ENV_FILE</key>
           <string>#{etc}/rabbitmq/rabbitmq-env.conf</string>
         </dict>
+        <key>StandardErrorPath</key>
+        <string>#{var}/log/rabbitmq/std_error.log</string>
+        <key>StandardOutPath</key>
+        <string>#{var}/log/rabbitmq/std_out.log</string>
       </dict>
     </plist>
-    EOS
+  EOS
   end
 
   test do

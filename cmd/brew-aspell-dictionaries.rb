@@ -23,14 +23,18 @@ URI.parse("#{dict_url}/0index.html").open do |content|
   end
 end
 
-languages.each do |lang, path|
+resources = languages.map do |lang, path|
   r = Resource.new(lang)
   r.owner = Formulary.factory("aspell")
   r.url "#{dict_url}/#{path}"
   r.mirror "#{dict_mirror}/#{path}"
-  r.fetch
+  r
+end
+
+resources.each {|r| r.fetch(verify_download_integrity: false)}
+
+resources.each do |r|
   puts <<-EOS
-    option "with-lang-#{r.name}", "Install #{r.name} dictionary"
     resource "#{r.name}" do
       url "#{r.url}"
       mirror "#{r.mirrors.first}"

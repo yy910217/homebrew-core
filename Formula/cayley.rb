@@ -1,18 +1,16 @@
 class Cayley < Formula
   desc "Graph database inspired by Freebase and Knowledge Graph"
   homepage "https://github.com/cayleygraph/cayley"
-  url "https://github.com/cayleygraph/cayley/archive/v0.7.3.tar.gz"
-  sha256 "2cd993b9f7d452574da3eb74c28b23de797646bf79c8e3b3954a4591b2ce5656"
+  url "https://github.com/cayleygraph/cayley/archive/v0.7.5.tar.gz"
+  sha256 "4fcc8bf44f775dbbbd6146713f6fbdc80f2d88e2e8b93767f62eb5d635a56739"
   head "https://github.com/google/cayley.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "13bf69c405651363c7a1c0fd281ca377eab0cde20c3114e00e05a407b3fffcd2" => :high_sierra
-    sha256 "fdde7a5914e9cdeac1e47d63ccf3c2f40c4eeb64d97ec4c3b01dfd377e73d5ad" => :sierra
-    sha256 "61c99517f32bc2fa4ab1f8190efc9874d0984e764092609da332df797bec2aca" => :el_capitan
+    sha256 "377e5180df5cf802155e5d2af615f226706c0f02774b50a53b2b5d44480a151d" => :mojave
+    sha256 "ce7a9c57fbf969e0cf60bc9cdf8f6e1d57e254dc506a9e509cc4d7052bbb53df" => :high_sierra
+    sha256 "a745c0d7c87f43e62232be852ec8df3b8ee5e18cb6595725b5588843521164a4" => :sierra
   end
-
-  option "without-samples", "Don't install sample data"
 
   depends_on "bazaar" => :build
   depends_on "dep" => :build
@@ -24,7 +22,7 @@ class Cayley < Formula
 
     (buildpath/"src/github.com/cayleygraph/cayley").install buildpath.children
     cd "src/github.com/cayleygraph/cayley" do
-      system "dep", "ensure"
+      system "dep", "ensure", "-vendor-only"
       system "go", "build", "-o", bin/"cayley", "-ldflags",
              "-X main.Version=#{version}", ".../cmd/cayley"
 
@@ -33,10 +31,9 @@ class Cayley < Formula
 
       (pkgshare/"assets").install "docs", "static", "templates"
 
-      if build.with? "samples"
-        system "gzip", "-d", "data/30kmoviedata.nq.gz"
-        (pkgshare/"samples").install "data/testdata.nq", "data/30kmoviedata.nq"
-      end
+      # Install samples
+      system "gzip", "-d", "data/30kmoviedata.nq.gz"
+      (pkgshare/"samples").install "data/testdata.nq", "data/30kmoviedata.nq"
     end
   end
 
@@ -80,7 +77,7 @@ class Cayley < Formula
         <string>#{var}/log/cayley.log</string>
       </dict>
     </plist>
-    EOS
+  EOS
   end
 
   test do

@@ -1,18 +1,18 @@
 class Telegraf < Formula
   desc "Server-level metric gathering agent for InfluxDB"
   homepage "https://influxdata.com"
-  url "https://github.com/influxdata/telegraf/archive/1.6.2.tar.gz"
-  sha256 "93cc548f336a8e0750055e137458c9950e4d5f6e59b2cbf9da492e5c58977240"
+  url "https://github.com/influxdata/telegraf/archive/1.12.1.tar.gz"
+  sha256 "dfe1beb140d655f1888e61b3adccc47c56c8c22aed27571ee0bd0bc141a6cdc4"
   head "https://github.com/influxdata/telegraf.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "6a52e1f1a5c990a3a1dd2438ca433500629c2845334841920e5f0bb3b59e48c0" => :high_sierra
-    sha256 "6555f0ecd8529ddb904342cc4f00522b2f5494a2c9e2b874b23c0dbf2d48ba8a" => :sierra
-    sha256 "4d48caa19da9c786606c03f32db64041590a093ce08aba8470ef84d950fb6570" => :el_capitan
+    sha256 "7333f2bfd20251eed5ee96ea57abb5f4b77d120d3ff21e780b3f6d1a5e840583" => :mojave
+    sha256 "b1f7b79e2375dddd1382343277aba75391ed25fe0039eb35b86e0f3f62c3c623" => :high_sierra
+    sha256 "418332580166a25d68919c77d314f2226695dbe8037fb73146e823c24479fe65" => :sierra
   end
 
-  depends_on "gdm" => :build
+  depends_on "dep" => :build
   depends_on "go" => :build
 
   def install
@@ -20,7 +20,7 @@ class Telegraf < Formula
     dir = buildpath/"src/github.com/influxdata/telegraf"
     dir.install buildpath.children
     cd dir do
-      system "gdm", "restore"
+      system "dep", "ensure", "-vendor-only"
       system "go", "install", "-ldflags", "-X main.version=#{version}", "./..."
       prefix.install_metafiles
     end
@@ -65,7 +65,7 @@ class Telegraf < Formula
         <string>#{var}/log/telegraf.log</string>
       </dict>
     </plist>
-    EOS
+  EOS
   end
 
   test do

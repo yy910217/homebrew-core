@@ -1,13 +1,14 @@
 class Gcab < Formula
   desc "Windows installer (.MSI) tool"
   homepage "https://wiki.gnome.org/msitools"
-  url "https://download.gnome.org/sources/gcab/1.1/gcab-1.1.tar.xz"
-  sha256 "192b2272c2adfde43595e5c62388854bca8a404bc796585b638e81774dd62950"
+  url "https://download.gnome.org/sources/gcab/1.2/gcab-1.2.tar.xz"
+  sha256 "5a2d96fe7e69e42d363c31cf2370d7afa3bb69cec984d4128322ea40e62c100d"
+  revision 1
 
   bottle do
-    sha256 "89af1288fc8177bc3dd3e4f3c7791cd33ac5d29df158e2ed19928ff10a44b335" => :high_sierra
-    sha256 "2bfa5379c2f250514d0309557d972396d48f978c669d446d1032079cba94dbff" => :sierra
-    sha256 "87bef1462d6e43615cb099cf8d6c061f52814c257430f2dc0cbbbb69856af99b" => :el_capitan
+    sha256 "b72ded95967c164253ee795435637e99dbe62202c82ad8a5730a5753a0f1a0af" => :mojave
+    sha256 "49f8e335616b55f0c3ee19078b7a2fc58e0066fba206adc94be76107f6f843ed" => :high_sierra
+    sha256 "257cac0a43760726ec36ea892695236a787b50f29bd41f6db67225200a9478c7" => :sierra
   end
 
   depends_on "gobject-introspection" => :build

@@ -1,25 +1,32 @@
 class Cockroach < Formula
   desc "Distributed SQL database"
   homepage "https://www.cockroachlabs.com"
-  url "https://binaries.cockroachdb.com/cockroach-v2.0.1.src.tgz"
-  version "2.0.1"
-  sha256 "4f929461ad50d3fd471886856aa399f41a405a664e886cf9ab71d2879162955e"
+  url "https://binaries.cockroachdb.com/cockroach-v19.1.4.src.tgz"
+  version "19.1.4"
+  sha256 "d819167dc109b566511cb6cef9aadc8c4f07b1be6a8b3108f4bbd14808d21faf"
   head "https://github.com/cockroachdb/cockroach.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "8c6c3011cf1ed64d7c0d4a5b7ccaeb08b05d7f40ed49b854ffa556768034ff5d" => :high_sierra
-    sha256 "ed8f7bf78acec12cbc321555fb996c92cc5511e1ca44c8e7d3b948826e75d47a" => :sierra
-    sha256 "ca238206eac0199947c6dab60d8a9d330e65282262984137327ec7b9dccbd5f0" => :el_capitan
+    sha256 "82d20462ca26fcdaad2c4639582bc3cbb10fee2ca9fb63d1944648dc9fdf461a" => :mojave
+    sha256 "247cea9630fdc06c497c42ccf6290b601870eaac96a14ec91a993e87bbf5acb1" => :high_sierra
+    sha256 "f55c8f203ff3c49312641f81d7a15c4f3bcc02c5a5585981574b11161eeda62d" => :sierra
   end
 
   depends_on "autoconf" => :build
   depends_on "cmake" => :build
   depends_on "go" => :build
+  depends_on "make" => :build
   depends_on "xz" => :build
 
   def install
-    system "make", "install", "prefix=#{prefix}"
+    # The GNU Make that ships with macOS Mojave (v3.81 at the time of writing) has a bug
+    # that causes it to loop infinitely when trying to build cockroach. Use
+    # the more up-to-date make that Homebrew provides.
+    ENV.prepend_path "PATH", Formula["make"].opt_libexec/"gnubin"
+    # Build only the OSS components
+    system "make", "buildoss"
+    system "make", "install", "prefix=#{prefix}", "BUILDTYPE=release"
   end
 
   def caveats; <<~EOS
@@ -33,7 +40,7 @@ class Cockroach < Formula
     mode and may expose data publicly in e.g. a DNS rebinding attack. To run
     CockroachDB securely, please see:
       #{Formatter.url("https://www.cockroachlabs.com/docs/secure-a-cluster.html")}
-    EOS
+  EOS
   end
 
   plist_options :manual => "cockroach start --insecure"
@@ -62,7 +69,7 @@ class Cockroach < Formula
       <true/>
     </dict>
     </plist>
-    EOS
+  EOS
   end
 
   test do
@@ -81,6 +88,15 @@ class Cockroach < Formula
         id,balance
         1,1000.50
       EOS
+    rescue => e
+      # If an error occurs, attempt to print out any messages from the
+      # server.
+      begin
+        $stderr.puts "server messages:", File.read("start.out")
+      rescue
+        $stderr.puts "unable to load messages from start.out"
+      end
+      raise e
     ensure
       system "#{bin}/cockroach", "quit", "--insecure"
     end

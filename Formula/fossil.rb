@@ -1,43 +1,34 @@
 class Fossil < Formula
   desc "Distributed software configuration management"
   homepage "https://www.fossil-scm.org/"
-  url "https://www.fossil-scm.org/index.html/uv/fossil-src-2.6.tar.gz"
-  sha256 "76a794555918be179850739a90f157de0edb8568ad552b4c40ce186c79ff6ed9"
-
+  url "https://www.fossil-scm.org/index.html/uv/fossil-src-2.9.tar.gz"
+  sha256 "1cb2ada92d43e3e7e008fe77f5e743d301c7ea34d4c36c42f255f873e73d8b4f"
+  revision 1
   head "https://www.fossil-scm.org/", :using => :fossil
 
   bottle do
     cellar :any
-    sha256 "d95826fb9776c9a7da204733217ed5adef89c57e695f30301d02146882b1d3db" => :high_sierra
-    sha256 "be422f110ba495e9d61aed8e3b00a858cdf25cff0f70a59c9130334ea5ed87d4" => :sierra
-    sha256 "5847c8312bad3981f2c516ddbccf22158875d5debf79c6f8fb2b62e794e462ff" => :el_capitan
+    sha256 "c876f19f2fe8bd1d92360437baee0e3887a7598497328f408b5ad84d5ffe6696" => :mojave
+    sha256 "8b3b9b01b25196cef89e25e95b0eda93976a43fc3f525f77cc4353e492142091" => :high_sierra
+    sha256 "52de169a2cc7dcf4eff56e9553184f1790f98ee1bd21b367aeb83d1c637c862e" => :sierra
   end
 
-  option "without-json", "Build without 'json' command support"
-  option "without-tcl", "Build without the tcl-th1 command bridge"
-
-  depends_on "openssl"
-  depends_on :osxfuse => :optional
+  depends_on "openssl@1.1"
+  uses_from_macos "zlib"
 
   def install
     args = [
       # fix a build issue, recommended by upstream on the mailing-list:
       # https://permalink.gmane.org/gmane.comp.version-control.fossil-scm.user/22444
       "--with-tcl-private-stubs=1",
+      "--json",
+      "--disable-fusefs",
     ]
-    args << "--json" if build.with? "json"
 
-    if MacOS::CLT.installed? && build.with?("tcl")
-      sdk = MacOS::CLT.installed? ? "" : MacOS.sdk_path
-      args << "--with-tcl=#{sdk}/System/Library/Frameworks/Tcl.framework"
+    if MacOS.sdk_path_if_needed
+      args << "--with-tcl=#{MacOS.sdk_path}/System/Library/Frameworks/Tcl.framework"
     else
       args << "--with-tcl-stubs"
-    end
-
-    if build.with? "osxfuse"
-      ENV.prepend "CFLAGS", "-I/usr/local/include/osxfuse"
-    else
-      args << "--disable-fusefs"
     end
 
     system "./configure", *args

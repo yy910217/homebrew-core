@@ -1,19 +1,18 @@
 class Tile38 < Formula
   desc "In-memory geolocation data store, spatial index, and realtime geofence"
-  homepage "http://tile38.com"
-  url "https://github.com/tidwall/tile38/archive/1.12.2.tar.gz"
-  sha256 "c8301f42fc479423751ee485881e80051f3d566d49d24b91c802b7011096dc8e"
+  homepage "https://tile38.com/"
+  url "https://github.com/tidwall/tile38/archive/1.17.6.tar.gz"
+  sha256 "4656b976100dc553742c409e023ecfb7d491767b87e518f55e999e1b26bb1b9e"
   head "https://github.com/tidwall/tile38.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "0a26c17203bc3d40326653a0b541527ba6920863e882c91d8c3de54a70079608" => :high_sierra
-    sha256 "6bde0d100a12cb3091bb878d6dc6a0408497efed05829e3ab3ad21b1da9f80a8" => :sierra
-    sha256 "307e57b5862a59b0398d090cbf8215f7fce2b58c8ccaa480b2bc102ddb3068f3" => :el_capitan
+    sha256 "f420c16ea95108614a8ef3c660d8f68f24bbb02ffaa84266a6c4248ea27504b7" => :mojave
+    sha256 "5c10d7d38dd399445d38b48bdc9d224e0100c0602724b2ab2b312e536b16c3ef" => :high_sierra
+    sha256 "58f9522526d8b08f1e7e810b269f092c1259a957da54fb26782c6555311bfa02" => :sierra
   end
 
   depends_on "go" => :build
-  depends_on "godep" => :build
 
   def datadir
     var/"tile38/data"
@@ -33,7 +32,7 @@ class Tile38 < Formula
 
   def caveats; <<~EOS
     To connect: tile38-cli
-    EOS
+  EOS
   end
 
   plist_options :manual => "tile38-server -d #{HOMEBREW_PREFIX}/var/tile38/data"
@@ -66,10 +65,20 @@ class Tile38 < Formula
         <string>#{var}/log/tile38.log</string>
       </dict>
     </plist>
-    EOS
+  EOS
   end
 
   test do
-    system bin/"tile38-cli", "-h"
+    begin
+      pid = fork do
+        exec "#{bin}/tile38-server", "-q"
+      end
+      sleep 2
+      json_output = shell_output("#{bin}/tile38-cli server")
+      tile38_server = JSON.parse(json_output)
+      assert_equal tile38_server["ok"], true
+    ensure
+      Process.kill("HUP", pid)
+    end
   end
 end

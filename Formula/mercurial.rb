@@ -3,15 +3,18 @@
 class Mercurial < Formula
   desc "Scalable distributed version control system"
   homepage "https://mercurial-scm.org/"
-  url "https://mercurial-scm.org/release/mercurial-4.6.tar.gz"
-  sha256 "56ae3b10201adae37ad97fbd759cf3cea4ebe64c57641c059978c7a706ee6b49"
+  url "https://www.mercurial-scm.org/release/mercurial-5.1.1.tar.gz"
+  sha256 "35fc8ba5e0379c1b3affa2757e83fb0509e8ac314cbd9f1fd133cf265d16e49f"
+  revision 2
 
   bottle do
-    sha256 "6b68e483623baa387be5392b5b002f6502692ab88ee50ad4d6196e4cd0f8ca1c" => :high_sierra
-    sha256 "8bb05d716ba5785eb22e0334433f9833f293edb3902255d45e6c6143640e5c8e" => :sierra
-    sha256 "f97343bd9269d0da22ebf22dbadacff52ac6b673183f3cdaf725c746654ab4f4" => :el_capitan
+    sha256 "e4fcf22b36669ca85e582121d7365e8d94f4504d7b48dfd518a93e4dbf659646" => :mojave
+    sha256 "127344d5ead0a8fbd4cabbfafd7fca4dd4f85f45f260b76e500538c7fd0d05bc" => :high_sierra
+    sha256 "9b9f8f096a65d37f2899e7133fb76d64a25be52100883ebd3b7805facc18a757" => :sierra
   end
 
+  # See discussion at https://github.com/Homebrew/homebrew-core/pull/44095
+  # plans for Python 3 migration
   depends_on "python@2"
 
   def install
@@ -21,8 +24,8 @@ class Mercurial < Formula
 
     # Install chg (see https://www.mercurial-scm.org/wiki/CHg)
     cd "contrib/chg" do
-      system "make", "PREFIX=#{prefix}", "HGPATH=#{bin}/hg", \
-             "HG=#{bin}/hg"
+      system "make", "PREFIX=#{prefix}", "HGPATH=#{bin}/hg",
+                     "HG=#{bin}/hg"
       bin.install "chg"
     end
 
@@ -45,8 +48,10 @@ class Mercurial < Formula
 
   def caveats
     return unless (opt_bin/"hg").exist?
+
     cacerts_configured = `#{opt_bin}/hg config web.cacerts`.strip
     return if cacerts_configured.empty?
+
     <<~EOS
       Homebrew has detected that Mercurial is configured to use a certificate
       bundle file as its trust store for TLS connections instead of using the

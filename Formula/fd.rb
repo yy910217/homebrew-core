@@ -1,21 +1,22 @@
 class Fd < Formula
   desc "Simple, fast and user-friendly alternative to find"
   homepage "https://github.com/sharkdp/fd"
-  url "https://github.com/sharkdp/fd/archive/v7.0.0.tar.gz"
-  sha256 "93cc5a7c9199dc650f51a491e4ed4512262eeaeae5847722e6886763b41e2896"
+  url "https://github.com/sharkdp/fd/archive/v7.4.0.tar.gz"
+  sha256 "33570ba65e7f8b438746cb92bb9bc4a6030b482a0d50db37c830c4e315877537"
   head "https://github.com/sharkdp/fd.git"
 
   bottle do
-    sha256 "2644d73cbba8a1dd1520f6c2a2628c9c7417dbc58f39fac6936ae290dcea4774" => :high_sierra
-    sha256 "e71f013de3825b3fe467304af14e50e3a3712b76628978628896b2ecdc6a5625" => :sierra
-    sha256 "f5363d8f9a41dfbefe1368abb7baadf9d0cc5dc0294676af3ef531a9eced33a0" => :el_capitan
+    cellar :any_skip_relocation
+    sha256 "f20d5cb883fcf5796f96429376f3251a51b6bb522070be8ebb514f4b6a462713" => :mojave
+    sha256 "fe9e33ff09a46fe7f3e7f25852be70de163c7ebdf9213533bf0bb0c1876bd744" => :high_sierra
+    sha256 "4cc2785a526d2a377f2a32d675f5b3b0816044fe16a53cde55703cd610fccbef" => :sierra
   end
 
   depends_on "rust" => :build
 
   def install
     ENV["SHELL_COMPLETIONS_DIR"] = buildpath
-    system "cargo", "install", "--root", prefix
+    system "cargo", "install", "--root", prefix, "--path", "."
     man1.install "doc/fd.1"
     bash_completion.install "fd.bash"
     fish_completion.install "fd.fish"

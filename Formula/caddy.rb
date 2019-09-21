@@ -1,30 +1,29 @@
 class Caddy < Formula
   desc "Alternative general-purpose HTTP/2 web server"
   homepage "https://caddyserver.com/"
-  url "https://github.com/mholt/caddy/archive/v0.11.0.tar.gz"
-  sha256 "81e593d258460a9f5c6b5a5f46890a08b6b1ce15f5c0fc7bcaf09826368c3a1a"
-  head "https://github.com/mholt/caddy.git"
+  url "https://github.com/caddyserver/caddy/archive/v1.0.3.tar.gz"
+  sha256 "c1c7b337a5008d28c1956fd4f057104a78d0e24b74c30867cea988369b61fed3"
+  head "https://github.com/caddyserver/caddy.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "14906b4bf0d7cb2b8bf034d7464645af3b06b484631b001e1e7af5358af112b5" => :high_sierra
-    sha256 "5a73e124c3e217c89325f753542dc626f80bbe78a5dcfe2f4613bd59a609f883" => :sierra
-    sha256 "04c0e14fd79ee5cf0aba00b8d3ab233bdf50eb47ee33e204a7e750c6c6a23615" => :el_capitan
+    sha256 "71cdee31fbe932ac7c48482bef34b5e8f95d148e14796b990494462ac334b9c0" => :mojave
+    sha256 "1b378b3ec18d7c9f97dc6fe52a5706e590ec3f329a755361a094228312b76fca" => :high_sierra
+    sha256 "17356067c9bbeb67c0b5ac218c21a066a90620cb9b6fb806733a38b27be73eff" => :sierra
   end
 
   depends_on "go" => :build
 
   def install
-    ENV["GOPATH"] = buildpath
     ENV["GOOS"] = "darwin"
-    ENV["GOARCH"] = MacOS.prefer_64_bit? ? "amd64" : "386"
+    ENV["GOARCH"] = "amd64"
 
-    (buildpath/"src/github.com/mholt").mkpath
-    ln_s buildpath, "src/github.com/mholt/caddy"
+    (buildpath/"src/github.com/caddyserver").mkpath
+    ln_s buildpath, "src/github.com/caddyserver/caddy"
 
     system "go", "build", "-ldflags",
-           "-X github.com/mholt/caddy/caddy/caddymain.gitTag=#{version}",
-           "-o", bin/"caddy", "github.com/mholt/caddy/caddy"
+           "-X github.com/caddyserver/caddy/caddy/caddymain.gitTag=#{version}",
+           "-o", bin/"caddy", "github.com/caddyserver/caddy/caddy"
   end
 
   plist_options :manual => "caddy -conf #{HOMEBREW_PREFIX}/etc/Caddyfile"
@@ -48,7 +47,7 @@ class Caddy < Formula
         <true/>
       </dict>
     </plist>
-    EOS
+  EOS
   end
 
   test do

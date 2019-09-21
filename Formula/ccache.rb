@@ -1,22 +1,25 @@
 class Ccache < Formula
   desc "Object-file caching compiler wrapper"
-  homepage "https://ccache.samba.org/"
-  url "https://www.samba.org/ftp/ccache/ccache-3.4.2.tar.xz"
-  sha256 "18a8b14367d63d3d37fb6c33cba60e1b7fcd7a63d608df97c9771ae0d234fee2"
+  homepage "https://ccache.dev/"
+  url "https://github.com/ccache/ccache/releases/download/v3.7.4/ccache-3.7.4.tar.xz"
+  sha256 "04c0af414b8cf89e541daed59735547fbfd323b1aaa983da0216f6b6731e6836"
 
   bottle do
-    sha256 "279961566bd797e5673c959161079c155044bb9091585890ece18d9ce557de45" => :high_sierra
-    sha256 "9d9fd55841f1967739949493c453260243a49d2e78af2ac3d1f24c878096c254" => :sierra
-    sha256 "02fabd715abe67071a46f6fda9f531455bc0d357202b025516c8655349bb614a" => :el_capitan
+    cellar :any_skip_relocation
+    sha256 "0a7fceb3c3679a4a877f1d4ae88e077199802dd443dda22de5da0d2876063008" => :mojave
+    sha256 "29271554b78ff5d578005be15d4011d2e1b3049d9c0bfe8e266fe7f897ba6716" => :high_sierra
+    sha256 "c63ff484e61c4d08ae490dc1f7bcc410542c3701b5388aae73a9aa123cd77c78" => :sierra
   end
+
+  uses_from_macos "zlib"
 
   head do
     url "https://github.com/ccache/ccache.git"
 
+    depends_on "asciidoc" => :build
     depends_on "autoconf" => :build
     depends_on "automake" => :build
     depends_on "libtool" => :build
-    depends_on "asciidoc" => :build
   end
 
   def install
@@ -33,9 +36,9 @@ class Ccache < Formula
       clang
       clang++
       cc
-      gcc gcc2 gcc3 gcc-3.3 gcc-4.0 gcc-4.2 gcc-4.3 gcc-4.4 gcc-4.5 gcc-4.6 gcc-4.7 gcc-4.8 gcc-4.9 gcc-5 gcc-6 gcc-7
-      c++ c++3 c++-3.3 c++-4.0 c++-4.2 c++-4.3 c++-4.4 c++-4.5 c++-4.6 c++-4.7 c++-4.8 c++-4.9 c++-5 c++-6 c++-7
-      g++ g++2 g++3 g++-3.3 g++-4.0 g++-4.2 g++-4.3 g++-4.4 g++-4.5 g++-4.6 g++-4.7 g++-4.8 g++-4.9 g++-5 g++-6 g++-7
+      gcc gcc2 gcc3 gcc-3.3 gcc-4.0 gcc-4.2 gcc-4.3 gcc-4.4 gcc-4.5 gcc-4.6 gcc-4.7 gcc-4.8 gcc-4.9 gcc-5 gcc-6 gcc-7 gcc-8 gcc-9
+      c++ c++3 c++-3.3 c++-4.0 c++-4.2 c++-4.3 c++-4.4 c++-4.5 c++-4.6 c++-4.7 c++-4.8 c++-4.9 c++-5 c++-6 c++-7 c++-8 c++-9
+      g++ g++2 g++3 g++-3.3 g++-4.0 g++-4.2 g++-4.3 g++-4.4 g++-4.5 g++-4.6 g++-4.7 g++-4.8 g++-4.9 g++-5 g++-6 g++-7 g++-8 g++-9
     ].each do |prog|
       libexec.install_symlink bin/"ccache" => prog
     end
@@ -52,7 +55,7 @@ class Ccache < Formula
 
     NOTE: ccache can prevent some software from compiling.
     ALSO NOTE: The brew command, by design, will never use ccache.
-    EOS
+  EOS
   end
 
   test do

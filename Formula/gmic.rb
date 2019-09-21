@@ -1,39 +1,29 @@
 class Gmic < Formula
   desc "Full-Featured Open-Source Framework for Image Processing"
   homepage "https://gmic.eu/"
-  url "https://gmic.eu/files/source/gmic_2.1.5.tar.gz"
-  sha256 "2f3de90a09bba6d24c89258be016fd6992886bda13dbbcaf03de58c765774845"
-  revision 1
+  url "https://gmic.eu/files/source/gmic_2.7.1.tar.gz"
+  sha256 "c71e784abd2141252efad505b6a48b6974c388788db5530b3ca0dfb07baeafeb"
   head "https://github.com/dtschump/gmic.git"
 
   bottle do
     cellar :any
-    sha256 "13ccaf356dc8be85d6d60078c5c10ad3ae6fd515169c396b6cb1c28b2a348c15" => :high_sierra
-    sha256 "7ed192f9ad04036d236cbe9b854ea54325bb366ec392d4cb977e227167ce1ebf" => :sierra
-    sha256 "db45390cb89c9a1d1280f05543555917d161be399223e79d99f6fcacae6532bf" => :el_capitan
+    sha256 "a8510f17aa4f57170b3afc337a26cde60d9b5a6daf6e0cfce07408fa0656781a" => :mojave
+    sha256 "ef58052263cf42b8d19126872f77b591ef14891abb6057ed4b756c69eaa507ff" => :high_sierra
+    sha256 "5042c3ee6211c25dd23708880e4c4261ab15445ed50aae7e58f8aee6eb56514b" => :sierra
   end
 
   depends_on "cmake" => :build
-  depends_on "jpeg" => :recommended
-  depends_on "libpng" => :recommended
-  depends_on "fftw" => :recommended
-  depends_on "opencv@2" => :optional
-  depends_on "ffmpeg" => :optional
-  depends_on "libtiff" => :optional
-  depends_on "openexr" => :optional
+  depends_on "fftw"
+  depends_on "jpeg"
+  depends_on "libpng"
+  depends_on "libtiff"
 
   def install
-    cp "resources/CMakeLists.txt", buildpath
-    args = std_cmake_args
-    args << "-DENABLE_X=OFF"
-    args << "-DENABLE_JPEG=OFF" if build.without? "jpeg"
-    args << "-DENABLE_PNG=OFF" if build.without? "libpng"
-    args << "-DENABLE_FFTW=OFF" if build.without? "fftw"
-    args << "-DENABLE_OPENCV=OFF" if build.without? "opencv"
-    args << "-DENABLE_FFMPEG=OFF" if build.without? "ffmpeg"
-    args << "-DENABLE_TIFF=OFF" if build.without? "libtiff"
-    args << "-DENABLE_OPENEXR=OFF" if build.without? "openexr"
-    system "cmake", *args
+    system "cmake", *std_cmake_args,
+                    "-DENABLE_FFMPEG=OFF",
+                    "-DENABLE_OPENCV=OFF",
+                    "-DENABLE_OPENEXR=OFF",
+                    "-DENABLE_X=OFF"
     system "make", "install"
   end
 

@@ -1,12 +1,12 @@
 class Ccze < Formula
   desc "Robust and modular log colorizer"
   homepage "https://packages.debian.org/wheezy/ccze"
-  url "https://mirrors.ocf.berkeley.edu/debian/pool/main/c/ccze/ccze_0.2.1.orig.tar.gz"
-  mirror "https://mirrorservice.org/sites/ftp.debian.org/debian/pool/main/c/ccze/ccze_0.2.1.orig.tar.gz"
+  url "https://deb.debian.org/debian/pool/main/c/ccze/ccze_0.2.1.orig.tar.gz"
   sha256 "8263a11183fd356a033b6572958d5a6bb56bfd2dba801ed0bff276cfae528aa3"
   revision 1
 
   bottle do
+    sha256 "d1993c584b39fc35c9b03d62677a5944301a64d96a8e72db89f2ba4974939990" => :mojave
     sha256 "6aa074341d1442c6795ece5581a5b404277254d4fdf3a42004d23e32e73824dd" => :high_sierra
     sha256 "7f1d8fb98c7ca95eb938ff2bae748ad081772542234bbd25151cc37e0f097461" => :sierra
     sha256 "795fc9b842f53197ec45774d909fb14efd463a64215fbec799ad870bb78a6834" => :el_capitan

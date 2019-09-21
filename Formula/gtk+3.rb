@@ -1,48 +1,58 @@
 class Gtkx3 < Formula
   desc "Toolkit for creating graphical user interfaces"
   homepage "https://gtk.org/"
-  url "https://download.gnome.org/sources/gtk+/3.22/gtk+-3.22.30.tar.xz"
-  sha256 "a1a4a5c12703d4e1ccda28333b87ff462741dc365131fbc94c218ae81d9a6567"
+  url "https://download.gnome.org/sources/gtk+/3.24/gtk+-3.24.11.tar.xz"
+  sha256 "dba7658d0a2e1bfad8260f5210ca02988f233d1d86edacb95eceed7eca982895"
 
   bottle do
-    sha256 "ca8e625e7f00fca495c6724d46fac0b384b61d449d4f1e0a687ea86273a41dd7" => :high_sierra
-    sha256 "a0f6f6f21e84bf16e15b284bdac7c06ae0acbffccf076bfbfd0db96e39344cf0" => :sierra
-    sha256 "5949596413f77dcdc0e59087ca3b187272af4606011494c5357c481a8f92ce52" => :el_capitan
+    sha256 "c2c7fcdc5d8be7691a66cd17ed88589f5d8c2fc17e6c5c119fd78f54dc57e8fd" => :mojave
+    sha256 "7e1a7ce05294c6eaecdceb457169fe09f6821061efd9d6dd18879516876b8acf" => :high_sierra
+    sha256 "680b254667a32e784ce478d0f79d8044974a5bacf1fc08b7cc5eb82325c9fade" => :sierra
   end
 
+  depends_on "docbook" => :build
+  depends_on "docbook-xsl" => :build
   depends_on "gobject-introspection" => :build
+  depends_on "meson" => :build
+  depends_on "ninja" => :build
   depends_on "pkg-config" => :build
-  depends_on "gdk-pixbuf"
   depends_on "atk"
+  depends_on "gdk-pixbuf"
+  depends_on "glib"
+  depends_on "gsettings-desktop-schemas"
+  depends_on "hicolor-icon-theme"
   depends_on "libepoxy"
   depends_on "pango"
-  depends_on "glib"
-  depends_on "hicolor-icon-theme"
-  depends_on "gsettings-desktop-schemas" => :recommended
 
   def install
     args = %W[
-      --enable-debug=minimal
-      --disable-dependency-tracking
       --prefix=#{prefix}
-      --disable-glibtest
-      --enable-introspection=yes
-      --disable-schemas-compile
-      --enable-quartz-backend
-      --disable-x11-backend
+      -Dx11_backend=false
+      -Dquartz_backend=true
+      -Dgtk_doc=false
+      -Dman=true
+      -Dintrospection=true
     ]
 
-    system "./configure", *args
-    # necessary to avoid gtk-update-icon-cache not being found during make install
-    bin.mkpath
-    ENV.prepend_path "PATH", bin
-    system "make", "install"
+    # ensure that we don't run the meson post install script
+    ENV["DESTDIR"] = "/"
+
+    # Find our docbook catalog
+    ENV["XML_CATALOG_FILES"] = "#{etc}/xml/catalog"
+
+    mkdir "build" do
+      system "meson", *args, ".."
+      system "ninja", "-v"
+      system "ninja", "install", "-v"
+    end
+
     # Prevent a conflict between this and Gtk+2
     mv bin/"gtk-update-icon-cache", bin/"gtk3-update-icon-cache"
   end
 
   def post_install
     system "#{Formula["glib"].opt_bin}/glib-compile-schemas", "#{HOMEBREW_PREFIX}/share/glib-2.0/schemas"
+    system bin/"gtk3-update-icon-cache", "-f", "-t", "#{HOMEBREW_PREFIX}/share/icons/hicolor"
   end
 
   test do
@@ -61,6 +71,7 @@ class Gtkx3 < Formula
     gdk_pixbuf = Formula["gdk-pixbuf"]
     gettext = Formula["gettext"]
     glib = Formula["glib"]
+    harfbuzz = Formula["harfbuzz"]
     libepoxy = Formula["libepoxy"]
     libpng = Formula["libpng"]
     pango = Formula["pango"]
@@ -75,6 +86,7 @@ class Gtkx3 < Formula
       -I#{glib.opt_include}/gio-unix-2.0/
       -I#{glib.opt_include}/glib-2.0
       -I#{glib.opt_lib}/glib-2.0/include
+      -I#{harfbuzz.opt_include}/harfbuzz
       -I#{include}
       -I#{include}/gtk-3.0
       -I#{libepoxy.opt_include}

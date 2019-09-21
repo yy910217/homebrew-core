@@ -1,14 +1,15 @@
 class Getdns < Formula
   desc "Modern asynchronous DNS API"
   homepage "https://getdnsapi.net"
-  url "https://getdnsapi.net/releases/getdns-1-4-2/getdns-1.4.2.tar.gz"
-  sha256 "1685b82dfe297cffc4bae08a773cdc88a3edf9a4e5a1ea27d8764bb5affc0e80"
-  revision 2
+  url "https://getdnsapi.net/releases/getdns-1-5-2/getdns-1.5.2.tar.gz"
+  sha256 "1826a6a221ea9e9301f2c1f5d25f6f5588e841f08b967645bf50c53b970694c0"
+  revision 3
 
   bottle do
-    sha256 "db09cf3974b2cdf304d8bd95605e0b0bcd15014917eb95a4afe9e91617a55b74" => :high_sierra
-    sha256 "8708ee62ca807cb817f5ad706a2f671062de82c73b76d72294cf701e6cde35a0" => :sierra
-    sha256 "45c118918b75e30acf417f20a0e822b1aaa29af40444c1de3a6cb07b0000e805" => :el_capitan
+    cellar :any
+    sha256 "c7cde9c6422419585abaf6b30b14d1213ee728d6298527689714f61e1003dfcd" => :mojave
+    sha256 "b105523ee31c31dd16484babf53659e82a2950f095f5949d811733b481f1d84b" => :high_sierra
+    sha256 "aab96082494eadf2d8806211a3597fdd3356938181e39b8c77a6146a8767ce97" => :sierra
   end
 
   head do
@@ -19,12 +20,10 @@ class Getdns < Formula
     depends_on "libtool" => :build
   end
 
-  depends_on "openssl"
-  depends_on "unbound" => :recommended
-  depends_on "libidn" => :recommended
-  depends_on "libevent" => :recommended
-  depends_on "libuv" => :optional
-  depends_on "libev" => :optional
+  depends_on "libevent"
+  depends_on "libidn2"
+  depends_on "openssl@1.1"
+  depends_on "unbound"
 
   def install
     if build.head?
@@ -32,18 +31,11 @@ class Getdns < Formula
       system "autoreconf", "-fi"
     end
 
-    args = [
-      "--with-ssl=#{Formula["openssl"].opt_prefix}",
-      "--with-trust-anchor=#{etc}/getdns-root.key",
-      "--without-stubby",
-    ]
-    args << "--enable-stub-only" if build.without? "unbound"
-    args << "--without-libidn" if build.without? "libidn"
-    args << "--with-libevent" if build.with? "libevent"
-    args << "--with-libuv" if build.with? "libuv"
-    args << "--with-libev" if build.with? "libev"
-
-    system "./configure", "--prefix=#{prefix}", *args
+    system "./configure", "--prefix=#{prefix}",
+                          "--with-libevent",
+                          "--with-ssl=#{Formula["openssl@1.1"].opt_prefix}",
+                          "--with-trust-anchor=#{etc}/getdns-root.key",
+                          "--without-stubby"
     system "make"
     ENV.deparallelize
     system "make", "install"

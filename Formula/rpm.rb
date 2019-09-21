@@ -1,23 +1,24 @@
 class Rpm < Formula
   desc "Standard unix software packaging tool"
-  homepage "http://www.rpm.org/"
-  url "http://ftp.rpm.org/releases/rpm-4.14.x/rpm-4.14.1.tar.bz2"
-  sha256 "43f40e2ccc3ca65bd3238f8c9f8399d4957be0878c2e83cba2746d2d0d96793b"
+  homepage "https://rpm.org/"
+  url "http://ftp.rpm.org/releases/rpm-4.14.x/rpm-4.14.2.1.tar.bz2"
+  sha256 "1139c24b7372f89c0a697096bf9809be70ba55e006c23ff47305c1849d98acda"
+  revision 2
   version_scheme 1
 
   bottle do
-    sha256 "6de4058fba75ee957c09b1fefa1659bd8ddd06db5c7d8c30f27ffd887c93d2f4" => :high_sierra
-    sha256 "36b3d79a238595e902c76f6fb239f262df5d8f0f49ca5acf856808b0833eb179" => :sierra
-    sha256 "984ba66c9306437aa22e0f9805e4daeae8bf1bf89c6a13f44f3d1ad91183b437" => :el_capitan
+    sha256 "1a4da220ae37c016815055778b94e3395c9acb2a460c6c1df87b15e834ec0dfb" => :mojave
+    sha256 "49be9aa93d8eb6e55a8b8e4e8214a70de9e4fe31bfbe68055ab7d19db1d3d467" => :high_sierra
+    sha256 "dc328eff0beb50f5a08b1ac4f98153c4471c2f0a53b3e4db4c5eef380757ac53" => :sierra
   end
 
-  depends_on "pkg-config"
   depends_on "berkeley-db"
   depends_on "gettext"
   depends_on "libarchive"
   depends_on "libmagic"
   depends_on "lua@5.1"
-  depends_on "openssl"
+  depends_on "openssl@1.1"
+  depends_on "pkg-config"
   depends_on "popt"
   depends_on "xz"
   depends_on "zstd"

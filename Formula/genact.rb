@@ -1,19 +1,20 @@
 class Genact < Formula
   desc "Nonsense activity generator"
   homepage "https://github.com/svenstaro/genact"
-  url "https://github.com/svenstaro/genact/archive/0.4.0.tar.gz"
-  sha256 "92265af4fc7adceda4379336ec5440125b60556dca59f16de37bfb32c35c5da8"
+  url "https://github.com/svenstaro/genact/archive/0.7.0.tar.gz"
+  sha256 "9bfb241d8d3e77dae63fa3f5c84ef67e459a03a8fc18ed4661e53765264288ce"
 
   bottle do
-    sha256 "cda0788c8c4b3430489284c98970a45fa4111cbcaada6112ec2171e70bc2de17" => :high_sierra
-    sha256 "0eba28cdb57f5bb297796668c65aff4eda911b7b23698306f27b0dcf19706156" => :sierra
-    sha256 "be6e7870976653c8d2a91f42fb8380531aa333f729d8d3298b4009efacc6a09d" => :el_capitan
+    cellar :any_skip_relocation
+    sha256 "fd5ef1de4fea2b1c08785d77eacaf40936764bf843e627977b2ab348f1c190ef" => :mojave
+    sha256 "efeb250335f9dc2ef86be2814243554933a99003a2f08aebf70339580917ff1d" => :high_sierra
+    sha256 "adeebbec88a70c4e06eece55a38b71e4d7031d85add9cf4069744f4a8b4cd395" => :sierra
   end
 
   depends_on "rust" => :build
 
   def install
-    system "cargo", "install", "--root", prefix
+    system "cargo", "install", "--root", prefix, "--path", "."
   end
 
   test do

@@ -1,21 +1,27 @@
+# This formula should never be deleted even when it is in violation of
+# https://docs.brew.sh/Versions. This is because it is useful to test things
+# with Ruby 2.0 for reproducing Ruby issues with older versions of macOS that
+# used this version (e.g. on 10.10 - 10.12 the system Ruby is 2.0).
+
 class RubyAT20 < Formula
   desc "Powerful, clean, object-oriented scripting language"
   homepage "https://www.ruby-lang.org/"
   url "https://cache.ruby-lang.org/pub/ruby/2.0/ruby-2.0.0-p648.tar.bz2"
   sha256 "087ad4dec748cfe665c856dbfbabdee5520268e94bb81a1d8565d76c3cc62166"
-  revision 6
+  revision 7
 
   bottle do
-    sha256 "654d5bcfe7e6de9d11b56e2e2f74856524b3a1e64dc3b2ab6e6d6435beb5c347" => :high_sierra
-    sha256 "904af6d6af1c1244c16baad5705a23afd1d9909413697bc06ff68de0e0b6b82d" => :sierra
-    sha256 "80e640febc6fc4a40ff2abcf1e665a644bbed97b8ff0d157de32f48c0fefea72" => :el_capitan
+    rebuild 1
+    sha256 "dc606a7858f4021e88dc36d88d99bc5308f8a45442d1db381624884e0162f385" => :mojave
+    sha256 "526c212867b28f5b4229c42ea42fef24ab36c016241c7e2235ccc54a96d6fcf5" => :high_sierra
+    sha256 "388b7e819b4a7750f4f87da89098d2812f96e2b6dee7195235ae339a7a461667" => :sierra
   end
 
   keg_only :versioned_formula
 
   depends_on "pkg-config" => :build
   depends_on "libyaml"
-  depends_on "openssl"
+  depends_on "openssl" # no OpenSSL 1.1 support
   depends_on "readline"
 
   def api_version
@@ -142,7 +148,7 @@ class RubyAT20 < Formula
         "#{opt_bin}/ruby"
       end
     end
-    EOS
+  EOS
   end
 
   def caveats; <<~EOS
@@ -150,7 +156,7 @@ class RubyAT20 < Formula
       #{rubygems_bindir}
 
     You may want to add this to your PATH.
-    EOS
+  EOS
   end
 
   test do

@@ -1,14 +1,14 @@
 class Gmime < Formula
   desc "MIME mail utilities"
   homepage "https://spruce.sourceforge.io/gmime/"
-  url "https://download.gnome.org/sources/gmime/3.2/gmime-3.2.0.tar.xz"
-  sha256 "75ec6033f9192488ff37745792c107b3d0ab0a36c2d3e4f732901a771755d7e0"
+  url "https://download.gnome.org/sources/gmime/3.2/gmime-3.2.3.tar.xz"
+  sha256 "6a0875eeb552ab447dd54853a68ced62217d863631048737dd97eaa2713e7311"
   revision 1
 
   bottle do
-    sha256 "4cefcf587984cfb905ec956527479f3b081bfb750ebec54a5ca074edc26333cc" => :high_sierra
-    sha256 "910361d5b4bc083a5365a366a3d9f39fe96ca6e9e78bd88bc4a6fdaeac634d14" => :sierra
-    sha256 "a2a9001ff723c5766ae4761c5b0553d7d6d5fb54c09cdb4154d659c3bbb614f8" => :el_capitan
+    sha256 "86f83fccbecf84898a0778444db42631d58080c25798aeffc4c0be69ca4fb62f" => :mojave
+    sha256 "d9bc49e393232e82fa89b1997f7dc0100550b6ae1663c1fb14aee306cabde160" => :high_sierra
+    sha256 "d1787c5e917185e39de52d19cef9524912ec9d2adec4b6b129a8787c623be021" => :sierra
   end
 
   depends_on "gobject-introspection" => :build
@@ -44,7 +44,7 @@ class Gmime < Formula
           return 1;
         }
       }
-      EOS
+    EOS
     gettext = Formula["gettext"]
     glib = Formula["glib"]
     pcre = Formula["pcre"]

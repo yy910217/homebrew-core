@@ -2,34 +2,30 @@ class Monero < Formula
   desc "Official monero wallet and cpu miner"
   homepage "https://getmonero.org/"
   url "https://github.com/monero-project/monero.git",
-      :tag => "v0.12.0.0",
-      :revision => "c29890c2c03f7f24aa4970b3ebbfe2dbb95b24eb"
-  revision 2
+      :tag      => "v0.14.1.2",
+      :revision => "8f0aedfa1ad7090ff1580cdce55b152fcb5655c0"
+  revision 1
 
   bottle do
-    sha256 "7b46a56bcb031b17d3a797c2ed867d56c1deaed9ed1aaa8f94990c0e422eada9" => :high_sierra
-    sha256 "307880ddf49338dc47aae782dce07f38933edae01937e47023978e5c3709dc37" => :sierra
-    sha256 "acbabbefedf0fad2b0aa863585f48c0aefc4e0dfd99c662b3b7cb11e3d331fa3" => :el_capitan
+    cellar :any
+    rebuild 1
+    sha256 "66645be8b44348dccf1772f32a25aa4d20f7c0f1d70d94143f97031099912c1b" => :mojave
+    sha256 "35d6e058a89875c99bb16ceb1c0452c5da5df0c99c8d247933fac4b62f998f73" => :high_sierra
+    sha256 "cd796d88fab23f151cdf7a959935629e072f7295ea1a5a05ac7d859306f64717" => :sierra
   end
 
   depends_on "cmake" => :build
   depends_on "pkg-config" => :build
   depends_on "boost"
-  depends_on "miniupnpc"
-  depends_on "openssl"
+  depends_on "libsodium"
+  depends_on "openssl@1.1"
   depends_on "readline"
+  depends_on "unbound"
   depends_on "zeromq"
 
-  # Fix "fatal error: 'boost/thread/v2/thread.hpp' file not found"
-  # https://github.com/monero-project/monero/pull/3667
-  patch do
-    url "https://github.com/monero-project/monero/commit/53a1962da18f952f6eb4683a846e52fe122520e2.patch?full_index=1"
-    sha256 "c5869f9da9429047fdad4386d0310cd88aae499a9ff148120612ab52c5a20b74"
-  end
-
   resource "cppzmq" do
-    url "https://github.com/zeromq/cppzmq/archive/v4.2.3.tar.gz"
-    sha256 "3e6b57bf49115f4ae893b1ff7848ead7267013087dc7be1ab27636a97144d373"
+    url "https://github.com/zeromq/cppzmq/archive/v4.3.0.tar.gz"
+    sha256 "27d1f56406ba94ee779e639203218820975cf68174f92fbeae0f645df0fcada4"
   end
 
   def install
@@ -38,6 +34,32 @@ class Monero < Formula
                          "-DReadline_ROOT_DIR=#{Formula["readline"].opt_prefix}",
                          *std_cmake_args
     system "make", "install"
+
+    # Avoid conflicting with miniupnpc
+    # Reported upstream 25 May 2018 https://github.com/monero-project/monero/issues/3862
+    rm lib/"libminiupnpc.a"
+    rm_rf include/"miniupnpc"
+  end
+
+  plist_options :manual => "monerod"
+
+  def plist; <<~EOS
+    <?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+    <plist version="1.0">
+    <dict>
+      <key>Label</key>
+      <string>#{plist_name}</string>
+      <key>ProgramArguments</key>
+      <array>
+        <string>#{opt_bin}/monerod</string>
+        <string>--non-interactive</string>
+      </array>
+      <key>RunAtLoad</key>
+      <true/>
+    </dict>
+    </plist>
+  EOS
   end
 
   test do

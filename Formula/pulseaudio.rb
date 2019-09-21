@@ -1,51 +1,31 @@
 class Pulseaudio < Formula
   desc "Sound system for POSIX OSes"
   homepage "https://wiki.freedesktop.org/www/Software/PulseAudio/"
-  url "https://www.freedesktop.org/software/pulseaudio/releases/pulseaudio-11.1.tar.xz"
-  sha256 "f2521c525a77166189e3cb9169f75c2ee2b82fa3fcf9476024fbc2c3a6c9cd9e"
-  revision 1
+  url "https://www.freedesktop.org/software/pulseaudio/releases/pulseaudio-13.0.tar.xz"
+  sha256 "961b23ca1acfd28f2bc87414c27bb40e12436efcf2158d29721b1e89f3f28057"
 
   bottle do
-    sha256 "a449d66ca202e6ba2106af19ab3513ab17841ad45db2069bd8e18c5fa3341189" => :high_sierra
-    sha256 "80fdcab93388854621cd2392e3e0782587efda978c2f0de51381d3c3a264301e" => :sierra
-    sha256 "9ae35d388adbb4164afd5c121e5c8105886be394ad21921c33ebcff375ec8dff" => :el_capitan
+    sha256 "819cb5b8dd86715db2285f647b1742611dd2a802447aea637f05adae33a6056b" => :mojave
+    sha256 "a5c5442b2118b9e3e3b2cbd8a8a700a121e9264b11c7096a3b3c42ce780a7a0b" => :high_sierra
+    sha256 "bc42617a58074e5631eae20559f6a043ee87c8dcfd9944ac45b47467a3cdca66" => :sierra
   end
 
   head do
     url "https://anongit.freedesktop.org/git/pulseaudio/pulseaudio.git"
 
-    depends_on "automake" => :build
     depends_on "autoconf" => :build
-    depends_on "intltool" => :build
+    depends_on "automake" => :build
     depends_on "gettext" => :build
+    depends_on "intltool" => :build
   end
-
-  option "with-nls", "Build with native language support"
-
-  deprecated_option "without-speex" => "without-speexdsp"
 
   depends_on "pkg-config" => :build
-
-  if build.with? "nls"
-    depends_on "intltool" => :build
-    depends_on "gettext" => :build
-  end
-
-  depends_on "libtool"
   depends_on "json-c"
   depends_on "libsndfile"
   depends_on "libsoxr"
-  depends_on "openssl"
-  depends_on "speexdsp" => :recommended
-  depends_on "glib" => :optional
-  depends_on "gconf" => :optional
-  depends_on "gtk+3" => :optional
-  depends_on "jack" => :optional
-
-  fails_with :clang do
-    build 421
-    cause "error: thread-local storage is unsupported for the current target"
-  end
+  depends_on "libtool"
+  depends_on "openssl@1.1"
+  depends_on "speexdsp"
 
   def install
     args = %W[
@@ -54,12 +34,11 @@ class Pulseaudio < Formula
       --prefix=#{prefix}
       --enable-coreaudio-output
       --disable-neon-opt
+      --disable-nls
+      --disable-x11
       --with-mac-sysroot=#{MacOS.sdk_path}
       --with-mac-version-min=#{MacOS.version}
-      --disable-x11
     ]
-
-    args << "--disable-nls" if build.without? "nls"
 
     if build.head?
       # autogen.sh runs bootstrap.sh then ./configure
@@ -88,7 +67,7 @@ class Pulseaudio < Formula
       <true/>
     </dict>
     </plist>
-    EOS
+  EOS
   end
 
   test do

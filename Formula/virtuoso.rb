@@ -1,17 +1,18 @@
 class Virtuoso < Formula
   desc "High-performance object-relational SQL database"
   homepage "https://virtuoso.openlinksw.com/wiki/main/"
-  url "https://github.com/openlink/virtuoso-opensource/releases/download/v7.2.4.2/virtuoso-opensource-7.2.4.2.tar.gz"
-  mirror "https://downloads.sourceforge.net/project/virtuoso/virtuoso/7.2.4.2/virtuoso-opensource-7.2.4.2.tar.gz"
-  sha256 "028075d3cf1970dbb9b79f660c833771de8be5be7403b9001d6907f64255b889"
+  url "https://github.com/openlink/virtuoso-opensource/releases/download/v7.2.5.1/virtuoso-opensource-7.2.5.tar.gz"
+  # Upstream pushed a hot-fix retag of 7.2.5 as 7.2.5.1.
+  # This explicit version should be safe to remove next release.
+  version "7.2.5.1"
+  sha256 "826477d25a8493a68064919873fb4da4823ebe09537c04ff4d26ba49d9543d64"
 
   bottle do
     cellar :any
-    sha256 "29dc5f3eb68e0f8a9d433766293fbce6828f8ec5ec541428f9b0f00c6d1be26c" => :high_sierra
-    sha256 "643818e6d36ad7a22b9d91b68f3eb16826f140415e23da30b96abb0858e73058" => :sierra
-    sha256 "76d5201d062e528bff78d3c42b9f4d3e8f8b041bfdc9a0881546572cdad87717" => :el_capitan
-    sha256 "4a2d5b2a0c81caa351a8388c781c189f36a45245479cd04584284668ca6a9ba6" => :yosemite
-    sha256 "feba222422d9882640afbd5d62f2e3a5cd3d8f9ecf00bb31c399bee5f685a53a" => :mavericks
+    rebuild 1
+    sha256 "fb4d826c3209738d2398cd471fa6dff632c10c0b64fb667eb948717c8cfbdf19" => :mojave
+    sha256 "d2d89c1cd64a84dec3728c691f1efbd3f0771dfe2fe931fe73bbbbd174343fd6" => :high_sierra
+    sha256 "bb86d15d36d1affafc57ff612ea0a6c88425882bbf5e1bd4cabe5bc1f434a31e" => :sierra
   end
 
   head do
@@ -24,7 +25,7 @@ class Virtuoso < Formula
 
   # If gawk isn't found, make fails deep into the process.
   depends_on "gawk" => :build
-  depends_on "openssl"
+  depends_on "openssl" # no OpenSSL 1.1 support
 
   conflicts_with "unixodbc", :because => "Both install `isql` binaries."
 
@@ -40,7 +41,7 @@ class Virtuoso < Formula
   def caveats; <<~EOS
     NOTE: the Virtuoso server will start up several times on port 1111
     during the install process.
-    EOS
+  EOS
   end
 
   test do

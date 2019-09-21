@@ -1,37 +1,32 @@
 class Leptonica < Formula
   desc "Image processing and image analysis library"
   homepage "http://www.leptonica.org/"
-  url "https://github.com/DanBloomberg/leptonica/releases/download/1.76.0/leptonica-1.76.0.tar.gz"
-  sha256 "5e9a33b7ce33ab39fb03cee5a7ec353b044670176303265d7c64d51539616857"
+  url "http://www.leptonica.org/source/leptonica-1.78.0.tar.gz"
+  sha256 "e2ed2e81e7a22ddf45d2c05f0bc8b9ae7450545d995bfe28517ba408d14a5a88"
 
   bottle do
     cellar :any
-    sha256 "344103405f8861f37a93e0500b47e9f9c755689db3e90e5eb6b3a33299f70af9" => :high_sierra
-    sha256 "35a0d7bdd7054e4ab59b8f40144f6a686f8a90f2773fe5463d3d6ef341fdcc66" => :sierra
-    sha256 "de45c709e91297e100e645f795bcecdb884a2c00e88505313cb8339fb435fe26" => :el_capitan
+    rebuild 1
+    sha256 "e986663412d5f3e2e731766c6b90eaf586f343067787602e9a11361d998b4d24" => :mojave
+    sha256 "9d07766fb8cb612838f4bc85801a106b7ba07b76bef30b68d5935aa9485076e4" => :high_sierra
+    sha256 "5200d6f0a132a730aa552c128f8a9abd076f34568a70dc6bea7b042d2fa7b037" => :sierra
   end
 
-  depends_on "libpng" => :recommended
-  depends_on "jpeg" => :recommended
-  depends_on "libtiff" => :recommended
-  depends_on "giflib" => :optional
-  depends_on "openjpeg" => :optional
-  depends_on "webp" => :optional
   depends_on "pkg-config" => :build
+  depends_on "giflib"
+  depends_on "jpeg"
+  depends_on "libpng"
+  depends_on "libtiff"
+  depends_on "openjpeg"
+  depends_on "webp"
 
   def install
     args = %W[
       --disable-dependency-tracking
       --prefix=#{prefix}
+      --with-libwebp
+      --with-libopenjpeg
     ]
-
-    %w[libpng jpeg libtiff giflib].each do |dep|
-      args << "--without-#{dep}" if build.without?(dep)
-    end
-    %w[openjpeg webp].each do |dep|
-      args << "--with-lib#{dep}" if build.with?(dep)
-      args << "--without-lib#{dep}" if build.without?(dep)
-    end
 
     system "./configure", *args
     system "make", "install"

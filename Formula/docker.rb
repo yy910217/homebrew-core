@@ -2,47 +2,48 @@ class Docker < Formula
   desc "Pack, ship and run any application as a lightweight container"
   homepage "https://www.docker.com/"
   url "https://github.com/docker/docker-ce.git",
-      :tag => "v18.05.0-ce",
-      :revision => "f150324782643a5268a04e7d1a675587125da20e"
+      :tag      => "v19.03.2",
+      :revision => "6a30dfca03664a0b6bf0646a7d389ee7d0318e6e"
+  revision 1
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "40582e0b44312fe1d3def7d727a56e277991b71089fa3c8f091db92e19cd3961" => :high_sierra
-    sha256 "a1bc28298a62d18141fc68dc6cf39f97494cee6ca5b0152c8fd5e6ec09987965" => :sierra
-    sha256 "5d5c4eea899490023737f2b39d8c1901957cf33dcc22e0babeaa4fdb4dd0e77d" => :el_capitan
+    sha256 "371c5f58946a49b67dba0adf84f25b85ed8ce7c7495c89ab9c41f5c2eb3dd05b" => :mojave
+    sha256 "76ff98e6db1e334d10afb01eefd090fe0e81c125e734b7d89994289a68792ec4" => :high_sierra
+    sha256 "ec6a2a7a21cdb3a9191c226e6f7f9279863e91b394bd3871a9ddeab88fc8235d" => :sierra
   end
-
-  option "with-experimental", "Enable experimental features"
-  option "without-completions", "Disable bash/zsh completions"
 
   depends_on "go" => :build
-
-  if build.with? "experimental"
-    depends_on "libtool"
-    depends_on "yubico-piv-tool" => :recommended
-  end
+  depends_on "go-md2man" => :build
 
   def install
-    ENV["DOCKER_EXPERIMENTAL"] = "1" if build.with? "experimental"
     ENV["GOPATH"] = buildpath
     dir = buildpath/"src/github.com/docker/cli"
     dir.install (buildpath/"components/cli").children
     cd dir do
       commit = Utils.popen_read("git rev-parse --short HEAD").chomp
-      ldflags = ["-X github.com/docker/cli/cli.GitCommit=#{commit}",
-                 "-X github.com/docker/cli/cli.Version=#{version}-ce"]
+      build_time = Utils.popen_read("date -u +'%Y-%m-%dT%H:%M:%SZ' 2> /dev/null").chomp
+      ldflags = ["-X \"github.com/docker/cli/cli/version.BuildTime=#{build_time}\"",
+                 "-X github.com/docker/cli/cli/version.GitCommit=#{commit}",
+                 "-X github.com/docker/cli/cli/version.Version=#{version}",
+                 "-X \"github.com/docker/cli/cli/version.PlatformName=Docker Engine - Community\""]
       system "go", "build", "-o", bin/"docker", "-ldflags", ldflags.join(" "),
              "github.com/docker/cli/cmd/docker"
 
-      if build.with? "completions"
-        bash_completion.install "contrib/completion/bash/docker"
-        fish_completion.install "contrib/completion/fish/docker.fish"
-        zsh_completion.install "contrib/completion/zsh/_docker"
+      Pathname.glob("man/*.[1-8].md") do |md|
+        section = md.to_s[/\.(\d+)\.md\Z/, 1]
+        (man/"man#{section}").mkpath
+        system "go-md2man", "-in=#{md}", "-out=#{man/"man#{section}"/md.stem}"
       end
+
+      bash_completion.install "contrib/completion/bash/docker"
+      fish_completion.install "contrib/completion/fish/docker.fish"
+      zsh_completion.install "contrib/completion/zsh/_docker"
     end
   end
 
   test do
-    system "#{bin}/docker", "--version"
+    assert_match "Docker version #{version}", shell_output("#{bin}/docker --version")
+    assert_match "ERROR: Cannot connect to the Docker daemon", shell_output("#{bin}/docker info", 1)
   end
 end

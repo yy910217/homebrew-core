@@ -2,14 +2,15 @@ class Skaffold < Formula
   desc "Easy and Repeatable Kubernetes Development"
   homepage "https://github.com/GoogleContainerTools/skaffold"
   url "https://github.com/GoogleContainerTools/skaffold.git",
-      :tag => "v0.6.0",
-      :revision => "ced2917e5df941849460d8809a04ce1df1317455"
+      :tag      => "v0.38.0",
+      :revision => "1012d7339d0055ab93d7f88e95b7a89292ce77f6"
+  head "https://github.com/GoogleContainerTools/skaffold.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "2318623dd2cc21b6674609e8ecf81890f63025a3651dd33fdc83a01a0f6068b7" => :high_sierra
-    sha256 "20e3cc723f81b4520a2a6c3d37058c9e9411321b4a49880a5070fe596ade7c80" => :sierra
-    sha256 "0a7e4a6ff56f542e55e55396823f65d35f2fe64d3ea40d11f5e7be6ceb3d5e90" => :el_capitan
+    sha256 "b3b048506e0f269b09f0945fbc392cd8ec1aefc7bc8dc22ff8fce4a740478f6a" => :mojave
+    sha256 "9b4b6720b35876e19b4953f697b726e9dc6400901c0d223687f48a76e2c3c870" => :high_sierra
+    sha256 "18c2962dc03e5584fccd726cb5e7d93a7e0de169cc8a80c2cd22103d2da4ffe2" => :sierra
   end
 
   depends_on "go" => :build
@@ -21,6 +22,13 @@ class Skaffold < Formula
     cd dir do
       system "make"
       bin.install "out/skaffold"
+
+      output = Utils.popen_read("#{bin}/skaffold completion bash")
+      (bash_completion/"skaffold").write output
+
+      output = Utils.popen_read("#{bin}/skaffold completion zsh")
+      (zsh_completion/"_skaffold").write output
+
       prefix.install_metafiles
     end
   end

@@ -1,47 +1,37 @@
 class Sleuthkit < Formula
   desc "Forensic toolkit"
   homepage "https://www.sleuthkit.org/"
-  url "https://github.com/sleuthkit/sleuthkit/releases/download/sleuthkit-4.6.1/sleuthkit-4.6.1.tar.gz"
-  sha256 "1f68f3b5983acdb871a30592fb735a32f4db93f041fcf318bcf3ec87128ab433"
+  url "https://github.com/sleuthkit/sleuthkit/releases/download/sleuthkit-4.6.7/sleuthkit-4.6.7.tar.gz"
+  sha256 "525fced79117929621fb583ed4a554a01a07e8739e9c000507acfa793f8d6915"
 
   bottle do
     cellar :any
-    sha256 "191e42868facb70b4a2d73e9d23d4283aee9248c2aae5865dc3eb5209f402cf4" => :high_sierra
-    sha256 "dc59fb5ee7eb2467fa01e1743fb4ba25660a898f7cb7a202aeab8ec90abd84c9" => :sierra
-    sha256 "994034b47b0992fa5c651787de90a548edf5a2ccddee7eb4e7a96bd74b23b470" => :el_capitan
+    sha256 "edd55849d72f35c2f7210d0760b5f21e6204e900a4da977a8c19fa6db3d5cf7b" => :mojave
+    sha256 "1938217697347d823ca2d915c9ab2046843d675b9d07dea38c1c452637a6db1e" => :high_sierra
+    sha256 "c8ce9b0639eb21ea41344bc117df1dda8ac103400be32dd412f79b6d18ebb50f" => :sierra
   end
 
-  option "with-jni", "Build Sleuthkit with JNI bindings"
-  option "with-debug", "Build debug version"
+  depends_on "ant" => :build
+  depends_on "afflib"
+  depends_on :java
+  depends_on "libewf"
+  depends_on "libpq"
+  depends_on "sqlite"
 
-  depends_on "afflib" => :optional
-  depends_on "libewf" => :optional
-
-  if build.with? "jni"
-    depends_on :java
-    depends_on "ant" => :build
-  end
-
-  conflicts_with "irods", :because => "both install `ils`"
   conflicts_with "ffind",
     :because => "both install a 'ffind' executable."
 
   def install
-    ENV.append_to_cflags "-DNDEBUG" if build.without? "debug"
+    ENV.append_to_cflags "-DNDEBUG"
 
-    args = ["--disable-dependency-tracking", "--prefix=#{prefix}"]
-    args << "--disable-java" if build.without? "jni"
-
-    system "./configure", *args
+    system "./configure", "--disable-dependency-tracking", "--prefix=#{prefix}"
     system "make"
     system "make", "install"
 
-    if build.with? "jni"
-      cd "bindings/java" do
-        system "ant"
-      end
-      prefix.install "bindings"
+    cd "bindings/java" do
+      system "ant"
     end
+    prefix.install "bindings"
   end
 
   test do

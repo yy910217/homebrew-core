@@ -1,22 +1,22 @@
 class Geckodriver < Formula
   desc "WebDriver <-> Marionette proxy"
   homepage "https://github.com/mozilla/geckodriver"
-  url "https://github.com/mozilla/geckodriver/archive/v0.20.1.tar.gz"
-  sha256 "0bee8be4841147528c41417e4eb1f44eaddd7aa16b267d6237ec2abafecf71b2"
+  url "https://github.com/mozilla/geckodriver/archive/v0.25.0.tar.gz"
+  sha256 "9ba9b1be1a2e47ddd11216ce863903853975a4805e72b9ed5da8bcbcaebbcea9"
   head "https://hg.mozilla.org/mozilla-central/", :using => :hg
 
   bottle do
-    sha256 "619cbf30892108fcd05a423321392f27332918560a1498d71c37eab4e7294b72" => :high_sierra
-    sha256 "e048038a056738d753e9937737753331e564306a5ea034079652c4dd40b27399" => :sierra
-    sha256 "39f790fa76fe15069eaf4d49dccc28408344a5381c6bbb59fb655ef5213f5444" => :el_capitan
+    cellar :any_skip_relocation
+    sha256 "beddf7cc7ac7f7c649823cef79a3e2531cfdeb35c5257e776d6a069548d29101" => :mojave
+    sha256 "2d5600b848944ff98938b8ccadc1848e5e447e4df4404c33ad82c30318b5db24" => :high_sierra
+    sha256 "396bb7d74bfccae7c18214c31f2f6de071c10b8deed08b3ea12b60869427dafc" => :sierra
   end
 
   depends_on "rust" => :build
 
   def install
     dir = build.head? ? "testing/geckodriver" : "."
-    cd(dir) { system "cargo", "build" }
-    bin.install "target/debug/geckodriver"
+    cd(dir) { system "cargo", "install", "--root", prefix, "--path", "." }
     bin.install_symlink bin/"geckodriver" => "wires"
   end
 

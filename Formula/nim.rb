@@ -1,15 +1,14 @@
 class Nim < Formula
-  desc "Statically typed, imperative programming language"
+  desc "Statically typed compiled systems programming language"
   homepage "https://nim-lang.org/"
-  url "https://nim-lang.org/download/nim-0.18.0.tar.xz"
-  sha256 "45c74adb35f08dfa9add1112ae17330e5d902ebb4a36e7046caee8b79e6f3bd0"
-  revision 1
+  url "https://nim-lang.org/download/nim-0.20.2.tar.xz"
+  sha256 "e1fa5c7e762a45535d82a961f88a6fc82e343985b780c3674081810e028d2b5e"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "a99e236ed857f79a06465bd3a56e1d22dce9d5c70166b4ba34473fc42215601a" => :high_sierra
-    sha256 "e7196c3102286cf5485c6f64a9b2275752f9e26b5dd44762a17d14c5df35195a" => :sierra
-    sha256 "9b5f245d3eadef66260d0851c81c3f7a976768b98ace3aece7ce6e63eeb88345" => :el_capitan
+    sha256 "99dc7109355f188aeeb3fcafd364d8737de184dbe31894bc136272e5624f3aaa" => :mojave
+    sha256 "52ece02a2308fbd9584f1a960f28fd888f9f4cb8b482824dc120c9a0d61b556a" => :high_sierra
+    sha256 "92379c9a9554e93f90228bfba8d1e0eabecf85bed4d3e3a7cd43b2a81d5363c6" => :sierra
   end
 
   head do
@@ -23,8 +22,7 @@ class Nim < Formula
     if build.head?
       resource("csources").stage do
         system "/bin/sh", "build.sh"
-        build_bin = buildpath/"bin"
-        build_bin.install "bin/nim"
+        (buildpath/"bin").install "bin/nim"
       end
     else
       system "/bin/sh", "build.sh"
@@ -33,20 +31,18 @@ class Nim < Formula
     system "bin/nim", "c", "-d:release", "koch"
     # Build a new version of the compiler with readline bindings
     system "./koch", "boot", "-d:release", "-d:useLinenoise"
-    # Build nimsuggest/nimble/nimgrep
+    # Build nimble/nimgrep/nimpretty/nimsuggest
     system "./koch", "tools"
     system "./koch", "geninstall"
     system "/bin/sh", "install.sh", prefix
-    bin.install_symlink prefix/"nim/bin/nim"
-    bin.install_symlink prefix/"nim/bin/nim" => "nimrod"
 
     target = prefix/"nim/bin"
-    target.install "bin/nimsuggest"
-    target.install "bin/nimble"
-    target.install "bin/nimgrep"
-    bin.install_symlink prefix/"nim/bin/nimsuggest"
-    bin.install_symlink target/"nimble"
-    bin.install_symlink target/"nimgrep"
+    bin.install_symlink target/"nim"
+    tools = %w[nimble nimgrep nimpretty nimsuggest]
+    tools.each do |t|
+      target.install buildpath/"bin"/t
+      bin.install_symlink target/t
+    end
   end
 
   test do

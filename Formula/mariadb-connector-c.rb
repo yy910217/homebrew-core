@@ -1,17 +1,18 @@
 class MariadbConnectorC < Formula
   desc "MariaDB database connector for C applications"
   homepage "https://downloads.mariadb.org/connector-c/"
-  url "https://downloads.mariadb.org/f/connector-c-3.0.3/mariadb-connector-c-3.0.3-src.tar.gz"
-  sha256 "210f0ee3414b235d3db8e98e9e5a0a98381ecf771e67ca4a688036368984eeea"
+  url "https://downloads.mariadb.org/f/connector-c-3.1.2/mariadb-connector-c-3.1.2-src.tar.gz"
+  sha256 "156aa2de91fd9607fa6c638d23888082b6dd07628652697992bba6d15045ff5d"
+  revision 1
 
   bottle do
-    sha256 "43b657d33bd13473ccd6692e6d33ec6abb01a56891b610e75e0e4db5f6501feb" => :high_sierra
-    sha256 "a89b9f6276d8c29b0775883686447cb593d9b2e50c7ac7af4e57870db0652998" => :sierra
-    sha256 "4c63069a76d6fe43ebd97654884b06dab7b67782b3776cb49c8b11624ca4ba92" => :el_capitan
+    sha256 "b64eb44ed34e785ccb71b71452d0a7073409ffb589c1b33fe49de6bc9a031820" => :mojave
+    sha256 "50663d29b7cf483e8bbf554f329110c79939fdba54850c9e046d6460d992429f" => :high_sierra
+    sha256 "98f0045250155bbf5cc2dd34771f76bb54544496a6b63ce2f61032f9cfd22a43" => :sierra
   end
 
   depends_on "cmake" => :build
-  depends_on "openssl"
+  depends_on "openssl@1.1"
 
   conflicts_with "mysql", "mariadb", "percona-server",
                  :because => "both install plugins"
@@ -19,7 +20,7 @@ class MariadbConnectorC < Formula
   def install
     args = std_cmake_args
     args << "-DWITH_OPENSSL=On"
-    args << "-DOPENSSL_INCLUDE_DIR=#{Formula["openssl"].opt_include}"
+    args << "-DOPENSSL_INCLUDE_DIR=#{Formula["openssl@1.1"].opt_include}"
     args << "-DCOMPILATION_COMMENT=Homebrew"
 
     system "cmake", ".", *args

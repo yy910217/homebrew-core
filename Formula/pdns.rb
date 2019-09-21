@@ -1,36 +1,30 @@
 class Pdns < Formula
   desc "Authoritative nameserver"
   homepage "https://www.powerdns.com"
-  url "https://downloads.powerdns.com/releases/pdns-4.1.2.tar.bz2"
-  sha256 "86d8be0171d1ba85c2c6496d62ebf9198a5d522135aa0df3714c0d487a725695"
+  url "https://downloads.powerdns.com/releases/pdns-4.1.11.tar.bz2"
+  sha256 "754e4f0ce31118fef5dc470dc039e1f4e7b3ca6248074c9678a659508693b712"
+  revision 1
 
   bottle do
-    sha256 "fa683a8e83c6e5deeadebb94071eeed97578292d28f40ec29341c5efaea356b8" => :high_sierra
-    sha256 "d9592add50f6ea15a56e39f24f142c7b6631497a4881dba2805730768c2a5ff8" => :sierra
-    sha256 "4c3577023da4c055bb566c25ad5629b3c27c7a4fdc146038b156e8f4d21a0d63" => :el_capitan
+    sha256 "e9b851c9ce8248562bfa591aaa8313768643e7c3535744e491040d5939e1078e" => :mojave
+    sha256 "1f195fcf89c603691184c77841f8df250cb6ef205841feede230a41337203d77" => :high_sierra
+    sha256 "a0e77bc4f1d21eedef8f74cd1a669d700fddfbe35c950e207ceaf1868898e25b" => :sierra
   end
 
   head do
     url "https://github.com/powerdns/pdns.git"
 
-    depends_on "automake" => :build
     depends_on "autoconf" => :build
+    depends_on "automake" => :build
     depends_on "libtool"  => :build
     depends_on "ragel"
   end
 
-  option "with-postgresql", "Enable the PostgreSQL backend"
-  option "with-remote", "enable the Remote backend"
-
-  deprecated_option "pgsql" => "with-postgresql"
-  deprecated_option "with-pgsql" => "with-postgresql"
-
   depends_on "pkg-config" => :build
   depends_on "boost"
   depends_on "lua"
-  depends_on "openssl"
+  depends_on "openssl@1.1"
   depends_on "sqlite"
-  depends_on "postgresql" => :optional
 
   def install
     # Fix "configure: error: cannot find boost/program_options.hpp"
@@ -40,23 +34,13 @@ class Pdns < Formula
       --prefix=#{prefix}
       --sysconfdir=#{etc}/powerdns
       --with-lua
-      --with-openssl=#{Formula["openssl"].opt_prefix}
+      --with-openssl=#{Formula["openssl@1.1"].opt_prefix}
       --with-sqlite3
+      --with-modules=gsqlite3
     ]
-
-    # Include the PostgreSQL backend if requested
-    if build.with? "postgresql"
-      args << "--with-modules=gsqlite3 gpgsql"
-    elsif build.with? "remote"
-      args << "--with-modules=gsqlite3 remote"
-    else
-      # SQLite3 backend only is the default
-      args << "--with-modules=gsqlite3"
-    end
 
     system "./bootstrap" if build.head?
     system "./configure", *args
-
     system "make", "install"
   end
 
@@ -82,7 +66,7 @@ class Pdns < Formula
       <string>system.preferences</string>
     </dict>
     </plist>
-    EOS
+  EOS
   end
 
   test do

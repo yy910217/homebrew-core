@@ -1,21 +1,18 @@
 class Exim < Formula
   desc "Complete replacement for sendmail"
   homepage "https://exim.org"
-  url "https://ftp.exim.org/pub/exim/exim4/exim-4.91.tar.xz"
-  sha256 "ec57acb103d5550aca8d60adb57f355c7b3c41b5449290594ed6615ad4b9d118"
+  url "https://ftp.exim.org/pub/exim/exim4/exim-4.92.2.tar.xz"
+  sha256 "01d7ae481d03ff408f8e54fd9b250324ea5ddabc83b1db32917c7f27a096a654"
 
   bottle do
-    sha256 "29d984d5bfd7b421c4f8a4aa93155e8ccbc324fa781f0edf5001a90f2996f0dc" => :high_sierra
-    sha256 "078199c3db96e3ca5ffdaac9c6421c67a704814afeb741c0014a457c58bd1a5d" => :sierra
-    sha256 "df47c95efa6bcfe75fb26898845b341be2d9fbc26e1f0ba82d12dc6463ffbcaf" => :el_capitan
+    sha256 "78da462df3f48a298776cb9a249ac8f546ec469ad60f05f22780a62c700cf967" => :mojave
+    sha256 "dcd596124892bc5605d083c534bd9a7a574dddd733e73a0d8996edcb1598b3b5" => :high_sierra
+    sha256 "8c46e773d58dfcd43adede1a8636a73c23bfe5191bd33d3427ec1df735a6b89c" => :sierra
   end
 
-  deprecated_option "support-maildir" => "with-maildir"
-  option "with-maildir", "Support delivery in Maildir format"
-
-  depends_on "pcre"
   depends_on "berkeley-db@4"
-  depends_on "openssl"
+  depends_on "openssl@1.1"
+  depends_on "pcre"
 
   def install
     cp "src/EDITME", "Local/Makefile"
@@ -28,7 +25,6 @@ class Exim < Formula
       s.gsub! "/var/spool/exim", var/"spool/exim"
       # https://trac.macports.org/ticket/38654
       s.gsub! 'TMPDIR="/tmp"', "TMPDIR=/tmp"
-      s << "SUPPORT_MAILDIR=yes\n" if build.with? "maildir"
       s << "AUTH_PLAINTEXT=yes\n"
       s << "SUPPORT_TLS=yes\n"
       s << "TLS_LIBS=-lssl -lcrypto\n"
@@ -82,14 +78,14 @@ class Exim < Formula
       exit 1
       ;;
     esac
-    EOS
+  EOS
   end
 
   def caveats; <<~EOS
     Start with:
       exim_ctl start
     Don't forget to run it as root to be able to bind port 25.
-    EOS
+  EOS
   end
 
   test do

@@ -1,22 +1,22 @@
 class Libxmlsec1 < Formula
   desc "XML security library"
   homepage "https://www.aleksey.com/xmlsec/"
-  url "https://www.aleksey.com/xmlsec/download/xmlsec1-1.2.25.tar.gz"
-  sha256 "967ca83edf25ccb5b48a3c4a09ad3405a63365576503bf34290a42de1b92fcd2"
+  url "https://www.aleksey.com/xmlsec/download/xmlsec1-1.2.28.tar.gz"
+  sha256 "13eec4811ea30e3f0e16a734d1dbf7f9d246a71d540b48d143a07b489f6222d4"
+  revision 1
 
   bottle do
     cellar :any
-    sha256 "9698c648420c3a443e7eb3721eac9467b5c41d27e08bf3c2c383c8b3310f5cd6" => :high_sierra
-    sha256 "443057ec59c7f9be61c3983a6660b8423fc0c90ac2210085d1d97b364a33c593" => :sierra
-    sha256 "c59fe51ea068c7c3d4ffa14775192067080f37f78682348776330ba610b07621" => :el_capitan
+    sha256 "c9cc625bf2b00cdaa9ed8d59e873dfe0928931b6e62392a877d5a437757b3c5c" => :mojave
+    sha256 "7ebacb8f7c89a0c8828cf721ba7385b3f0d7561549daaa0941b9a3a15186bc57" => :high_sierra
+    sha256 "cec2b227a01fe451566ce854f94e187ec8f7e045a0ca570bc927bb58d3407a72" => :sierra
   end
 
   depends_on "pkg-config" => :build
-  depends_on "libxml2" if MacOS.version <= :lion
-  # Yes, it wants both ssl/tls variations.
-  depends_on "openssl" => :recommended
-  depends_on "gnutls" => :recommended
-  depends_on "libgcrypt" if build.with? "gnutls"
+  depends_on "gnutls" # Yes, it wants both ssl/tls variations
+  depends_on "libgcrypt"
+  depends_on "libxml2"
+  depends_on "openssl@1.1"
 
   # Add HOMEBREW_PREFIX/lib to dl load path
   patch :DATA
@@ -25,10 +25,8 @@ class Libxmlsec1 < Formula
     args = ["--disable-dependency-tracking",
             "--prefix=#{prefix}",
             "--disable-crypto-dl",
-            "--disable-apps-crypto-dl"]
-
-    args << "--with-openssl=#{Formula["openssl"].opt_prefix}" if build.with? "openssl"
-    args << "--with-libxml=#{Formula["libxml2"].opt_prefix}" if build.with? "libxml2"
+            "--disable-apps-crypto-dl",
+            "--with-openssl=#{Formula["openssl@1.1"].opt_prefix}"]
 
     system "./configure", *args
     system "make", "install"

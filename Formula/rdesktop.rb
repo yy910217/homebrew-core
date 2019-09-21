@@ -1,26 +1,21 @@
 class Rdesktop < Formula
   desc "UNIX client for connecting to Windows Remote Desktop Services"
   homepage "https://www.rdesktop.org/"
-  url "https://downloads.sourceforge.net/project/rdesktop/rdesktop/1.8.3/rdesktop-1.8.3.tar.gz"
-  mirror "https://mirrors.kernel.org/debian/pool/main/r/rdesktop/rdesktop_1.8.3.orig.tar.gz"
-  sha256 "88b20156b34eff5f1b453f7c724e0a3ff9370a599e69c01dc2bf0b5e650eece4"
+  url "https://github.com/rdesktop/rdesktop/releases/download/v1.8.6/rdesktop-1.8.6.tar.gz"
+  sha256 "4131c5cc3d6a2e1a6515180502093c2b1b94cc8c34dd3f86aa8b3475399634ef"
+  revision 1
 
   bottle do
-    sha256 "7a70e9cd3c541121b9ae55eabb7036f34c3818a952ab5104365bd6437ebb9420" => :high_sierra
-    sha256 "2a09f53bccef981e542de0c2a3066ccb6e438fe0c11341281cb2803ce09f7bb8" => :sierra
-    sha256 "46b1a3070669d5f0e2f1e70e387ae4a3c7d956a0991378138ab5de39e6be3b9e" => :el_capitan
-    sha256 "923ab34a5daaab70f97aa23c8cebc91cba3a776584d35444eadf123050471d5f" => :yosemite
+    sha256 "c319fc2fceca931b83d5b05f6e2d9c1ae4687a277b1c71e4e5cb73e424759ef8" => :mojave
+    sha256 "92a663dd356df68f0b86ec58e1f3f07d242aa6c66fda7c90dc41330b793f2c4d" => :high_sierra
+    sha256 "c3514986d81f0b8c9e4e37e2dc6648ce4978d814dff3c5e187a9ead35fdadf0d" => :sierra
   end
 
-  option "with-smartcard", "Build with Smart Card Support"
-
-  depends_on "openssl"
+  depends_on "openssl@1.1"
   depends_on :x11
 
   # Note: The patch below is meant to remove the reference to the
-  # undefined symbol SCARD_CTL_CODE. Since we are compiling with
-  # --disable-smartcard (by default), we don't need it anyway (and it should
-  # probably have been #ifdefed in the original code).
+  # undefined symbol SCARD_CTL_CODE.
   # upstream bug report: https://sourceforge.net/p/rdesktop/bugs/352/
   patch :DATA
 
@@ -28,16 +23,11 @@ class Rdesktop < Formula
     args = %W[
       --prefix=#{prefix}
       --disable-credssp
-      --with-openssl=#{Formula["openssl"].opt_prefix}
+      --enable-smartcard
+      --with-openssl=#{Formula["openssl@1.1"].opt_prefix}
       --x-includes=#{MacOS::X11.include}
       --x-libraries=#{MacOS::X11.lib}
     ]
-
-    if build.with? "smartcard"
-      args << "--enable-smartcard"
-    else
-      args << "--disable-smartcard"
-    end
 
     system "./configure", *args
     system "make", "install"

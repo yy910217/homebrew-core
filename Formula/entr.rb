@@ -1,14 +1,14 @@
 class Entr < Formula
   desc "Run arbitrary commands when files change"
   homepage "http://entrproject.org/"
-  url "http://entrproject.org/code/entr-4.0.tar.gz"
-  sha256 "4ad4fe9108b179199951cfc78a581a8a69602b073dae59bcae4b810f6e1f6c8b"
+  url "http://entrproject.org/code/entr-4.2.tar.gz"
+  sha256 "27300215df0aab8b773002da25c7bf60681d8c392f5d5702946c46798e9b5d70"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "17c3c9ad92d7506685f86093dff1e6d119e8825b9e6a3981a383730ef340a040" => :high_sierra
-    sha256 "bc1976b4f61506dd65f106cf593c48d534500b9f15763746424ed8dcd557410a" => :sierra
-    sha256 "e4702252f69db478d06aa9cb8d8c677f777277f0c5efe2bd9edb01d46f32440e" => :el_capitan
+    sha256 "3b29b190745ef3babc843549b3d56ed994418f8480479f5652bddc879912e9a7" => :mojave
+    sha256 "56947670876a871fb696e6b5ce08260f6a2bbd49a5f9cccb6f389e566e2d0354" => :high_sierra
+    sha256 "562a8def03820db90e6d6ff40f4ac38d3f3c170b9b75f4c3ec337848013b616b" => :sierra
   end
 
   head do

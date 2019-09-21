@@ -1,22 +1,23 @@
 class AircrackNg < Formula
   desc "Next-generation aircrack with lots of new features"
   homepage "https://aircrack-ng.org/"
-  url "https://download.aircrack-ng.org/aircrack-ng-1.2.tar.gz"
-  sha256 "794ffed5400f35cb78f3466eabb47546f050e0ac35287c174acce60763a0fa7c"
+  url "https://download.aircrack-ng.org/aircrack-ng-1.5.2.tar.gz"
+  sha256 "9e592fe7658046220e0ac0a6d05c4026903f3077b248893e0056ccbe4ee88241"
+  revision 1
 
   bottle do
-    sha256 "f428be874a80b246c063d61fe17d46caa10427fa60ca2162298cf5fd52e53dcd" => :high_sierra
-    sha256 "17c03df615090f9639cfbe0cf593ab0cc19f936beff4d0c6806473b6a612d68e" => :sierra
-    sha256 "d7616bdd95c9bb230f1fa582819bd001a527e829af4739812f2984623e3a23cf" => :el_capitan
+    sha256 "772e69403efdced2c6482abb1d118bb848d5d033156f64d6d5807e4205028399" => :mojave
+    sha256 "ef9b3527b33cfdff40e21e8b678921dfbd411d0be586b5fede62a039a0d50d1f" => :high_sierra
+    sha256 "620b3b925934f2a9fdeee038d9f00983c413ae098a65d26552bb61b4411c434c" => :sierra
   end
 
   depends_on "autoconf" => :build
   depends_on "automake" => :build
   depends_on "libtool" => :build
   depends_on "pkg-config" => :build
-  depends_on "sqlite"
-  depends_on "openssl"
+  depends_on "openssl@1.1"
   depends_on "pcre"
+  depends_on "sqlite"
 
   # Remove root requirement from OUI update script. See:
   # https://github.com/Homebrew/homebrew/pull/12755
@@ -25,13 +26,14 @@ class AircrackNg < Formula
   def install
     system "./autogen.sh", "--disable-silent-rules",
                            "--disable-dependency-tracking",
-                           "--prefix=#{prefix}"
+                           "--prefix=#{prefix}",
+                           "--with-experimental"
     system "make", "install"
   end
 
   def caveats; <<~EOS
     Run `airodump-ng-oui-update` install or update the Airodump-ng OUI file.
-    EOS
+  EOS
   end
 
   test do

@@ -1,17 +1,17 @@
 class Mill < Formula
   desc "Scala build tool"
   homepage "https://www.lihaoyi.com/mill/"
-  url "https://github.com/lihaoyi/mill/releases/download/0.2.0/0.2.0", :using => :nounzip
-  sha256 "7a033b87e8132eeea040d61c114bf192215a21656b1b3ea563f019d1350ebe7f"
+  url "https://github.com/lihaoyi/mill/releases/download/0.5.1/0.5.1"
+  sha256 "5c7e743870b06f678ae38000c7de3ad6d5a7cc7970f6f3280f8a530c2a21a0f8"
 
   bottle :unneeded
 
-  depends_on :java => "1.8"
+  depends_on :java => "1.8+"
 
   def install
     libexec.install Dir["*"].shift => "mill"
     chmod 0555, libexec/"mill"
-    (bin/"mill").write_env_script libexec/"mill", Language::Java.java_home_env("1.8")
+    (bin/"mill").write_env_script libexec/"mill", Language::Java.java_home_env("1.8+")
   end
 
   test do
@@ -19,7 +19,7 @@ class Mill < Formula
       import mill._
       import mill.scalalib._
       object foo extends ScalaModule {
-        def scalaVersion = "2.12.4"
+        def scalaVersion = "2.12.8"
       }
     EOS
     output = shell_output("#{bin}/mill resolve __.compile")

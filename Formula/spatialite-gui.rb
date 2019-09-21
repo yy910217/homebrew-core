@@ -3,14 +3,13 @@ class SpatialiteGui < Formula
   homepage "https://www.gaia-gis.it/fossil/spatialite_gui/index"
   url "https://www.gaia-gis.it/gaia-sins/spatialite-gui-sources/spatialite_gui-1.7.1.tar.gz"
   sha256 "cb9cb1ede7f83a5fc5f52c83437e556ab9cb54d6ace3c545d31b317fd36f05e4"
-  revision 4
+  revision 5
 
   bottle do
     cellar :any
-    rebuild 1
-    sha256 "329a43210fc2f99c3d2c8090bb304bff81e5fc2450778f15f052b32100230151" => :high_sierra
-    sha256 "1ab0a3f3a0ce183dac239210c4bf2f632cdfe827a59a86f34bf3229bf2df93e4" => :sierra
-    sha256 "e04f2392b64ad916bb50e62d2267b075eab00ca44f7b8001f7a9f5e30c447e3e" => :el_capitan
+    sha256 "f1540e6cb0e8565039043767ba8e4d15de2068054832570456cb10760ffddd30" => :mojave
+    sha256 "f8821bf0bc2b6e1aed35937cd6a3d94a9208828a961dea9308ba25d78ddf14b8" => :high_sierra
+    sha256 "f6531922f0cb1d731f8450e55469990ba8e0dde3451d51560522c853f8c4a345" => :sierra
   end
 
   depends_on "pkg-config" => :build
@@ -32,6 +31,10 @@ class SpatialiteGui < Formula
     ENV.prepend "LDFLAGS", "-L#{sqlite.opt_lib} -lsqlite3"
     ENV.prepend "CFLAGS", "-I#{sqlite.opt_include}"
 
+    # Use Proj 6.0.0 compatibility headers
+    # https://www.gaia-gis.it/fossil/spatialite_gui/tktview?name=8349866db6
+    ENV.append_to_cflags "-DACCEPT_USE_OF_DEPRECATED_PROJ_API_H"
+
     # Add aui library; reported upstream multiple times:
     # https://groups.google.com/forum/#!searchin/spatialite-users/aui/spatialite-users/wnkjK9pde2E/hVCpcndUP_wJ
     inreplace "configure", "WX_LIBS=\"$(wx-config --libs)\"", "WX_LIBS=\"$(wx-config --libs std,aui)\""
@@ -48,7 +51,7 @@ an app bundle on OS X.
 This clever hack sidesteps the headache of packing simple programs into app
 bundles:
 
-  http://www.miscdebris.net/blog/2010/03/30/
+  https://www.miscdebris.net/blog/2010/03/30/
     solution-for-my-mac-os-x-gui-program-doesnt-get-focus-if-its-outside-an-application-bundle
 ---
  Main.cpp |   21 +++++++++++++++++++++
@@ -82,7 +85,7 @@ index a857e8a..9c90afb 100644
 +  //
 +  // Credit for this hack goes to:
 +  //
-+  //   http://www.miscdebris.net/blog/2010/03/30/solution-for-my-mac-os-x-gui-program-doesnt-get-focus-if-its-outside-an-application-bundle
++  //   https://www.miscdebris.net/blog/2010/03/30/solution-for-my-mac-os-x-gui-program-doesnt-get-focus-if-its-outside-an-application-bundle
 +  ProcessSerialNumber psn;
 +
 +  GetCurrentProcess( &psn );

@@ -1,26 +1,24 @@
 class Nomad < Formula
   desc "Distributed, Highly Available, Datacenter-Aware Scheduler"
   homepage "https://www.nomadproject.io"
-  url "https://github.com/hashicorp/nomad/archive/v0.8.3.tar.gz"
-  sha256 "af1aee7bd182a656c846a710b262318b7a10bb31671843697f302606a758fe04"
+  url "https://github.com/hashicorp/nomad/archive/v0.9.5.tar.gz"
+  sha256 "f5dcc802cd07756f169c24dda637fe32f8b2cb6c6bb71bb2b3f4d7f3def8223b"
   head "https://github.com/hashicorp/nomad.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "ca31c4ffe06992ed2e20ae5450b663c295e9996966cee3bdc58c596e06010e12" => :high_sierra
-    sha256 "1ce7c627de4b3ea61b05a750cf7264d7cbb6f51b0a6dde9df9a0153dbb013845" => :sierra
-    sha256 "86038847277661309c15d6edc9be8f01b02a22af7c866ef227ce7e1a33c8f243" => :el_capitan
+    sha256 "dbc2e2ba1aa8d1cb8f7e913d15407c72017ce8336b09e11ae3ba158f88d7cd54" => :mojave
+    sha256 "5a11ee1e498e435e6eb30a3c9fd87efb1a62899ca3da0e392877d5b6f0af2e15" => :high_sierra
+    sha256 "81a87661a1c1960763a0a03f7793c89a62a64bae9c793ec0e96fb30f99efbba0" => :sierra
   end
-
-  option "with-dynamic", "Build dynamic binary with CGO_ENABLED=1"
 
   depends_on "go" => :build
 
   def install
     ENV["GOPATH"] = buildpath
-    (buildpath/"src/github.com/hashicorp/nomad").install buildpath.children
-    cd "src/github.com/hashicorp/nomad" do
-      ENV["CGO_ENABLED"] = "1" if build.with? "dynamic"
+    src = buildpath/"src/github.com/hashicorp/nomad"
+    src.install buildpath.children
+    src.cd do
       system "go", "build", "-tags", "ui", "-o", bin/"nomad"
       prefix.install_metafiles
     end

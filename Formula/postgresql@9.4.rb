@@ -1,31 +1,20 @@
 class PostgresqlAT94 < Formula
   desc "Object-relational database system"
   homepage "https://www.postgresql.org/"
-  url "https://ftp.postgresql.org/pub/source/v9.4.18/postgresql-9.4.18.tar.bz2"
-  sha256 "428337f2b2f5e3ea21b8a44f88eb89c99a07a324559b99aebe777c9abdf4c4c0"
+  url "https://ftp.postgresql.org/pub/source/v9.4.24/postgresql-9.4.24.tar.bz2"
+  sha256 "52253d67dd46a7463a9d7c5e82bf959931fa4c11ec56293150210fa82a0f9429"
+  revision 1
 
   bottle do
-    sha256 "3b6142111be8016544c6033f264f4b958c67a0e55050833aa29106eef4f5375a" => :high_sierra
-    sha256 "23ce9c8a6ed128d559d9c87051dd0d05a27e5548664e12e75728cf5dd3c5f51c" => :sierra
-    sha256 "495fa8f166505f36671469d7c2c653853f62ff10fe5823b2d4b2be4f8832eb95" => :el_capitan
+    sha256 "a79336772356f70f9dcc0cc6ac89cf4d8f68cf8b18f61da2686d720249e7c705" => :mojave
+    sha256 "e627e9679ed5b2fd35d9f31571e9c86ea7e0b8e098bf8ae32e05027204c14c6c" => :high_sierra
+    sha256 "37cb6a1cbd1da98b31d69b2be227c9bcb6fa46f6972c631d1b25fb98b0f0f515" => :sierra
   end
 
   keg_only :versioned_formula
 
-  option "without-perl", "Build without Perl support"
-  option "without-tcl", "Build without Tcl support"
-  option "with-dtrace", "Build with DTrace support"
-
-  deprecated_option "with-python" => "with-python@2"
-
-  depends_on "openssl"
+  depends_on "openssl@1.1"
   depends_on "readline"
-  depends_on "python@2" => :optional
-
-  fails_with :clang do
-    build 211
-    cause "Miscompilation resulting in segfault on queries"
-  end
 
   def install
     # Fix "configure: error: readline library not found"
@@ -33,8 +22,9 @@ class PostgresqlAT94 < Formula
       ENV["SDKROOT"] = MacOS.sdk_path
     end
 
-    ENV.prepend "LDFLAGS", "-L#{Formula["openssl"].opt_lib} -L#{Formula["readline"].opt_lib}"
-    ENV.prepend "CPPFLAGS", "-I#{Formula["openssl"].opt_include} -I#{Formula["readline"].opt_include}"
+    ENV.prepend "LDFLAGS", "-L#{Formula["openssl@1.1"].opt_lib} -L#{Formula["readline"].opt_lib}"
+    ENV.prepend "CPPFLAGS", "-I#{Formula["openssl@1.1"].opt_include} -I#{Formula["readline"].opt_include}"
+    ENV.prepend "PG_SYSROOT", MacOS.sdk_path
     ENV.append_to_cflags "-D_XOPEN_SOURCE"
 
     args = %W[
@@ -50,22 +40,15 @@ class PostgresqlAT94 < Formula
       --with-pam
       --with-libxml
       --with-libxslt
+      --with-perl
+      --with-uuid=e2fs
     ]
 
-    args << "--with-perl" if build.with? "perl"
-    args << "--with-python" if build.with? "python@2"
-
     # The CLT is required to build tcl support on 10.7 and 10.8 because tclConfig.sh is not part of the SDK
-    if build.with?("tcl") && (MacOS.version >= :mavericks || MacOS::CLT.installed?)
-      args << "--with-tcl"
-
-      if File.exist?("#{MacOS.sdk_path}/System/Library/Frameworks/Tcl.framework/tclConfig.sh")
-        args << "--with-tclconfig=#{MacOS.sdk_path}/System/Library/Frameworks/Tcl.framework"
-      end
+    args << "--with-tcl"
+    if File.exist?("#{MacOS.sdk_path}/System/Library/Frameworks/Tcl.framework/tclConfig.sh")
+      args << "--with-tclconfig=#{MacOS.sdk_path}/System/Library/Frameworks/Tcl.framework"
     end
-
-    args << "--enable-dtrace" if build.with? "dtrace"
-    args << "--with-uuid=e2fs"
 
     system "./configure", *args
     system "make", "install-world"
@@ -80,26 +63,20 @@ class PostgresqlAT94 < Formula
   end
 
   def caveats
-    s = <<~EOS
+    <<~EOS
       If builds of PostgreSQL 9 are failing and you have version 8.x installed,
       you may need to remove the previous version first. See:
         https://github.com/Homebrew/legacy-homebrew/issues/2510
 
       To migrate existing data from a previous major version (pre-9.3) of PostgreSQL, see:
         https://www.postgresql.org/docs/9.3/static/upgrading.html
+
+      When installing the postgres gem, including ARCHFLAGS is recommended:
+        ARCHFLAGS="-arch x86_64" gem install pg
+
+      To install gems without sudo, see the Homebrew documentation:
+        https://docs.brew.sh/Gems,-Eggs-and-Perl-Modules
     EOS
-
-    if MacOS.prefer_64_bit?
-      s << <<~EOS
-        \nWhen installing the postgres gem, including ARCHFLAGS is recommended:
-          ARCHFLAGS="-arch x86_64" gem install pg
-
-        To install gems without sudo, see the Homebrew documentation:
-          https://docs.brew.sh/Gems,-Eggs-and-Perl-Modules
-      EOS
-    end
-
-    s
   end
 
   plist_options :manual => "pg_ctl -D #{HOMEBREW_PREFIX}/var/postgresql@9.4 start"
@@ -127,7 +104,7 @@ class PostgresqlAT94 < Formula
       <string>#{var}/log/#{name}.log</string>
     </dict>
     </plist>
-    EOS
+  EOS
   end
 
   test do

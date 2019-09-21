@@ -1,14 +1,14 @@
 class GoJira < Formula
   desc "Simple jira command-line client in Go"
-  homepage "https://github.com/Netflix-Skunkworks/go-jira"
-  url "https://github.com/Netflix-Skunkworks/go-jira/archive/v1.0.17.tar.gz"
-  sha256 "c1127af5ff8d19ab3f6b5bf424f262495143448608ec59beadcefb5e645feddb"
+  homepage "https://github.com/go-jira/jira"
+  url "https://github.com/go-jira/jira/archive/v1.0.21.tar.gz"
+  sha256 "c76089423fc0d4b9dcdd39822d6d94452136f8f24b8c17ec75b0e702e40fbcc2"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "998f112c60677a6148d494a228cb0c7ce52b1305ca592f390303aa4bbeafa1c3" => :high_sierra
-    sha256 "f69c2762ed8579b1e90039f87a4729e08713c44b3769a10a4d05ea39534532d6" => :sierra
-    sha256 "feac86e0055b80f2553211f21db03a8e56eb6e1f7e229afff6aa395c576a3aff" => :el_capitan
+    sha256 "470f7105708b78919c14f33a052ddb9224ed9a6e518771b656fbee408fe860ae" => :mojave
+    sha256 "dec791b7060932024a39da7f30830215db75594dc0626dba4807bcf4baa77680" => :high_sierra
+    sha256 "d3cd28544ccbd2e413e504b801e19107d7a3c009a51b65578af6c8b15b0ff44b" => :sierra
   end
 
   depends_on "go" => :build
@@ -29,7 +29,7 @@ class GoJira < Formula
     template_dir = testpath/".jira.d/templates/"
 
     files = Dir.entries(template_dir)
-    # not an exhaustive list, see https://github.com/Netflix-Skunkworks/go-jira/blob/4d74554300fa7e5e660cc935a92e89f8b71012ea/jiracli/templates.go#L239
+    # not an exhaustive list, see https://github.com/go-jira/jira/blob/4d74554300fa7e5e660cc935a92e89f8b71012ea/jiracli/templates.go#L239
     expected_templates = %w[comment components create edit issuetypes list view worklog debug]
 
     assert_equal([], expected_templates - files)

@@ -1,18 +1,15 @@
 class Kafka < Formula
   desc "Publish-subscribe messaging rethought as a distributed commit log"
   homepage "https://kafka.apache.org/"
-  url "https://www.apache.org/dyn/closer.cgi?path=/kafka/1.1.0/kafka_2.12-1.1.0.tgz"
-  sha256 "499283970b5020358726949b4f1d93d3167bc5eecaa1d167076bae6bb2862d12"
+  url "https://www.apache.org/dyn/closer.cgi?path=/kafka/2.3.0/kafka_2.12-2.3.0.tgz"
+  sha256 "d86f5121a9f0c44477ae6b6f235daecc3f04ecb7bf98596fd91f402336eee3e7"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "67105a99b29380f4af1e124de0ce92cda4d90eeb1cac0ee4bfc7771a9b408213" => :high_sierra
-    sha256 "67105a99b29380f4af1e124de0ce92cda4d90eeb1cac0ee4bfc7771a9b408213" => :sierra
-    sha256 "67105a99b29380f4af1e124de0ce92cda4d90eeb1cac0ee4bfc7771a9b408213" => :el_capitan
+    sha256 "1483beca512a1121491d8890290826e80f87d6630c37b15207db1d0cf39c805c" => :mojave
+    sha256 "1483beca512a1121491d8890290826e80f87d6630c37b15207db1d0cf39c805c" => :high_sierra
+    sha256 "84e51f5c33a35333e3da125076fa9f566e647ff9a555716ac478123a81d4186b" => :sierra
   end
-
-  depends_on "zookeeper"
-  depends_on :java => "1.8"
 
   # Related to https://issues.apache.org/jira/browse/KAFKA-2034
   # Since Kafka does not currently set the source or target compability version inside build.gradle
@@ -21,6 +18,9 @@ class Kafka < Formula
     reason "The bottle requires Java 1.8."
     satisfy { quiet_system("/usr/libexec/java_home --version 1.8 --failfast") }
   end
+
+  depends_on :java => "1.8"
+  depends_on "zookeeper"
 
   def install
     data = var/"lib"
@@ -73,7 +73,7 @@ class Kafka < Formula
         <string>#{var}/log/kafka/kafka_output.log</string>
     </dict>
     </plist>
-    EOS
+  EOS
   end
 
   test do
@@ -98,16 +98,20 @@ class Kafka < Formula
 
       sleep 30
 
-      system "#{bin}/kafka-topics --zookeeper localhost:2181 --create --if-not-exists --replication-factor 1 --partitions 1 --topic test > #{testpath}/kafka/demo.out 2>/dev/null"
-      pipe_output("#{bin}/kafka-console-producer --broker-list localhost:9092 --topic test 2>/dev/null", "test message")
-      system "#{bin}/kafka-console-consumer --zookeeper localhost:2181 --topic test --from-beginning --max-messages 1 >> #{testpath}/kafka/demo.out 2>/dev/null"
-      system "#{bin}/kafka-topics --zookeeper localhost:2181 --delete --topic test >> #{testpath}/kafka/demo.out 2>/dev/null"
+      system "#{bin}/kafka-topics --zookeeper localhost:2181 --create --if-not-exists --replication-factor 1 " \
+             "--partitions 1 --topic test > #{testpath}/kafka/demo.out 2>/dev/null"
+      pipe_output "#{bin}/kafka-console-producer --broker-list localhost:9092 --topic test 2>/dev/null",
+                  "test message"
+      system "#{bin}/kafka-console-consumer --bootstrap-server localhost:9092 --topic test --from-beginning " \
+             "--max-messages 1 >> #{testpath}/kafka/demo.out 2>/dev/null"
+      system "#{bin}/kafka-topics --zookeeper localhost:2181 --delete --topic test >> #{testpath}/kafka/demo.out " \
+             "2>/dev/null"
     ensure
       system "#{bin}/kafka-server-stop"
       system "#{bin}/zookeeper-server-stop"
       sleep 10
     end
 
-    assert_match /test message/, IO.read("#{testpath}/kafka/demo.out")
+    assert_match(/test message/, IO.read("#{testpath}/kafka/demo.out"))
   end
 end

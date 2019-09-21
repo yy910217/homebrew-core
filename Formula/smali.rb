@@ -1,14 +1,14 @@
 class Smali < Formula
   desc "Assembler/disassembler for Android's Java VM implementation"
   homepage "https://github.com/JesusFreke/smali"
-  url "https://bitbucket.org/JesusFreke/smali/downloads/smali-2.2.2.jar"
-  sha256 "5ec0ce98146d36c5826f1fbf362180a0a264ce0a31d50b8c24833975b47d98e6"
+  url "https://bitbucket.org/JesusFreke/smali/downloads/smali-2.3.1.jar"
+  sha256 "a3c5a308dc8aa6b6441f4df5a2f3c333301d117c0f50465cbc0aff8f6053d594"
 
   bottle :unneeded
 
   resource "baksmali-jar" do
-    url "https://bitbucket.org/JesusFreke/smali/downloads/baksmali-2.2.2.jar"
-    sha256 "cf7484d8c090fedfa9cd35215144ffabda43c30afd35e00b57c1cf53bde4c66f"
+    url "https://bitbucket.org/JesusFreke/smali/downloads/baksmali-2.3.1.jar"
+    sha256 "6053ed3ffabb9f298d8fd42efc1c8386b7ef31df911db6cdbce05bb5d1f3acca"
   end
 
   resource "baksmali" do

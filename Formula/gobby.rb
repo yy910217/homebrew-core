@@ -1,30 +1,27 @@
 class Gobby < Formula
   desc "Multi-platform collaborative text editor"
-  homepage "http://gobby.0x539.de"
+  homepage "https://gobby.github.io/"
   url "http://releases.0x539.de/gobby/gobby-0.5.0.tar.gz"
   sha256 "8ceb3598d27cfccdf9c9889b781c4c5c8e1731ca6beb183f5d4555644c06bd98"
-  revision 4
-
-  head "git://git.0x539.de/git/gobby.git"
+  revision 6
+  head "https://github.com/gobby/gobby"
 
   bottle do
-    sha256 "6a192c00a7b792c83f6155078690dbc274ca9c1d9253899ab877ee5e6b991162" => :high_sierra
-    sha256 "dd4fad73acd7ebc6a232afa06a8a39753a3d0434204f027e279c87d161277cf7" => :sierra
-    sha256 "315099a2c3c991cb122bdff320c8dc050c5ae352d8bce91d38695482f7462f39" => :el_capitan
+    sha256 "1df49cd1dfdf83a2be9410580e236a1d5f53c00d10422a0cc477f5fa0ab19caf" => :mojave
+    sha256 "8c668399bc39b26879cab9e3fe62275ce7075083f740e92243475cd9588b9036" => :high_sierra
+    sha256 "9d44cf7da6a4864a88eff1ec9d191bbfdb7c7cc2cb41cc5e52285102fa310c91" => :sierra
   end
 
-  depends_on "pkg-config" => :build
   depends_on "intltool" => :build
-  depends_on "gtkmm3"
-  depends_on "gsasl"
-  depends_on "gnutls"
-  depends_on "libxml++"
-  depends_on "gtksourceview3"
+  depends_on "pkg-config" => :build
   depends_on "gettext"
+  depends_on "gnutls"
+  depends_on "gsasl"
+  depends_on "gtkmm3"
+  depends_on "gtksourceview3"
   depends_on "hicolor-icon-theme"
   depends_on "libinfinity"
-
-  needs :cxx11
+  depends_on "libxml++"
 
   # Necessary to remove mandatory gtk-mac-integration
   # it's badly broken as it depends on an ancient version of ige-mac-integration

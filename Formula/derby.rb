@@ -1,8 +1,8 @@
 class Derby < Formula
   desc "Apache Derby is an embedded relational database running on JVM"
   homepage "https://db.apache.org/derby/"
-  url "https://www.apache.org/dyn/closer.cgi?path=db/derby/db-derby-10.14.2.0/db-derby-10.14.2.0-bin.tar.gz"
-  sha256 "980fb0534c38edf4a529a13fb4a12b53d32054827b57b6c5f0307d10f17d25a8"
+  url "https://www.apache.org/dyn/closer.cgi?path=db/derby/db-derby-10.15.1.3/db-derby-10.15.1.3-bin.tar.gz"
+  sha256 "eedb0293fea8b7d9cc813371c34935661e42ea8270e72fedd0ffe2a6a29c61ad"
 
   bottle :unneeded
 
@@ -15,7 +15,7 @@ class Derby < Formula
     bin.install Dir["bin/*"]
     bin.env_script_all_files(libexec/"bin",
       Language::Java.overridable_java_home_env.merge(:DERBY_INSTALL => libexec.to_s,
-                                                     :DERBY_HOME => libexec.to_s))
+                                                     :DERBY_HOME    => libexec.to_s))
   end
 
   def post_install
@@ -46,7 +46,7 @@ class Derby < Formula
       <string>#{var}/derby</string>
     </dict>
     </plist>
-    EOS
+  EOS
   end
 
   test do

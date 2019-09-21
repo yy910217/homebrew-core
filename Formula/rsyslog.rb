@@ -1,46 +1,25 @@
 class Rsyslog < Formula
   desc "Enhanced, multi-threaded syslogd"
   homepage "https://www.rsyslog.com/"
-  url "https://www.rsyslog.com/files/download/rsyslog/rsyslog-8.34.0.tar.gz"
-  sha256 "18330a9764c55d2501b847aad267292bd96c2b12fa5c3b92909bd8d4563c80a9"
+  url "https://www.rsyslog.com/files/download/rsyslog/rsyslog-8.1908.0.tar.gz"
+  sha256 "f8c8e53b651e03a011667c60bd2d4dba7a7cb6ec04b247c8ea8514115527863b"
 
   bottle do
-    sha256 "cd53ebf44f879d8786fbdf6faa3af2e68a180b0b96a49c37e82dfe2c366f5b69" => :high_sierra
-    sha256 "3e7de1d3e48776cb66edc3fe9c67274d7be45c0b2bb5b5241477d1bd26001d8f" => :sierra
-    sha256 "e984aeeeca6c29591d314f15e99595a50b46835e922cca90291ed5c7695c2057" => :el_capitan
+    sha256 "0a4054dbd737bb3d4a525e289b955f032bc1f4eb7b838a8c46f56174bae3c2ea" => :mojave
+    sha256 "26f028afe97baa540fa5a3606b48eb228603634c787ec48524c73a25040f2ba5" => :high_sierra
+    sha256 "02581b59828e52756fa99798134f34771afd84308136c2f5c543941d7f56d4e6" => :sierra
   end
 
   depends_on "pkg-config" => :build
   depends_on "libestr"
 
   resource "libfastjson" do
-    url "http://download.rsyslog.com/libfastjson/libfastjson-0.99.8.tar.gz"
+    url "https://download.rsyslog.com/libfastjson/libfastjson-0.99.8.tar.gz"
     sha256 "3544c757668b4a257825b3cbc26f800f59ef3c1ff2a260f40f96b48ab1d59e07"
-  end
-
-  resource "liblogging" do
-    url "http://download.rsyslog.com/liblogging/liblogging-1.0.6.tar.gz"
-    sha256 "338c6174e5c8652eaa34f956be3451f7491a4416ab489aef63151f802b00bf93"
-  end
-
-  # Remove for > 8.34.0
-  # Fix "fatal error: 'liblogging/stdlog.h' file not found"
-  # Upstream PR 14 May 2018 "pass liblogging cflags when building fmhttp and
-  # imfile plugins"; see https://github.com/rsyslog/rsyslog/pull/2703
-  patch do
-    url "https://raw.githubusercontent.com/Homebrew/formula-patches/a4f4bb9/rsyslog/liblogging-cflags.diff"
-    sha256 "f5d02e928783e34d0784136e7315a831f09309544d9b49a7087468063447c736"
   end
 
   def install
     resource("libfastjson").stage do
-      system "./configure", "--disable-dependency-tracking",
-                            "--disable-silent-rules",
-                            "--prefix=#{libexec}"
-      system "make", "install"
-    end
-
-    resource("liblogging").stage do
       system "./configure", "--disable-dependency-tracking",
                             "--disable-silent-rules",
                             "--prefix=#{libexec}"
@@ -90,6 +69,6 @@ class Rsyslog < Formula
         <string>#{var}/log/rsyslogd.log</string>
       </dict>
     </plist>
-    EOS
+  EOS
   end
 end

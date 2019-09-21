@@ -3,43 +3,48 @@ class Remarshal < Formula
 
   desc "Convert between TOML, YAML and JSON"
   homepage "https://github.com/dbohdan/remarshal"
-  url "https://github.com/dbohdan/remarshal/archive/v0.8.0.tar.gz"
-  sha256 "ab2ab978aaf20e97719680f8f242ea3407090b562d747205486a02cdbf14d17f"
+  url "https://github.com/dbohdan/remarshal/archive/v0.11.2.tar.gz"
+  sha256 "3f383e48f59722a4d93ef2b5e417b6a8c152f382a1faad416099ffcde5c87a66"
   head "https://github.com/dbohdan/remarshal.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "63e760f882da33ef11b3b0d1339d75aa8876f2ce73b7e895edd7f00e2c3c453c" => :high_sierra
-    sha256 "6bdde286613dec8bdbecf6a9f1c5726109e94eed5a77ecf603cc07184faa352b" => :sierra
-    sha256 "ed9cf2d1329e174021492b470f34e3f953fb06148758255607e5acb54d52cd75" => :el_capitan
+    sha256 "5a74936a60c2a6242cfafde7aef7c07c2c311c88c114cba85ca927bb54e9346f" => :mojave
+    sha256 "757a22523a68e47fbfc372d84c44d840bd61c212fb02d5e1f17fccdfd870d62a" => :high_sierra
+    sha256 "645c1cbaa4ff1fa317b2ca3cfdf2ccd8763bd2a11b69b3ffe9bb39e0ee4b8669" => :sierra
   end
 
-  depends_on "python@2"
+  depends_on "python"
 
   resource "PyYAML" do
-    url "https://files.pythonhosted.org/packages/4a/85/db5a2df477072b2902b0eb892feb37d88ac635d36245a72a6a69b23b383a/PyYAML-3.12.tar.gz"
-    sha256 "592766c6303207a20efc445587778322d7f73b161bd994f227adaa341ba212ab"
+    url "https://files.pythonhosted.org/packages/a3/65/837fefac7475963d1eccf4aa684c23b95aa6c1d033a2c5965ccb11e22623/PyYAML-5.1.1.tar.gz"
+    sha256 "b4bb4d3f5e232425e25dda21c070ce05168a786ac9eda43768ab7f3ac2770955"
   end
 
   resource "pytoml" do
-    url "https://files.pythonhosted.org/packages/6d/2a/c5a0eb781cff59df8613a531f07f9d82bb47ea595aa91c6f114f1621a94a/pytoml-0.1.14.tar.gz"
-    sha256 "aff69147d436c3ba8c7f3bc1b3f4aa3d7e47d305a495f2631872e6429694aabf"
+    url "https://files.pythonhosted.org/packages/f4/ba/98ee2054a2d7b8bebd367d442e089489250b6dc2aee558b000e961467212/pytoml-0.1.21.tar.gz"
+    sha256 "8eecf7c8d0adcff3b375b09fe403407aa9b645c499e5ab8cac670ac4a35f61e7"
   end
 
   resource "python-dateutil" do
-    url "https://files.pythonhosted.org/packages/c5/39/4da7c2dbc4f023fba5fb2325febcadf0d0ce0efdc8bd12083a0f65d20653/python-dateutil-2.7.2.tar.gz"
-    sha256 "9d8074be4c993fbe4947878ce593052f71dac82932a677d49194d8ce9778002e"
+    url "https://files.pythonhosted.org/packages/ad/99/5b2e99737edeb28c71bcbec5b5dda19d0d9ef3ca3e92e3e925e7c0bb364c/python-dateutil-2.8.0.tar.gz"
+    sha256 "c89805f6f4d64db21ed966fda138f8a5ed7a4fdbc1a8ee329ce1b74e3c74da9e"
   end
 
   resource "six" do
-    url "https://files.pythonhosted.org/packages/16/d8/bc6316cf98419719bd59c91742194c111b6f2e85abac88e496adefaf7afe/six-1.11.0.tar.gz"
-    sha256 "70e8a77beed4562e7f14fe23a786b54f6296e34344c23bc42f07b15018ff98e9"
+    url "https://files.pythonhosted.org/packages/dd/bf/4138e7bfb757de47d1f4b6994648ec67a51efe58fa907c1e11e350cddfca/six-1.12.0.tar.gz"
+    sha256 "d16a0141ec1a18405cd4ce8b4613101da75da0e9a7aec5bdd4fa804d0e0eba73"
+  end
+
+  resource "u-msgpack-python" do
+    url "https://files.pythonhosted.org/packages/d4/6b/b2deb0763305a2de35c4d125bfede7b0e414b7c18fb43011b554b9ce1832/u-msgpack-python-2.5.1.tar.gz"
+    sha256 "6c02a0654a5e11f8fad532ed634109ed49cdc929f7b972848773e4e0ce52f30c"
   end
 
   def install
     virtualenv_install_with_resources
 
-    ["toml", "yaml", "json"].permutation(2).each do |informat, outformat|
+    %w[toml yaml json msgpack].permutation(2).each do |informat, outformat|
       bin.install_symlink "remarshal" => "#{informat}2#{outformat}"
     end
   end
@@ -64,5 +69,6 @@ class Remarshal < Formula
     assert_equal toml, pipe_output("#{bin}/yaml2toml", yaml)
     assert_equal json, pipe_output("#{bin}/remarshal -if=toml -of=json", toml).chomp
     assert_equal json, pipe_output("#{bin}/toml2json", toml).chomp
+    assert_equal pipe_output("#{bin}/remarshal -if=yaml -of=msgpack", yaml), pipe_output("#{bin}/remarshal -if=json -of=msgpack", json)
   end
 end

@@ -1,32 +1,31 @@
 class Anjuta < Formula
   desc "GNOME Integrated Development Environment"
   homepage "http://anjuta.org"
-  url "https://download.gnome.org/sources/anjuta/3.28/anjuta-3.28.0.tar.xz"
-  sha256 "b087b0a5857952d0edd24dae458616eb166a3257bc647d5279a9e71495544779"
-  revision 1
+  url "https://download.gnome.org/sources/anjuta/3.34/anjuta-3.34.0.tar.xz"
+  sha256 "42a93130ed3ee02d064a7094e94e1ffae2032b3f35a87bf441e37fc3bb3a148f"
 
   bottle do
-    sha256 "e038d342a81ee2f5db084d5ad6d1ff87144194aeae66bef28b3f764b8e0cd6d3" => :high_sierra
-    sha256 "d402812770fad67e94aed33484c6ca12cdcd89a4d290e2d313b27f627caeea07" => :sierra
-    sha256 "4b5db4d330a8386085efc7cb24771ae7cb49cc3c523c9babb53e177befce9f3b" => :el_capitan
+    sha256 "66bc5d99d0c5ab823e283c01cc0c7af5294bb095f20bdb99e9b775bc408968c7" => :mojave
+    sha256 "939d047893f21a25ef7d79915dc18ff2ee62462fdf830a417bdf57a105826656" => :high_sierra
+    sha256 "6ed200a7ee0a39f773117c5d69d60255a11004152f3f56d7f8ff8a819b15f156" => :sierra
   end
 
-  depends_on "python@2"
-  depends_on "pkg-config" => :build
   depends_on "intltool" => :build
   depends_on "itstool" => :build
-  depends_on "gtksourceview3"
-  depends_on "libxml2"
-  depends_on "libgda"
-  depends_on "gdl"
-  depends_on "vte3"
-  depends_on "hicolor-icon-theme"
+  depends_on "pkg-config" => :build
   depends_on "adwaita-icon-theme"
+  depends_on "autogen"
+  depends_on "gdl"
+  depends_on "gnome-themes-standard"
   depends_on "gnutls"
+  depends_on "gtksourceview3"
+  depends_on "hicolor-icon-theme"
+  depends_on "libgda"
+  depends_on "libxml2"
+  depends_on "python"
   depends_on "shared-mime-info"
-  depends_on "vala" => :recommended
-  depends_on "autogen" => :recommended
-  depends_on "gnome-themes-standard" => :optional
+  depends_on "vala"
+  depends_on "vte3"
 
   def install
     system "./configure", "--disable-debug",
@@ -34,18 +33,22 @@ class Anjuta < Formula
                           "--disable-silent-rules",
                           "--prefix=#{prefix}",
                           "--disable-schemas-compile"
-    ENV.append_path "PYTHONPATH", "#{Formula["libxml2"].opt_lib}/python2.7/site-packages"
+
+    xy = Language::Python.major_minor_version "python3"
+    ENV.append_path "PYTHONPATH", "#{Formula["libxml2"].opt_lib}/python#{xy}/site-packages"
     system "make", "install"
   end
 
   def post_install
-    system "#{Formula["glib"].opt_bin}/glib-compile-schemas", "#{HOMEBREW_PREFIX}/share/glib-2.0/schemas"
-    system "#{Formula["gtk+3"].opt_bin}/gtk3-update-icon-cache", "-f", "-t", "#{HOMEBREW_PREFIX}/share/icons/hicolor"
+    hshare = HOMEBREW_PREFIX/"share"
+
+    system "#{Formula["glib"].opt_bin}/glib-compile-schemas", hshare/"glib-2.0/schemas"
+    system "#{Formula["gtk+3"].opt_bin}/gtk3-update-icon-cache", "-f", "-t", hshare/"icons/hicolor"
     # HighContrast is provided by gnome-themes-standard
-    if File.file?("#{HOMEBREW_PREFIX}/share/icons/HighContrast/.icon-theme.cache")
-      system "#{Formula["gtk+3"].opt_bin}/gtk3-update-icon-cache", "-f", "-t", "#{HOMEBREW_PREFIX}/share/icons/HighContrast"
+    if File.file?("#{hshare}/icons/HighContrast/.icon-theme.cache")
+      system "#{Formula["gtk+3"].opt_bin}/gtk3-update-icon-cache", "-f", "-t", hshare/"icons/HighContrast"
     end
-    system "#{Formula["shared-mime-info"].opt_bin}/update-mime-database", "#{HOMEBREW_PREFIX}/share/mime"
+    system "#{Formula["shared-mime-info"].opt_bin}/update-mime-database", hshare/"mime"
   end
 
   test do

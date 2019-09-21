@@ -1,16 +1,14 @@
 class Mgba < Formula
   desc "Game Boy Advance emulator"
   homepage "https://mgba.io/"
-  url "https://github.com/mgba-emu/mgba/archive/0.6.3.tar.gz"
-  sha256 "35c8906c01206adae714fee9c2bc39698c514a4adb32c9c4a5a3fa58b2d10f9a"
-  revision 2
+  url "https://github.com/mgba-emu/mgba/archive/0.7.3.tar.gz"
+  sha256 "6d5e8ab6f87d3d9fa85af2543db838568dbdfcecd6797f8153f1b3a10b4a8bdd"
   head "https://github.com/mgba-emu/mgba.git"
 
   bottle do
-    cellar :any
-    sha256 "b35eb17585007f58d73104a6cee5c9fd4ade4073f714f8cd4d595eeb9b1e9073" => :high_sierra
-    sha256 "c4a7b9598e074a904a466d4f7f540a67c511131f780a6898b1b8def3e33058ba" => :sierra
-    sha256 "fafaa47a86e92ad1877814abcf7a6d7159188e02ba2e63ad8f171116d49f5546" => :el_capitan
+    sha256 "78f1c95c5e21b075394df17f70c1263fc9912a645707eaeb7bfb63ab263ffe0b" => :mojave
+    sha256 "7b805b6bd27e90c706b742f6ec0ae3cbbcb24be31426c38e4da41e3d854cf387" => :high_sierra
+    sha256 "aa1c834a99df54edc2fca5c5f9aa8e167ea04b8cd3fcdb3b9aa88b13f5a16e96" => :sierra
   end
 
   depends_on "cmake" => :build

@@ -1,26 +1,29 @@
 class UBootTools < Formula
   desc "Universal boot loader"
   homepage "https://www.denx.de/wiki/U-Boot/"
-  url "http://ftp.denx.de/pub/u-boot/u-boot-2018.05.tar.bz2"
-  sha256 "4da13c2a6139a78cc08608f21fd4741db27eda336cfad7ab8264fda923b9c048"
+  url "https://ftp.denx.de/pub/u-boot/u-boot-2019.07.tar.bz2"
+  sha256 "bff4fa77e8da17521c030ca4c5b947a056c1b1be4d3e6ee8637020b8d50251d0"
+  revision 1
 
   bottle do
     cellar :any
-    sha256 "292d6891f543f3db03c96e8b62fa754e2c452e6b1ba5c4e7fde67a9731fe2dcb" => :high_sierra
-    sha256 "d6cfb2dd3794f31182cfdbe54dc73de11fda73fa1fa0548c18e46630f4f4ff1c" => :sierra
-    sha256 "094486dc701036c17716113e867af69c6104b7dd3114bb10df5a02bd93777cd4" => :el_capitan
+    sha256 "12b0fc3efe3bc1cb8bc8601961312b5cc0f06c0763f7e8ef498c6b67c51bb914" => :mojave
+    sha256 "7ce886985cd7618286df58f5b81db5122a20e32a31463ee09f2231adece1646a" => :high_sierra
+    sha256 "d773f7288db6b6e29d421b64c237f9b3cdc2fa67c1cca63d5f1aaa2160eea424" => :sierra
   end
 
-  depends_on "openssl"
+  depends_on "openssl@1.1"
 
   def install
     system "make", "sandbox_defconfig"
     system "make", "tools"
     bin.install "tools/mkimage"
+    bin.install "tools/dumpimage"
     man1.install "doc/mkimage.1"
   end
 
   test do
     system bin/"mkimage", "-V"
+    system bin/"dumpimage", "-V"
   end
 end

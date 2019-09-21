@@ -1,25 +1,25 @@
 class Offlineimap < Formula
   desc "Synchronizes emails between two repositories"
   homepage "https://www.offlineimap.org/"
-  url "https://github.com/OfflineIMAP/offlineimap/archive/v7.2.0.tar.gz"
-  sha256 "b6c8c6dbd67ec7cd6228a40866b5d6143f707d78faf9603d9328c9bc43fdf7c4"
+  url "https://github.com/OfflineIMAP/offlineimap/archive/v7.2.4.tar.gz"
+  sha256 "5b6590c82cd5f6cbfe09e89ce52622208f5d4b24e021fce7646204b417bd1d2e"
   head "https://github.com/OfflineIMAP/offlineimap.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "7a4dc02c2ed9af5249bc3d063f5e10b7e0784a8660bd598664f8f77959ef58c7" => :high_sierra
-    sha256 "7a4dc02c2ed9af5249bc3d063f5e10b7e0784a8660bd598664f8f77959ef58c7" => :sierra
-    sha256 "7a4dc02c2ed9af5249bc3d063f5e10b7e0784a8660bd598664f8f77959ef58c7" => :el_capitan
+    sha256 "c9620b87d09719d7950203ec39e04b0ea4bb7a03cf169c3fa5596e0c53e7c177" => :mojave
+    sha256 "c9620b87d09719d7950203ec39e04b0ea4bb7a03cf169c3fa5596e0c53e7c177" => :high_sierra
+    sha256 "d56fbea8ca30549b4f5e3e5e294cae0dcf4363a08d7574d8b7e8abaa70f9ff17" => :sierra
   end
 
   depends_on "asciidoc" => :build
   depends_on "docbook-xsl" => :build
   depends_on "sphinx-doc" => :build
-  depends_on "python@2"
+  depends_on "python@2" # does not support Python 3
 
   resource "six" do
-    url "https://files.pythonhosted.org/packages/16/d8/bc6316cf98419719bd59c91742194c111b6f2e85abac88e496adefaf7afe/six-1.11.0.tar.gz"
-    sha256 "70e8a77beed4562e7f14fe23a786b54f6296e34344c23bc42f07b15018ff98e9"
+    url "https://files.pythonhosted.org/packages/dd/bf/4138e7bfb757de47d1f4b6994648ec67a51efe58fa907c1e11e350cddfca/six-1.12.0.tar.gz"
+    sha256 "d16a0141ec1a18405cd4ce8b4613101da75da0e9a7aec5bdd4fa804d0e0eba73"
   end
 
   def install
@@ -46,7 +46,7 @@ class Offlineimap < Formula
 
     * advanced configuration:
         cp -n #{etc}/offlineimap.conf ~/.offlineimaprc
-    EOS
+  EOS
   end
 
   plist_options :manual => "offlineimap"
@@ -82,7 +82,7 @@ class Offlineimap < Formula
         <string>/dev/null</string>
       </dict>
     </plist>
-    EOS
+  EOS
   end
 
   test do

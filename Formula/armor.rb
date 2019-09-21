@@ -1,20 +1,21 @@
 class Armor < Formula
   desc "Uncomplicated, modern HTTP server"
   homepage "https://github.com/labstack/armor"
-  url "https://github.com/labstack/armor/archive/0.4.11.tar.gz"
-  sha256 "dd6e968d67625e9180bab0e20773ec142eb870550b8a5eaef2a7846fb55b86db"
+  url "https://github.com/labstack/armor/archive/v0.4.14.tar.gz"
+  sha256 "bcaee0eaa1ef29ef439d5235b955516871c88d67c3ec5191e3421f65e364e4b8"
   head "https://github.com/labstack/armor.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "1eb6ccc128ce585652c5f1189cd7a9e93ee2a9bd064c64b3f70e67722976322b" => :high_sierra
-    sha256 "7b6376c03caba58a23de9a0027ab1272764a94bc6ed7b9caf879201837843697" => :sierra
-    sha256 "cbf3a72453a8585e3bd72b3738f01413b544442c8d635aa0994a99747b39d575" => :el_capitan
+    sha256 "b3fd4ee9a6827f911adfa84ef9ff3ad76a9519232dfcbdde1065af4928030a85" => :mojave
+    sha256 "47d85443ebd54b3805b6a02ee9e2c872f0068ca6782bc343490cc12812b32236" => :high_sierra
+    sha256 "d4f119fed6f576e3173e1229ad2849682026529afa1d88a1a58053406bc27e9f" => :sierra
   end
 
   depends_on "go" => :build
 
   def install
+    ENV["GO111MODULE"] = "on"
     ENV["GOPATH"] = buildpath
     armorpath = buildpath/"src/github.com/labstack/armor"
     armorpath.install buildpath.children
@@ -32,7 +33,7 @@ class Armor < Formula
       end
       sleep 1
       output = shell_output("curl -sI http://localhost:8080")
-      assert_match /200 OK/m, output
+      assert_match(/200 OK/m, output)
     ensure
       Process.kill("HUP", pid)
     end

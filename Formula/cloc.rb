@@ -1,15 +1,15 @@
 class Cloc < Formula
   desc "Statistics utility to count lines of code"
   homepage "https://github.com/AlDanial/cloc/"
-  url "https://github.com/AlDanial/cloc/releases/download/v1.76/cloc-1.76.tar.gz"
-  sha256 "d43e812b417ec718219fb561ed8f50f2eaac9bf365fd5dfdf127ebc8ffa65917"
+  url "https://github.com/AlDanial/cloc/archive/1.82.tar.gz"
+  sha256 "7ab390f3a4888d9b78df420bff586326b53e3f7fc0e0c9ff9b160d076ca85a17"
   head "https://github.com/AlDanial/cloc.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "0123cefae7e75bbb3b64b718b4f984bf6aa1da9efb28fc86f3b2a0687d5d8f5f" => :high_sierra
-    sha256 "2d16fe94a6a046f2cb9c889e65c396c4cf41bcd9e2d161ddb6cd94892d669d88" => :sierra
-    sha256 "8c6d4515481aa1738f65332757d7f90ec57103893835460d8c1d0758b261b58e" => :el_capitan
+    sha256 "661f3c3b8eb7e0a348e36b5b1b7aebf2b579eec5ae078e7f2d2c64ab302a3644" => :mojave
+    sha256 "15a38a7a5172213f2c1577a0aef34260203d5e0c25d38c6a4a2252990a9c9414" => :high_sierra
+    sha256 "7e7622a28e8b32af41a292174a2f1ac8aef6e7f6a4735fefa7a3c83f7a11dd65" => :sierra
   end
 
   resource "Regexp::Common" do
@@ -23,8 +23,8 @@ class Cloc < Formula
   end
 
   resource "Parallel::ForkManager" do
-    url "https://cpan.metacpan.org/authors/id/Y/YA/YANICK/Parallel-ForkManager-1.19.tar.gz"
-    sha256 "f1de2e9875eeb77d65f80338905dedd522f3913822502982f805aa71cde5a472"
+    url "https://cpan.metacpan.org/authors/id/Y/YA/YANICK/Parallel-ForkManager-1.20.tar.gz"
+    sha256 "7cc4c1c3b0e676b61ffa90f82f4128e8057327449ca86a9beb2f39217023f289"
   end
 
   def install

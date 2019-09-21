@@ -1,24 +1,29 @@
 class Diffoscope < Formula
   desc "In-depth comparison of files, archives, and directories"
   homepage "https://diffoscope.org"
-  url "https://files.pythonhosted.org/packages/8e/31/f3f508bf8aea30d78cfa2cc87db9c2340ba4e38c6162d891941e3ad55e6c/diffoscope-94.tar.gz"
-  sha256 "a6cbd7d6b207a92b5ffb9945be132cf56cff6e1cf34f7749761ffd993261ec1e"
+  url "https://files.pythonhosted.org/packages/85/65/7da00c31920f33d9e33d83a360f9bc03e7565271c7cca2b9f21d957610f1/diffoscope-123.tar.gz"
+  sha256 "d05b76ebd89dac55cf29dfc3c1f6192f9bb0e27b119cf3db8b6d56402fd41043"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "0b377c127b98af9f52c7d23cc7ea41ca04dfbcc741db666a15558e159116350c" => :high_sierra
-    sha256 "0b377c127b98af9f52c7d23cc7ea41ca04dfbcc741db666a15558e159116350c" => :sierra
-    sha256 "0b377c127b98af9f52c7d23cc7ea41ca04dfbcc741db666a15558e159116350c" => :el_capitan
+    sha256 "a7bad5e7c06cf1bccf2fb8587a13c399f21c72bbc7b256a61dcbfdfae40ae969" => :mojave
+    sha256 "1d18e94c6d9f1547c3cf105e7555cc348319909d4c02b2b046fa298cfff86cca" => :high_sierra
+    sha256 "5f0552232995ac2a4e751859b91212bc7ec4b26c768d1d5eda12293fe8c682bc" => :sierra
   end
 
-  depends_on "libmagic"
-  depends_on "libarchive"
   depends_on "gnu-tar"
+  depends_on "libarchive"
+  depends_on "libmagic"
   depends_on "python"
 
   resource "libarchive-c" do
-    url "https://files.pythonhosted.org/packages/1f/4a/7421e8db5c7509cf75e34b92a32b69c506f2b6f6392a909c2f87f3e94ad2/libarchive-c-2.7.tar.gz"
-    sha256 "56eadbc383c27ec9cf6aad3ead72265e70f80fa474b20944328db38bab762b04"
+    url "https://files.pythonhosted.org/packages/b9/2c/c975b3410e148dab00d14471784a743268614e21121e50e4e00b13f38370/libarchive-c-2.8.tar.gz"
+    sha256 "06d44d5b9520bdac93048c72b7ed66d11a6626da16d2086f9aad079674d8e061"
+  end
+
+  resource "progressbar" do
+    url "https://files.pythonhosted.org/packages/a3/a6/b8e451f6cff1c99b4747a2f7235aa904d2d49e8e1464e0b798272aa84358/progressbar-2.5.tar.gz"
+    sha256 "5d81cb529da2e223b53962afd6c8ca0f05c6670e40309a7219eacc36af9b6c63"
   end
 
   resource "python-magic" do
@@ -42,13 +47,13 @@ class Diffoscope < Formula
     system "python3", *Language::Python.setup_install_args(libexec)
     bin.install Dir[libexec/"bin/*"]
     libarchive = Formula["libarchive"].opt_lib/"libarchive.dylib"
-    bin.env_script_all_files(libexec+"bin", :PYTHONPATH => ENV["PYTHONPATH"],
+    bin.env_script_all_files(libexec/"bin", :PYTHONPATH => ENV["PYTHONPATH"],
                                             :LIBARCHIVE => libarchive)
   end
 
   test do
     (testpath/"test1").write "test"
     cp testpath/"test1", testpath/"test2"
-    system "#{bin}/diffoscope", "test1", "test2"
+    system "#{bin}/diffoscope", "--progress", "test1", "test2"
   end
 end

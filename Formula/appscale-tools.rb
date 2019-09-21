@@ -1,21 +1,23 @@
 class AppscaleTools < Formula
   desc "Command-line tools for working with AppScale"
   homepage "https://github.com/AppScale/appscale-tools"
-  url "https://github.com/AppScale/appscale-tools/archive/3.5.0.tar.gz"
-  sha256 "0bc6763739bdbeb955d944ed24f9308b3dc803ef96a06bb2cd6f1ff77275b021"
+  url "https://github.com/AppScale/appscale-tools/archive/3.5.3.tar.gz"
+  sha256 "ae3f373626d5d88d38cf17fef8bd5faaf92234bc6421d5f5c49cf5788acbe93a"
+  revision 1
   head "https://github.com/AppScale/appscale-tools.git"
 
   bottle do
     cellar :any
-    sha256 "f353262e215988a11e3f5f46606a71a95974a05072e78cfb5f335f936179f087" => :high_sierra
-    sha256 "242405f2e13f0e80f00d7ce4b7b0c0973d485757d9ca5806ef2387f18f9d0e58" => :sierra
-    sha256 "f13d066fcf3849954e64eb78a387a36710b7c634e8802f840be9e624fea0c1d6" => :el_capitan
+    sha256 "152516bbbd74d6e356e70f2127f5856138291afcb2c5c8fb32356cf3827b2f5e" => :mojave
+    sha256 "2f3af2aec3c7270aea877868f28f6a7a2c783e74b44261523d255b409047689a" => :high_sierra
+    sha256 "e8eec8f0fef97aeb3cc2c6cf196712b44fd34d73c1292746aa3fa7ab75b8c0b8" => :sierra
   end
 
-  depends_on "python@2"
   depends_on "libyaml"
+  depends_on "openssl@1.1"
+  # Uses SOAPPy, which does not support Python 3
+  depends_on "python@2" # does not support Python 3
   depends_on "ssh-copy-id"
-  depends_on "openssl"
 
   resource "retrying" do
     url "https://files.pythonhosted.org/packages/44/ef/beae4b4ef80902f22e3af073397f079c96969c69b2c7d52a57ea9ae61c9d/retrying-1.3.3.tar.gz"

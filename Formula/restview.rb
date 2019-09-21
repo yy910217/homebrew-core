@@ -1,17 +1,17 @@
 class Restview < Formula
   desc "Viewer for ReStructuredText documents that renders them on the fly"
   homepage "https://mg.pov.lt/restview/"
-  url "https://github.com/mgedmin/restview/archive/2.9.0.tar.gz"
-  sha256 "d4ecfa795736e1a132ce0b69af7a6e1679a9ff94e729f39992c7d1fee909845a"
+  url "https://github.com/mgedmin/restview/archive/2.9.2.tar.gz"
+  sha256 "155a5744111d3d1f9e7903f4445ff41c04b42c0be29705f57fb98b3d33b283bd"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "bf14f8254116c956b8f10837dc608a702e41c06becf1e6f843ff9e17a70313fd" => :high_sierra
-    sha256 "33a36aab7a1615d2f39a2f1a33a1b7f5ea896cc8f532c34dd11e15221b9521e7" => :sierra
-    sha256 "c308803d9aea18aaeb5c83d2298b95dd5b1587120baefa05e5eeb6977ad8ac58" => :el_capitan
+    sha256 "20b1b86940e4cf58ddc5f8f8ea59a34b29379aa73ad77b4fb0985b25720a35ac" => :mojave
+    sha256 "0e97c65a7f872f32ecbe3a156ad4626258e872c71a53ef8700c7cb1049e83e10" => :high_sierra
+    sha256 "59ede18c81cfedc9d2a730dd7459a874de1a0518c0471439fb31063973e4265e" => :sierra
   end
 
-  depends_on "python@2"
+  depends_on "python"
 
   resource "bleach" do
     url "https://files.pythonhosted.org/packages/eb/ea/58428609442130dc31d3a59010bf6cbd263a16c589d01d23b7c1e6997e3b/bleach-2.1.3.tar.gz"
@@ -74,18 +74,19 @@ class Restview < Formula
   end
 
   def install
-    ENV.prepend_create_path "PYTHONPATH", libexec/"vendor/lib/python2.7/site-packages"
+    xy = Language::Python.major_minor_version "python3"
+    ENV.prepend_create_path "PYTHONPATH", libexec/"vendor/lib/python#{xy}/site-packages"
 
     res = resources.reject { |r| r.name == "sample" }
 
     res.each do |r|
       r.stage do
-        system "python", *Language::Python.setup_install_args(libexec/"vendor")
+        system "python3", *Language::Python.setup_install_args(libexec/"vendor")
       end
     end
 
-    ENV.prepend_create_path "PYTHONPATH", libexec/"lib/python2.7/site-packages"
-    system "python", *Language::Python.setup_install_args(libexec)
+    ENV.prepend_create_path "PYTHONPATH", libexec/"lib/python#{xy}/site-packages"
+    system "python3", *Language::Python.setup_install_args(libexec)
 
     bin.install Dir[libexec/"bin/*"]
     bin.env_script_all_files(libexec/"bin", :PYTHONPATH => ENV["PYTHONPATH"])

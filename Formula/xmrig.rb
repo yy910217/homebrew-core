@@ -1,19 +1,22 @@
 class Xmrig < Formula
   desc "Monero (XMR) CPU miner"
   homepage "https://github.com/xmrig/xmrig"
-  url "https://github.com/xmrig/xmrig/archive/v2.6.2.tar.gz"
-  sha256 "3452b104c3fbd90c2b08321140702d5ef30027823863fd9eabf896c255cf09ef"
+  url "https://github.com/xmrig/xmrig/archive/v2.14.4.tar.gz"
+  sha256 "7e827ece5df61ab1e23dda40940ad2f7946dc006fced86836aed3a26dcdc185e"
+  revision 1
+  head "https://github.com/xmrig/xmrig.git"
 
   bottle do
     cellar :any
-    sha256 "ad15667ce5a3b0af93c6782fa4179a7b1d6f87dfdab1707b3d4d0717023898c9" => :high_sierra
-    sha256 "37a37effd144a75f9e3910e7def2a2b0a3f63fb13642e8f237e6979ee37ba22a" => :sierra
-    sha256 "8e09814cfaffd7fd58bc1f6e549e6de804904bbc2a3d065135c2f00e0d74fea4" => :el_capitan
+    sha256 "9cfd4cdb1593f0e90867dfce64e82f0979558ddeb89492edb4ef8fb04e865af3" => :mojave
+    sha256 "578b70e67019678acc15d0d936a948b7905dab827efbdac4c0e235dc8e00db36" => :high_sierra
+    sha256 "b798556ea6f2315521d08d4a9d209191b4b9f64bf26ff9104dca8df07f7561c4" => :sierra
   end
 
   depends_on "cmake" => :build
   depends_on "libmicrohttpd"
   depends_on "libuv"
+  depends_on "openssl@1.1"
 
   def install
     mkdir "build" do
@@ -26,7 +29,7 @@ class Xmrig < Formula
   end
 
   test do
-    assert_match version.to_s, shell_output("#{bin}/xmrig -V", 2)
+    assert_match version.to_s, shell_output("#{bin}/xmrig -V")
     test_server="donotexist.localhost:65535"
     timeout=10
     begin

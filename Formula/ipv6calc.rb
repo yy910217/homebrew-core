@@ -1,15 +1,14 @@
 class Ipv6calc < Formula
   desc "Small utility for manipulating IPv6 addresses"
   homepage "https://www.deepspace6.net/projects/ipv6calc.html"
-  url "https://github.com/pbiering/ipv6calc/archive/1.0.0.tar.gz"
-  sha256 "74b0455e61834843bf8a5e7e0e0f39dd2b148114ff896d590eb2d826714594bd"
+  url "https://github.com/pbiering/ipv6calc/archive/2.1.1.tar.gz"
+  sha256 "964957e79505cbc71ebc706a0fc0b67c6e08c55ed53335470ed7f8309eb84405"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "1f3666901fc9da4e53f0c00d35bcc2bf807ec11a3363122850ef89b9cf45654c" => :high_sierra
-    sha256 "c6bdf091f2496a5ffcb776d18fd1dba83ca1051c9755c45449183e7c22d8814a" => :sierra
-    sha256 "768f3b011dd2c900b2d3030d63eba0d4ae3c417ba6aa5a9f4802a686ef74c562" => :el_capitan
-    sha256 "a129eaac7552df52afc8be73d6644ea4b556847efc9be48baf208fe04ca164e0" => :yosemite
+    sha256 "1442ca698f227f0eccdff7118381abd8c2b33ecb481bbc39ff5037bec4fefce4" => :mojave
+    sha256 "67be87559723f99a220267b3dc085df99ccc40a2b49ccb4801dfb1d745465bbd" => :high_sierra
+    sha256 "121e83f0282c80d2a3f515b7b949160ab6d2ffcb1d874e63e4f960919c70b253" => :sierra
   end
 
   def install

@@ -1,33 +1,27 @@
 class Poco < Formula
   desc "C++ class libraries for building network and internet-based applications"
   homepage "https://pocoproject.org/"
-  url "https://pocoproject.org/releases/poco-1.9.0/poco-1.9.0-all.tar.gz"
-  sha256 "0387bf0f9d313e2311742e1ad0b64e07f2f3e76039eed20e3b9aa9951b88e187"
+  url "https://pocoproject.org/releases/poco-1.9.3/poco-1.9.3-all.tar.gz"
+  sha256 "583c464cb2a85a1b0d1bded22875a929eabca54b1575124b114dc4f7e573aa68"
   revision 1
-
   head "https://github.com/pocoproject/poco.git", :branch => "develop"
 
   bottle do
     cellar :any
-    sha256 "95644f8b0931aa8eef1494d099a4cb1e40522c5d35e63a2f090930caa8262828" => :high_sierra
-    sha256 "2f0d853a7333f8c727ba9606982c5ff65c6553d6eb52cab090b1ff6b01e6de9d" => :sierra
-    sha256 "291e90aa5a585355a5464cf4383d01a79072e25ff6f62e38e96f65da725fcf88" => :el_capitan
+    sha256 "b1d99b95f5db087fd940730f1a18b10150678222545becc5930b1d82b4fa8291" => :mojave
+    sha256 "e81534b6338bf2ee789a34c58947f460a30f02df717bf88b6cfd2045424646e5" => :high_sierra
+    sha256 "c4c316c9c37ec16007d688e2fadda3c9b704914d63a8cbbbb98fd686ccc5b7d6" => :sierra
   end
 
-  option "with-static", "Build static libraries (instead of shared)"
-
-  depends_on "openssl"
   depends_on "cmake" => :build
+  depends_on "openssl@1.1"
 
   def install
     ENV.cxx11
 
-    args = std_cmake_args
-    args << "-DENABLE_DATA_MYSQL=OFF" << "-DENABLE_DATA_ODBC=OFF"
-    args << "-DPOCO_STATIC=ON" if build.with? "static"
-
     mkdir "build" do
-      system "cmake", "..", *args
+      system "cmake", "..", *std_cmake_args, "-DENABLE_DATA_MYSQL=OFF",
+                            "-DENABLE_DATA_ODBC=OFF"
       system "make", "install"
     end
   end

@@ -2,14 +2,15 @@ class Haxe < Formula
   desc "Multi-platform programming language"
   homepage "https://haxe.org/"
   url "https://github.com/HaxeFoundation/haxe.git",
-      :tag => "3.4.7",
+      :tag      => "3.4.7",
       :revision => "bb7b827a9c135fbfd066da94109a728351b87b92"
 
   bottle do
     cellar :any
-    sha256 "2b58281f88a611b0ae4b9a0b1b0fe6e09182f4a71d5b23fb333660527b37bacc" => :high_sierra
-    sha256 "5c5c995444cc9e33aa26fcccbf652623ab6ac3006a33eb0bb1d6ce89b02fb5c0" => :sierra
-    sha256 "c57c9af6070a2d33401dac05d8b78c4059a95a3c7e212a9595fb5f49d3208a6a" => :el_capitan
+    rebuild 1
+    sha256 "c0fb5f2d7e35d16ac66311d1d9389aa1fa668309d88248cbd938b7a119abcc65" => :mojave
+    sha256 "d9a2655a44eb67e429b2a0a46fdbba40608fa888143f7592a64f7101efceab74" => :high_sierra
+    sha256 "759280efbec7f6ab98ca83639639325892f688a6fc9c6c7daa24432545086f47" => :sierra
   end
 
   head do
@@ -20,9 +21,9 @@ class Haxe < Formula
     depends_on "pkg-config" => :build
   end
 
-  depends_on "ocaml" => :build
   depends_on "camlp4" => :build
   depends_on "cmake" => :build
+  depends_on "ocaml" => :build
   depends_on "neko"
   depends_on "pcre"
 
@@ -36,7 +37,7 @@ class Haxe < Formula
       Dir.mktmpdir("opamroot") do |opamroot|
         ENV["OPAMROOT"] = opamroot
         ENV["OPAMYES"] = "1"
-        system "opam", "init", "--no-setup"
+        system "opam", "init", "--no-setup", "--disable-sandboxing"
         system "opam", "config", "exec", "--",
                "opam", "pin", "add", "haxe", buildpath, "--no-action"
         system "opam", "config", "exec", "--",
@@ -64,7 +65,7 @@ class Haxe < Formula
   def caveats; <<~EOS
     Add the following line to your .bashrc or equivalent:
       export HAXE_STD_PATH="#{HOMEBREW_PREFIX}/lib/haxe/std"
-    EOS
+  EOS
   end
 
   test do

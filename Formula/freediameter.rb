@@ -1,39 +1,26 @@
 class Freediameter < Formula
   desc "Open source Diameter (Authentication) protocol implementation"
   homepage "http://www.freediameter.net"
-  url "http://www.freediameter.net/hg/freeDiameter/archive/1.2.1.tar.gz"
-  sha256 "bd7f105542e9903e776aa006c6931c1f5d3d477cb59af33a9162422efa477097"
-  revision 1
+  url "http://www.freediameter.net/hg/freeDiameter/archive/1.3.2.tar.gz"
+  sha256 "ce05b4bf2a04cd2f472e77ba4b86fbfca690bfc83e51da8ce0e575804b763eda"
   head "http://www.freediameter.net/hg/freeDiameter", :using => :hg
 
   bottle do
-    sha256 "c57d61c9ddb1a1cef706b043d3be28ad4ab94eb7e9bbd0c9952f392074fafc31" => :high_sierra
-    sha256 "0b444785c639b55365e67092f5ff4997c2cba3ad72f37aaaaf7cf4a2eb88b758" => :sierra
-    sha256 "ae4a0a662111c28c542ba2b15f2ff5f0d6955dd62c474b7216f12bda8a54041c" => :el_capitan
+    cellar :any
+    sha256 "aacb7d5749e234dd8937365b3b493b593a4fc1be5d70c9aed95596b8b238f46d" => :mojave
+    sha256 "e194caf5035629cf10d8872e0c21ca86b8b4f4ae6665ce2d4a424ee2ea5794fb" => :high_sierra
+    sha256 "0f1a491d96a02003555ee8101b6e8d25e580bc8416bb1cdb4f877950dd0a3986" => :sierra
   end
-
-  option "with-all-extensions", "Enable all extensions"
 
   depends_on "cmake" => :build
   depends_on "gnutls"
   depends_on "libgcrypt"
   depends_on "libidn"
 
-  if build.with? "all-extensions"
-    depends_on "swig" => :build
-    depends_on "postgresql"
-    depends_on "mysql"
-  end
-
   def install
-    args = std_cmake_args + %W[
-      -DDEFAULT_CONF_PATH=#{etc}
-      -DDISABLE_SCTP=ON
-    ]
-    args << "-DALL_EXTENSIONS=ON" if build.with? "all-extensions"
-
     mkdir "build" do
-      system "cmake", "..", *args
+      system "cmake", "..", *std_cmake_args, "-DDEFAULT_CONF_PATH=#{etc}",
+                      "-DDISABLE_SCTP=ON"
       system "make"
       system "make", "install"
     end
@@ -57,7 +44,7 @@ class Freediameter < Formula
       http://www.freediameter.net/trac/wiki/Configuration
 
     Other potentially useful files can be found in #{opt_pkgshare}/contrib.
-    EOS
+  EOS
   end
 
   plist_options :startup => true
@@ -80,7 +67,7 @@ class Freediameter < Formula
         </dict>
       </dict>
     </plist>
-    EOS
+  EOS
   end
 
   test do

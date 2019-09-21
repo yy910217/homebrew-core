@@ -1,14 +1,15 @@
 class LibbitcoinProtocol < Formula
   desc "Bitcoin Blockchain Query Protocol"
   homepage "https://github.com/libbitcoin/libbitcoin-protocol"
-  url "https://github.com/libbitcoin/libbitcoin-protocol/archive/v3.5.0.tar.gz"
-  sha256 "9deac6908489e2d59fb9f89c895c49b00e01902d5fdb661f67d4dbe45b22af76"
+  url "https://github.com/libbitcoin/libbitcoin-protocol/archive/v3.6.0.tar.gz"
+  sha256 "fc41c64f6d3ee78bcccb63fd0879775c62bba5326f38c90b4c6804e2b9e8686e"
+  revision 2
 
   bottle do
     cellar :any
-    sha256 "30d447fe065bda74e416dcc7aba55dfeebf26e4716c2ff84533a1926d89c5917" => :high_sierra
-    sha256 "282b99bfa3ba4a811853efe0446f050e0eab39dd05e2056bf9b01c186e88be6b" => :sierra
-    sha256 "61a6dab774bd9ef3552d04783bed9e1bdf801e6145e9b5739d1391a1788e4d15" => :el_capitan
+    sha256 "e7dad4f664f27dc5fe89df604daf5e55289133fc99a7a67303869216ab9848fe" => :mojave
+    sha256 "aa121e23ea64bdcedfefeecc296fda96b9c3025cef17227d5b8fa2a7f2867abc" => :high_sierra
+    sha256 "a3fc6e2486cc3f5bdc6fd45c3fac16ab2b6a282e0128bd29904ddcadb937b11f" => :sierra
   end
 
   depends_on "autoconf" => :build
@@ -38,9 +39,10 @@ class LibbitcoinProtocol < Formula
         assert(instance.size() == 1u);
       }
     EOS
-    system ENV.cxx, "-std=c++11", "test.cpp",
-                    "-lbitcoin", "-lbitcoin-protocol", "-lboost_system",
-                    "-o", "test"
+    system ENV.cxx, "-std=c++11", "test.cpp", "-o", "test",
+                    "-L#{Formula["libbitcoin"].opt_lib}", "-lbitcoin",
+                    "-L#{lib}", "-lbitcoin-protocol",
+                    "-L#{Formula["boost"].opt_lib}", "-lboost_system"
     system "./test"
   end
 end

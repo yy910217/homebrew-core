@@ -1,23 +1,21 @@
 class Gocr < Formula
   desc "Optical Character Recognition (OCR), converts images back to text"
   homepage "https://wasd.urz.uni-magdeburg.de/jschulen/ocr/"
-  url "https://wasd.urz.uni-magdeburg.de/jschulen/ocr/gocr-0.51.tar.gz"
-  sha256 "6eb2ae0fa4eb07cf4163081e0194ea65f605f7db9709dd30680686804dfc2692"
+  url "https://wasd.urz.uni-magdeburg.de/jschulen/ocr/gocr-0.52.tar.gz"
+  sha256 "df906463105f5f4273becc2404570f187d4ea52bd5769d33a7a8661a747b8686"
 
   bottle do
-    cellar :any_skip_relocation
-    sha256 "9130f859261ff352e24fc1dc17c5b7c73eae89d4387cbf35bd2fbdfdfbac62d5" => :high_sierra
-    sha256 "45dd1209a1a24c9d63c8817eab5be77690be2c0a2ca1e26c71954c3dbaaeeff2" => :sierra
-    sha256 "46a821f9815ad964bc58feff3e5344964e9c164db625c9a8faffc0c7450055fb" => :el_capitan
+    cellar :any
+    sha256 "f0af1bb6614e72f70b54eeacb2063aff9eea014965611828f2e13eb8677d636b" => :mojave
+    sha256 "8bcc15b6bef035a94d27a242f7cd40f6c71d4585a2b0c964f3e26aa800258f8a" => :high_sierra
+    sha256 "bf3b661399dd9450b81ed3c22536ebeec0931310daa57371904ee4e40f5b0413" => :sierra
   end
 
-  option "with-lib", "Install library and headers"
-
-  depends_on "netpbm" => :optional
-  depends_on "jpeg" => :optional
+  depends_on "jpeg"
+  depends_on "netpbm"
 
   # Edit makefile to install libs per developer documentation
-  patch :DATA if build.with? "lib"
+  patch :DATA
 
   def install
     system "./configure", "--disable-debug",
@@ -29,7 +27,7 @@ class Gocr < Formula
       s.change_make_var! "mandir", "/share/man"
     end
 
-    system "make", "libs" if build.with? "lib"
+    system "make", "libs"
     system "make", "install"
   end
 

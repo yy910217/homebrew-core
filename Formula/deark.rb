@@ -2,15 +2,15 @@ require "base64"
 
 class Deark < Formula
   desc "File conversion utility for older formats"
-  homepage "http://entropymine.com/deark/"
-  url "http://entropymine.com/deark/releases/deark-1.4.6.tar.gz"
-  sha256 "6b45028de3cfaa589f49f5290e5d736d4104f5fc657ee6b208af9e9899fc7caf"
+  homepage "https://entropymine.com/deark/"
+  url "https://entropymine.com/deark/releases/deark-1.5.2.tar.gz"
+  sha256 "817c641767c546dd5b3f466fc8408cb9edd4d67d8756bf07bf322f50247c3287"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "d0b5c220343bfb1c65373c61e7f5676294860c5d7a934a8f080d79c4ef2bb487" => :high_sierra
-    sha256 "5631ef8609234b791f6eb744d6f6097ce0f75dbbb4ce2975451af7e21ebe57cf" => :sierra
-    sha256 "baebc1b49688c321b02cb9cd84d727f8aa5e1d66a29bef86d8ac3f194411efa0" => :el_capitan
+    sha256 "16bd12bfa6d0ca8f192a1b7a8febf411cae588b1887d18ca2c48dcbe46357fe4" => :mojave
+    sha256 "f7fbcf71cf7ce9f6e4f402e8a22b3a11bf213790fb82c2fb1865da9aac78671d" => :high_sierra
+    sha256 "41adf7c83aeae1c945d3007e860993e9f8845f6a1f7c239b86327958b9ed470a" => :sierra
   end
 
   def install

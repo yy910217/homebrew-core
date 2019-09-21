@@ -1,18 +1,18 @@
 class Roswell < Formula
   desc "Lisp installer and launcher for major environments"
   homepage "https://github.com/roswell/roswell"
-  url "https://github.com/roswell/roswell/archive/v18.3.10.89.tar.gz"
-  sha256 "3606469a787bd83f5f9bf887c49ebb264339ef18977097f63270356ce50c20b7"
+  url "https://github.com/roswell/roswell/archive/v19.08.10.101.tar.gz"
+  sha256 "0f80277ac1609b8865c54856130d9fd7e8f099988e720367f6ef6448cd47b2b6"
   head "https://github.com/roswell/roswell.git"
 
   bottle do
-    sha256 "c87b74c9daa7220742540d9b68736db5125f0229a4ee8b94b1bf3d8078eace7b" => :high_sierra
-    sha256 "ec64d8f24316cb562698df1204364417eadba35cc885effe77d50ea11de9624c" => :sierra
-    sha256 "460379c66ee483de0807bb1c5b8beb91ef62ebae56c5aa4a3714bbefaf485604" => :el_capitan
+    sha256 "7845a692e70e1e730ca28d006d28d0d820e1dda17822173678cb8953355fa652" => :mojave
+    sha256 "8f6679b2029c370f542347b85dfc2064891cba533ce4f00f1251eb5aa1a7a630" => :high_sierra
+    sha256 "bd03edaabed64ba841d312fc8ed9fa34c914e701eda75da671d3ab81f8b79233" => :sierra
   end
 
-  depends_on "automake" => :build
   depends_on "autoconf" => :build
+  depends_on "automake" => :build
 
   def install
     system "./bootstrap"

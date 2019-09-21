@@ -1,15 +1,15 @@
 class Chamber < Formula
   desc "CLI for managing secrets through AWS SSM Parameter Store"
   homepage "https://github.com/segmentio/chamber"
-  url "https://github.com/segmentio/chamber/archive/v2.1.0.tar.gz"
-  sha256 "d28bf9d02f9477bf3339e750287d32ecbeaa2d1398411624074a4d4498e9693a"
+  url "https://github.com/segmentio/chamber/archive/v2.5.0.tar.gz"
+  sha256 "975d046eda38efc06c4fd77529612869d7cb76f35c6092b2a31f6000ec8fe9d1"
   head "https://github.com/segmentio/chamber.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "1eaa1dd2acde6d889557b0f713c7ec9655cb8715f5526f50bfe7c63b9ce63d3c" => :high_sierra
-    sha256 "413cbf130fbd5bef2c69f74eb9ec2bf077ce1aa90a935d825cc55e0c88b983c3" => :sierra
-    sha256 "a44294004e2aaf3bd9514edf0ba7bddeff1e10b198722c9d69cff7f0244cd9c5" => :el_capitan
+    sha256 "0ea468454bbe3f97a52d4d5d6c0f0892030222902842682ae52498d2c3cd2627" => :mojave
+    sha256 "e9c1c32c471e76fc4a3c4dc235988c53b24ca5e6a9ca3e1c35d10ffdd5172d04" => :high_sierra
+    sha256 "0e153992bbdd6c4356ea2db2ea4844968d422205192ddbda0f1bd6a5431702c5" => :sierra
   end
 
   depends_on "go" => :build
@@ -24,7 +24,7 @@ class Chamber < Formula
     path = buildpath/"src/github.com/segmentio/chamber"
     path.install Dir["{*,.git}"]
 
-    cd buildpath/"src/github.com/segmentio/chamber" do
+    cd "src/github.com/segmentio/chamber" do
       system "govendor", "sync"
       system "go", "build", "-o", bin/"chamber",
                    "-ldflags", "-X main.Version=#{version}"

@@ -1,38 +1,39 @@
 class Gnutls < Formula
   desc "GNU Transport Layer Security (TLS) Library"
   homepage "https://gnutls.org/"
-  url "https://gnupg.org/ftp/gcrypt/gnutls/v3.5/gnutls-3.5.18.tar.xz"
-  mirror "https://www.mirrorservice.org/sites/ftp.gnupg.org/gcrypt/gnutls/v3.5/gnutls-3.5.18.tar.xz"
-  sha256 "ae2248d9e78747cf9c469dde81ff8f90b56838b707a0637f3f7d4eee90e80234"
+  url "https://www.gnupg.org/ftp/gcrypt/gnutls/v3.6/gnutls-3.6.9.tar.xz"
+  mirror "https://www.mirrorservice.org/sites/ftp.gnupg.org/gcrypt/gnutls/v3.6/gnutls-3.6.9.tar.xz"
+  sha256 "4331fca55817ecdd74450b908a6c29b4f05bb24dd13144c6284aa34d872e1fcb"
 
   bottle do
-    sha256 "ba36c5fd1956fff7edd9ba56c737cc2821905e7b308efcf66b8fb5f6046c123d" => :high_sierra
-    sha256 "6f47b7360580591ffb10e2e7a2cc1427988f16a06df21b109eeb03f1fa15ffc7" => :sierra
-    sha256 "a9313514b645aad1ed99805bd8d499da84de422d106be985fb64b6a25cda5290" => :el_capitan
+    sha256 "919a4cbaf5a160dbbe94811b6cc399b91986e4d13ce69d107b812265a0156dff" => :mojave
+    sha256 "6f8bc3a47210b4c86fbbca4a445c311786e7fb31e4cd5c81d9a6654927016b1a" => :high_sierra
+    sha256 "d13c3930d861d58d936c9c5e0d6d99dac16e23bc2dd125cf0e092aa683332754" => :sierra
   end
 
-  devel do
-    url "https://www.gnupg.org/ftp/gcrypt/gnutls/v3.6/gnutls-3.6.2.tar.xz"
-    mirror "https://www.mirrorservice.org/sites/ftp.gnupg.org/gcrypt/gnutls/v3.6/gnutls-3.6.2.tar.xz"
-    sha256 "bcd5db7b234e02267f36b5d13cf5214baac232b7056a506252b7574ea7738d1f"
-  end
-
+  depends_on "autoconf" => :build
+  depends_on "automake" => :build
   depends_on "pkg-config" => :build
-  depends_on "libtasn1"
   depends_on "gmp"
-  depends_on "nettle"
+  depends_on "libidn2"
+  depends_on "libtasn1"
   depends_on "libunistring"
-  depends_on "p11-kit" => :recommended
-  depends_on "guile" => :optional
-  depends_on "unbound" => :optional
+  depends_on "nettle"
+  depends_on "p11-kit"
+  depends_on "unbound"
+
+  # Patch for build error on Sierra:
+  #   Undefined symbols for architecture x86_64:
+  #     "___get_cpuid_count", referenced from:
+  #     _register_x86_crypto in libaccelerated.a(x86-common.o)
+  #
+  # This patch has been merged upstream and this issue should be fixed in the 3.6.10 release.
+  patch do
+    url "https://gitlab.com/gnutls/gnutls/commit/ef80617d1e17e0878a909baad62a75ba265c0e00.diff"
+    sha256 "aa8b92375e3bced3f81fe8a820d5dabaa68cac332aed097d45be01080f517460"
+  end
 
   def install
-    # Fix "dyld: lazy symbol binding failed: Symbol not found: _getentropy"
-    # Reported 18 Oct 2016 https://gitlab.com/gnutls/gnutls/issues/142
-    if MacOS.version == "10.11" && MacOS::Xcode.installed? && MacOS::Xcode.version >= "8.0"
-      inreplace "configure", "getentropy(0, 0);", "undefinedgibberish(0, 0);"
-    end
-
     args = %W[
       --disable-dependency-tracking
       --disable-silent-rules
@@ -40,20 +41,10 @@ class Gnutls < Formula
       --prefix=#{prefix}
       --sysconfdir=#{etc}
       --with-default-trust-store-file=#{etc}/openssl/cert.pem
+      --disable-guile
       --disable-heartbeat-support
+      --with-p11-kit
     ]
-
-    if build.with? "p11-kit"
-      args << "--with-p11-kit"
-    else
-      args << "--without-p11-kit"
-    end
-
-    if build.with? "guile"
-      args << "--enable-guile" << "--with-guile-site-dir"
-    else
-      args << "--disable-guile"
-    end
 
     system "./configure", *args
     system "make", "install"

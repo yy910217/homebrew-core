@@ -6,20 +6,13 @@ class ThriftAT09 < Formula
 
   bottle do
     cellar :any
-    sha256 "9bf6dbb1699dd2e47ec08c0a6c45d922bfe44e39541cfa824c6d3fa0e612cbee" => :high_sierra
-    sha256 "52d2ce63e41f13d81c4df4cff528d5bd25b75b09316a59e0cd7060bbb313a831" => :sierra
-    sha256 "167da043b6111631373371b51e2b6678d84602179d034827dd221e88f6211027" => :el_capitan
+    rebuild 2
+    sha256 "8f53901fc673714781061e6c78e74cffe4145681d9e0c54b75a6f51e9ad280d7" => :mojave
+    sha256 "512e477e531ba50224ff3dd89cf5029e0bb52637d5dda62a1ace4b7051e3883d" => :high_sierra
+    sha256 "fe51400fc1062beda47105f013d5d98f28dbe061897f630831a52169f5d1b59b" => :sierra
   end
 
   keg_only :versioned_formula
-
-  option "with-haskell", "Install Haskell binding"
-  option "with-erlang", "Install Erlang binding"
-  option "with-java", "Install Java binding"
-  option "with-perl", "Install Perl binding"
-  option "with-php", "Install Php binding"
-
-  deprecated_option "with-python" => "with-python@2"
 
   depends_on "autoconf" => :build
   depends_on "automake" => :build
@@ -27,34 +20,25 @@ class ThriftAT09 < Formula
   depends_on "libtool" => :build
   depends_on "pkg-config" => :build
   depends_on "boost"
-  depends_on "openssl"
-  depends_on "python@2" => :optional
-
-  if build.with? "java"
-    depends_on "ant" => :build
-    depends_on :java => "1.8"
-  end
+  depends_on "openssl" # no OpenSSL 1.1 support
 
   def install
-    args = ["--without-ruby", "--without-tests", "--without-php_extension"]
+    args = %w[
+      --without-erlang
+      --without-haskell
+      --without-java
+      --without-perl
+      --without-php
+      --without-php_extension
+      --without-python
+      --without-ruby
+      --without-tests
+    ]
 
-    args << "--without-python" if build.without? "python@2"
-    args << "--without-haskell" if build.without? "haskell"
-    args << "--without-java" if build.without? "java"
-    args << "--without-perl" if build.without? "perl"
-    args << "--without-php" if build.without? "php"
-    args << "--without-erlang" if build.without? "erlang"
-
-    ENV.cxx11 if MacOS.version >= :mavericks && ENV.compiler == :clang
+    ENV.cxx11 if ENV.compiler == :clang
 
     # Don't install extensions to /usr
-    ENV["PY_PREFIX"] = prefix
-    ENV["PHP_PREFIX"] = prefix
     ENV["JAVA_PREFIX"] = pkgshare/"java"
-
-    # configure's version check breaks on ant >1.10 so just override it. This
-    # doesn't need guarding because of the --without-java flag used above.
-    inreplace "configure", 'ANT=""', "ANT=\"#{Formula["ant"].opt_bin}/ant\""
 
     system "./configure", "--disable-debug",
                           "--prefix=#{prefix}",

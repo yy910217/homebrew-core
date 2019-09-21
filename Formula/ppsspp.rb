@@ -1,36 +1,25 @@
 class Ppsspp < Formula
   desc "PlayStation Portable emulator"
   homepage "https://ppsspp.org/"
-  revision 1
+  url "https://github.com/hrydgard/ppsspp.git",
+      :tag      => "v1.8.0",
+      :revision => "e66f019ffaaf7ff4224aa3605ebf59f5654bd0d4"
   head "https://github.com/hrydgard/ppsspp.git"
-
-  stable do
-    url "https://github.com/hrydgard/ppsspp.git",
-        :tag => "v1.5.4",
-        :revision => "a1e74d0d4f89ba3fa2d4fe64bac7a0fa16fc146f"
-
-    # Remove for > 1.5.4
-    # Upstream commit from 22 Apr 2018: "Fix build with ffmpeg 4.0"
-    patch do
-      url "https://github.com/hrydgard/ppsspp/commit/70c54a7d1ab15c0cf84a205b944db7e0339242e0.diff?full_index=1"
-      sha256 "ed7401010e1f1e222bfbb0f1b5321821ce8b780a6781a7928397a09d8807fcb7"
-    end
-  end
 
   bottle do
     cellar :any
-    sha256 "188fba0108fb2399d66a6339716096d5ff44267fec831a2d617f484a0cfb7dd8" => :high_sierra
-    sha256 "7d1ca5e3f63fa206e65f529ef35c7cdb8763fdab849653750ead94d9cbd044c1" => :sierra
-    sha256 "3b0923d51f0ca7f5552eb974e9c438aecce0e5724dda9fc358bedc4229ba7575" => :el_capitan
+    sha256 "44023b7686c2b7d305be47c2ab706891ed41e6d2acc30c0c05e9da452f916631" => :mojave
+    sha256 "b9e7eedbd1db8f9b3dafb13d2081a230ded65d59c232ebec0db36cd9d5bfdc22" => :high_sierra
+    sha256 "35bc11f99dc63d71d24296412b8c90f2e06a2503ca3fea5fc4e3779dc699c571" => :sierra
   end
 
   depends_on "cmake" => :build
   depends_on "pkg-config" => :build
-  depends_on "sdl2"
+  depends_on "ffmpeg"
   depends_on "glew"
   depends_on "libzip"
+  depends_on "sdl2"
   depends_on "snappy"
-  depends_on "ffmpeg"
 
   def install
     args = std_cmake_args

@@ -1,13 +1,14 @@
 class Ola < Formula
   desc "Open Lighting Architecture for lighting control information"
   homepage "https://www.openlighting.org/ola/"
-  url "https://github.com/OpenLightingProject/ola/releases/download/0.10.6/ola-0.10.6.tar.gz"
-  sha256 "26a8302b5134c370541e59eabff0145dcf7127cda761890df10aa80dfe223af0"
+  url "https://github.com/OpenLightingProject/ola/releases/download/0.10.7/ola-0.10.7.tar.gz"
+  sha256 "8a65242d95e0622a3553df498e0db323a13e99eeb1accc63a8a2ca8913ab31a0"
+  revision 1
 
   bottle do
-    sha256 "ada249b3e16aaee5610c9c4a2c438b158c1dcf36be684af62e4af6095984fe7b" => :high_sierra
-    sha256 "06defbab5f678025a309989dc0c84aed8c2a315f880d9610263d2bdaab2d5c4c" => :sierra
-    sha256 "9230a8fcc75bcc0c29c57dbd012909a2d7331823e70db1fc58462143c7350cf3" => :el_capitan
+    sha256 "2912f40950ff9f15ecab6c2fe637b12e92596bf70f969dc386350b18cd2b851c" => :mojave
+    sha256 "79416500da0abb87d235b048033d080f6f7ad8f5e660ec9109f47c9015c37692" => :high_sierra
+    sha256 "2e469d457018a7620dc14b29856471b2406c740702078c6db77544072995b016" => :sierra
   end
 
   head do
@@ -18,20 +19,13 @@ class Ola < Formula
     depends_on "libtool" => :build
   end
 
-  option "with-libftdi", "Install FTDI USB plugin for OLA."
-  option "with-rdm-tests", "Install RDM Tests for OLA."
-  deprecated_option "with-ftdi" => "with-libftdi"
-
   depends_on "pkg-config" => :build
+  depends_on "liblo"
   depends_on "libmicrohttpd"
-  depends_on "ossp-uuid"
+  depends_on "libusb"
+  depends_on "numpy"
   depends_on "protobuf@3.1"
-  depends_on "python@2"
-  depends_on "liblo" => :recommended
-  depends_on "libusb" => :recommended
-  depends_on "doxygen" => :optional
-  depends_on "libftdi" => :optional
-  depends_on "libftdi0" if build.with? "libftdi"
+  depends_on "python@2" # protobuf@3.1 does not support Python 3
 
   resource "protobuf-c" do
     url "https://github.com/protobuf-c/protobuf-c/releases/download/v1.2.1/protobuf-c-1.2.1.tar.gz"
@@ -54,12 +48,10 @@ class Ola < Formula
       --disable-dependency-tracking
       --disable-silent-rules
       --prefix=#{prefix}
-      --enable-python-libs
       --disable-unittests
+      --enable-python-libs
+      --enable-rdm-tests
     ]
-
-    args << "--enable-rdm-tests" if build.with? "rdm-tests"
-    args << "--enable-doxygen-man" if build.with? "doxygen"
 
     system "autoreconf", "-fvi" if build.head?
     system "./configure", *args

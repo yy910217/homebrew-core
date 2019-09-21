@@ -6,7 +6,7 @@ class CdDiscid < Formula
 
   stable do
     url "http://linukz.org/download/cd-discid-1.4.tar.gz"
-    mirror "https://mirrors.ocf.berkeley.edu/debian/pool/main/c/cd-discid/cd-discid_1.4.orig.tar.gz"
+    mirror "https://deb.debian.org/debian/pool/main/c/cd-discid/cd-discid_1.4.orig.tar.gz"
     sha256 "ffd68cd406309e764be6af4d5cbcc309e132c13f3597c6a4570a1f218edd2c63"
 
     # macOS fix; see https://github.com/Homebrew/homebrew/issues/46267
@@ -16,6 +16,7 @@ class CdDiscid < Formula
 
   bottle do
     cellar :any_skip_relocation
+    sha256 "158d91563b2e79574c0a336f775b49033d85ce3b290f122dae853dea45841f5b" => :mojave
     sha256 "26b88be0312f960484625161d94adf9a44aa88ef5817ba28b61af520a6e17e03" => :high_sierra
     sha256 "6b0d9c55a1adfce8a2c6e9eabd00c37118a05b60678564e7a9695d876bca117b" => :sierra
     sha256 "f0c17cfc3c345c661104a6f29562b766cac2a80747feea0c26cda04ece3c8326" => :el_capitan

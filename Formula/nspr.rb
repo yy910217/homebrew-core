@@ -1,14 +1,14 @@
 class Nspr < Formula
   desc "Platform-neutral API for system-level and libc-like functions"
   homepage "https://developer.mozilla.org/docs/Mozilla/Projects/NSPR"
-  url "https://archive.mozilla.org/pub/mozilla.org/nspr/releases/v4.19/src/nspr-4.19.tar.gz"
-  sha256 "2ed95917fa2277910d1d1cf36030607dccc0ba522bba08e2af13c113dcd8f729"
+  url "https://archive.mozilla.org/pub/nspr/releases/v4.22/src/nspr-4.22.tar.gz"
+  sha256 "c9e4b6cc24856ec93202fe13704b38b38ba219f0f2aeac93090ce2b6c696d430"
 
   bottle do
     cellar :any
-    sha256 "e422c79b0be3e83e776034c41583ff7321b23b627b0e8de577615a1546fcc3b9" => :high_sierra
-    sha256 "d58d218efa11c262e774476d5ca85a9b0e239c6c5c01f2b11cb0c43d2c31b0df" => :sierra
-    sha256 "437a7baf3aaddbcfe35b4a51351c3993e92b8f82b1171759a76ea144da3a5100" => :el_capitan
+    sha256 "44b8d6ae65760da94e14b9bb742378c81b72821abd6ac4bb0be88c218234210a" => :mojave
+    sha256 "5a466d443e42a227e6c6d972725558068a2121ee69a2807af993837281c0bcd1" => :high_sierra
+    sha256 "f8e389b885ebef82929c0b6afc8b0ffbccbebb98f7267d81cad3e0d6d177f8c0" => :sierra
   end
 
   def install
@@ -16,8 +16,7 @@ class Nspr < Formula
     cd "nspr" do
       # Fixes a bug with linking against CoreFoundation, needed to work with SpiderMonkey
       # See: https://openradar.appspot.com/7209349
-      target_frameworks = Hardware::CPU.is_32_bit? ? "-framework Carbon" : ""
-      inreplace "pr/src/Makefile.in", "-framework CoreServices -framework CoreFoundation", target_frameworks
+      inreplace "pr/src/Makefile.in", "-framework CoreServices -framework CoreFoundation", ""
 
       args = %W[
         --disable-debug
@@ -26,8 +25,8 @@ class Nspr < Formula
         --with-pthreads
         --enable-ipv6
         --enable-macos-target=#{MacOS.version}
+        --enable-64bit
       ]
-      args << "--enable-64bit" if MacOS.prefer_64_bit?
       system "./configure", *args
       # Remove the broken (for anyone but Firefox) install_name
       inreplace "config/autoconf.mk", "-install_name @executable_path/$@ ", "-install_name #{lib}/$@ "

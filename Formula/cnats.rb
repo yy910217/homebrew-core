@@ -1,24 +1,26 @@
 class Cnats < Formula
   desc "C client for the NATS messaging system"
-  homepage "https://github.com/nats-io/cnats"
-  url "https://github.com/nats-io/cnats/archive/v1.7.6.tar.gz"
-  sha256 "9155102243c6c7a3e9a6b37b259f7587bcfbad5f9521fbe466be58a4517df769"
+  homepage "https://github.com/nats-io/nats.c"
+  url "https://github.com/nats-io/nats.c/archive/v2.0.0.tar.gz"
+  sha256 "e10beeb623fc5dadd0673269674331f7b35d19e52ff32d14ceac981b3c701587"
+  revision 1
 
   bottle do
     cellar :any
-    sha256 "93634acc0e5dc64ffcd7e664bd61d58b138293f2462aca247e85a29e1f0c9154" => :high_sierra
-    sha256 "b7b780159a6dd26e6b998b5fc602b62781e1c9b9aa0aaa58872c2402e82e1805" => :sierra
-    sha256 "c0bbd1825975f69b7ed172c3ad428a36494611ea56cbdadd9b6288cc26154929" => :el_capitan
+    sha256 "edd1c5bb6f1f53f55cd6ce37747296e18a4058169a216cbf2cffd38992782142" => :mojave
+    sha256 "21e635453416ef371f04e5557c537b23cba302429075e5a6e44f1962e57194ab" => :high_sierra
+    sha256 "d49a379b532fc1aaaa42e0b11d8c75e84b0ffa3dfeba4b67fb34474cb43c431c" => :sierra
   end
 
   depends_on "cmake" => :build
-  depends_on "libevent" => :optional
-  depends_on "libuv" => :optional
-  depends_on "openssl"
+  depends_on "libevent"
+  depends_on "libuv"
+  depends_on "openssl@1.1"
+  depends_on "protobuf-c"
 
   def install
-    local_cmake_args = ["-DNATS_INSTALL_PREFIX=#{prefix}", "-DBUILD_TESTING=OFF"]
-    system "cmake", ".", *local_cmake_args, *std_cmake_args
+    system "cmake", ".", "-DCMAKE_INSTALL_PREFIX=#{prefix}",
+                         "-DBUILD_TESTING=OFF", *std_cmake_args
     system "make", "install"
   end
 

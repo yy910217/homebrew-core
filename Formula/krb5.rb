@@ -1,27 +1,27 @@
 class Krb5 < Formula
   desc "Network authentication protocol"
   homepage "https://web.mit.edu/kerberos/"
-  url "https://kerberos.org/dist/krb5/1.16/krb5-1.16.1.tar.gz"
-  sha256 "214ffe394e3ad0c730564074ec44f1da119159d94281bbec541dc29168d21117"
+  url "https://kerberos.org/dist/krb5/1.17/krb5-1.17.tar.gz"
+  sha256 "5a6e2284a53de5702d3dc2be3b9339c963f9b5397d3fbbc53beb249380a781f5"
+  revision 1
 
   bottle do
-    sha256 "ac3539420efc0db874142ff42a58b31a8e95d91ee3f6387a2e52ff91f74a0dbf" => :high_sierra
-    sha256 "5345fa53b64215a02f28ca3a6603275ab922cc6c9ae34d462cd16645db736862" => :sierra
-    sha256 "bea43fed7870e621af7ebb5438f1fe3eaa84f5d6aed68cb2429e71155da397b9" => :el_capitan
+    sha256 "f879534f9d242bcfe8f788854db6b80d08dfa5b8a77aea0e2309824e4b66d3e9" => :mojave
+    sha256 "11a94abdbe1f318c5c60eb6abfbeb8cf20b80625c16472e9fd70869f85111433" => :high_sierra
+    sha256 "b2016e6c49deebe1f581a17fc0c00ccee982f8740b2d37a9bcff28ff4c91c33b" => :sierra
   end
 
   keg_only :provided_by_macos
 
-  depends_on "openssl"
+  depends_on "openssl@1.1"
 
   def install
     cd "src" do
-      system "./configure",
-        "--disable-debug",
-        "--disable-dependency-tracking",
-        "--disable-silent-rules",
-        "--prefix=#{prefix}",
-        "--without-system-verto"
+      system "./configure", "--disable-debug",
+                            "--disable-dependency-tracking",
+                            "--disable-silent-rules",
+                            "--prefix=#{prefix}",
+                            "--without-system-verto"
       system "make"
       system "make", "install"
     end

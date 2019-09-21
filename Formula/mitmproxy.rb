@@ -3,20 +3,21 @@ class Mitmproxy < Formula
 
   desc "Intercept, modify, replay, save HTTP/S traffic"
   homepage "https://mitmproxy.org"
-  url "https://github.com/mitmproxy/mitmproxy/archive/v4.0.1.tar.gz"
-  sha256 "3cd25ad1f57eca3c846ff7823405622287d2c5670fdbf33dc052171c03cd17ba"
+  url "https://github.com/mitmproxy/mitmproxy/archive/v4.0.4.tar.gz"
+  sha256 "d91eaaad06a5e124a76388999b22a4c590ea26149a30aaff73658cd98d0651d5"
+  revision 1
   head "https://github.com/mitmproxy/mitmproxy.git"
 
   bottle do
     cellar :any
-    sha256 "0492d4a6e7892536df7022f1a134a3aab6b8563fff1d50be0b01fb6e736ca35d" => :high_sierra
-    sha256 "e0d88888e1f97b33aded23186cc398177f832a3dcbc150e9ab4fbbf41fb6b3e1" => :sierra
-    sha256 "ba9caec394371c8baefd4dcd845edf2e3d014009257d9dba5b8da7e3333a6477" => :el_capitan
+    sha256 "4b0bcb86f6eaabecde7a75dea70f6a0d3b0029d5abd407581579e7735dd6ddf4" => :mojave
+    sha256 "1c43f967c2526644fd4536d2a63a9526dcf20158c1288cbb086c467d9a581345" => :high_sierra
+    sha256 "36114abd20791f041f8d5c76f6448635cf8adc6c99777366dcba86f27f0f19b4" => :sierra
   end
 
-  depends_on "openssl"
-  depends_on "python"
+  depends_on "openssl@1.1"
   depends_on "protobuf"
+  depends_on "python"
 
   resource "asn1crypto" do
     url "https://files.pythonhosted.org/packages/fc/f1/8db7daa71f414ddabfa056c4ef792e1461ff655c2ae2928a2b675bfed6b4/asn1crypto-0.24.0.tar.gz"
@@ -49,8 +50,8 @@ class Mitmproxy < Formula
   end
 
   resource "cryptography" do
-    url "https://files.pythonhosted.org/packages/ec/b2/faa78c1ab928d2b2c634c8b41ff1181f0abdd9adf9193211bd606ffa57e2/cryptography-2.2.2.tar.gz"
-    sha256 "9fc295bf69130a342e7a19a39d7bbeb15c0bcaabc7382ec33ef3b2b7d18d2f63"
+    url "https://files.pythonhosted.org/packages/79/a2/61c8625f96c8582d3053f89368c483ba62e56233d055e58e372f94a393f0/cryptography-2.3.tar.gz"
+    sha256 "c132bab45d4bd0fff1d3fe294d92b0a6eb8404e93337b3127bdec9f21de117e6"
   end
 
   resource "h11" do
@@ -74,8 +75,8 @@ class Mitmproxy < Formula
   end
 
   resource "idna" do
-    url "https://files.pythonhosted.org/packages/f4/bd/0467d62790828c23c47fc1dfa1b1f052b24efdf5290f071c7a91d0d82fd3/idna-2.6.tar.gz"
-    sha256 "2c6a5de3089009e3da7c5dde64a141dbc8551d5b7f6cf4ed7c2568d0cc520a8f"
+    url "https://files.pythonhosted.org/packages/65/c4/80f97e9c9628f3cac9b98bfca0402ede54e0563b56482e3e6e45c43c4935/idna-2.7.tar.gz"
+    sha256 "684a38a6f903c1d71d6d5fac066b58d7768af4de2b832e426ec79c30daa94a16"
   end
 
   resource "kaitaistruct" do
@@ -94,8 +95,8 @@ class Mitmproxy < Formula
   end
 
   resource "pyasn1" do
-    url "https://files.pythonhosted.org/packages/eb/3d/b7d0fdf4a882e26674c68c20f40682491377c4db1439870f5b6f862f76ed/pyasn1-0.4.2.tar.gz"
-    sha256 "d258b0a71994f7770599835249cece1caef3c70def868c4915e6e5ca49b67d15"
+    url "https://files.pythonhosted.org/packages/10/46/059775dc8e50f722d205452bced4b3cc965d27e8c3389156acd3b1123ae3/pyasn1-0.4.4.tar.gz"
+    sha256 "f58f2a3d12fd754aa123e9fa74fb7345333000a035f3921dbdaa08597aa53137"
   end
 
   resource "pycparser" do
@@ -104,8 +105,8 @@ class Mitmproxy < Formula
   end
 
   resource "pyOpenSSL" do
-    url "https://files.pythonhosted.org/packages/3b/15/a5d90ab1a41075e8f0fae334f13452549528f82142b3b9d0c9d86ab7178c/pyOpenSSL-17.5.0.tar.gz"
-    sha256 "2c10cfba46a52c0b0950118981d61e72c1e5b1aac451ca1bc77de1a679456773"
+    url "https://files.pythonhosted.org/packages/9b/7c/ee600b2a9304d260d96044ab5c5e57aa489755b92bbeb4c0803f9504f480/pyOpenSSL-18.0.0.tar.gz"
+    sha256 "6488f1423b00f73b7ad5167885312bb0ce410d3312eb212393795b53c8caa580"
   end
 
   resource "pyparsing" do
@@ -114,13 +115,13 @@ class Mitmproxy < Formula
   end
 
   resource "pyperclip" do
-    url "https://files.pythonhosted.org/packages/5b/06/86e3c6a55cacef0e4ec7c25379ff7fcd1a88fd939ecefd442b535c792fa4/pyperclip-1.6.0.tar.gz"
-    sha256 "ce829433a9af640e08ee89b20f7c62132714bcc5d77df114044d0fccb8c3b3b8"
+    url "https://files.pythonhosted.org/packages/2d/9a/23059a00dfd52eb700bd03c4ee3a6954cae60827539c3488026c8742a555/pyperclip-1.6.4.tar.gz"
+    sha256 "f70e83d27c445795b6bf98c2bc826bbf2d0d63d4c7f83091c8064439042ba0dc"
   end
 
   resource "ruamel.yaml" do
-    url "https://files.pythonhosted.org/packages/c1/ad/9557a78f1b61951623c56225e05dacdd81f80519f13fc39a926a5793edfa/ruamel.yaml-0.15.37.tar.gz"
-    sha256 "509842d96fb194f79b57483b76429f8956d8f7ade3cb49d1e5aeb5c5e9ef4918"
+    url "https://files.pythonhosted.org/packages/3d/46/a08f44a2a919e32689dca849ebfcb4f71f5e91e18f840bd49a88dc157a14/ruamel.yaml-0.15.46.tar.gz"
+    sha256 "8f048085a58ca59353c2c283e5f14af387ab6a1a7ae5d6ec26056bc2e7a396f0"
   end
 
   resource "six" do
@@ -129,13 +130,13 @@ class Mitmproxy < Formula
   end
 
   resource "sortedcontainers" do
-    url "https://files.pythonhosted.org/packages/08/a1/1c601da78d471b31682b842ece48a87ef71217d94fef6bd492bfff39797d/sortedcontainers-1.5.10.tar.gz"
-    sha256 "566cf5f8dbada3aed99737a19d98f03d15d76bf2a6c27e4fb0f4a718a99be761"
+    url "https://files.pythonhosted.org/packages/94/17/39a70184c2dbdb844db6c58c51cb3c9bc572cc08642646e77f0f1bda143c/sortedcontainers-2.0.4.tar.gz"
+    sha256 "607294c6e291a270948420f7ffa1fb3ed47384a4c08db6d1e9c92d08a6981982"
   end
 
   resource "tornado" do
-    url "https://files.pythonhosted.org/packages/cf/d1/3be271ae5eba9fb59df63c9891fdc7d8044b999e8ac145994cdbfd2ae66a/tornado-5.0.2.tar.gz"
-    sha256 "1b83d5c10550f2653380b4c77331d6f8850f287c4f67d7ce1e1c639d9222fbc7"
+    url "https://files.pythonhosted.org/packages/45/ec/f2a03a0509bcfca336bef23a3dab0d07504893af34fd13064059ba4a0503/tornado-5.1.tar.gz"
+    sha256 "4f66a2172cb947387193ca4c2c3e19131f1c70fa8be470ddbbd9317fd0801582"
   end
 
   resource "urwid" do
@@ -150,6 +151,7 @@ class Mitmproxy < Formula
 
   def install
     venv = virtualenv_create(libexec, "python3")
+    venv.pip_install resource("cffi")
     venv.pip_install resources
     venv.pip_install_and_link buildpath
   end

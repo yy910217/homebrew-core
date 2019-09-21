@@ -1,20 +1,18 @@
 class Suil < Formula
   desc "Lightweight C library for loading and wrapping LV2 plugin UIs"
   homepage "https://drobilla.net/software/suil/"
-  url "https://download.drobilla.net/suil-0.10.0.tar.bz2"
-  sha256 "9895c531f80c7e89a2b4b47de589d73b70bf48db0b0cfe56e5d54237ea4b8848"
-  revision 1
+  url "https://download.drobilla.net/suil-0.10.4.tar.bz2"
+  sha256 "a1e9899012790eef8867b5475853d76689b246cca88a99ac0d379a6c0d85c72b"
 
   bottle do
-    sha256 "836f6d8ad66cca4de66cd78c45205829627ee370b5485c0ef878bc9473d24ba6" => :high_sierra
-    sha256 "babe1c998fd93f29b86a767e01ad1518b95e74e17769b517c092ed4cbc0878bf" => :sierra
-    sha256 "639934ea8fd85b8968cf33838be1f399b7479e844fef972d4fca0ba2ab8a4bf4" => :el_capitan
+    sha256 "5edd9d88d7fbac6909430c73ffdcdf1ea3bc8ed7ccad2ffe5e132a256fb92a3b" => :mojave
+    sha256 "7cd481bd8924581cb61e3fcfd9fd6811d898c6b2dc18aae80007dc75e11a7671" => :high_sierra
+    sha256 "22ad8a4f9858b90574bd1f1e9028d37a37003a4e5b211baa3a2f400dedc65e38" => :sierra
   end
 
   depends_on "pkg-config" => :build
+  depends_on "gtk+"
   depends_on "lv2"
-  depends_on "gtk+" => :recommended
-  depends_on :x11 => :optional
 
   def install
     system "./waf", "configure", "--prefix=#{prefix}"

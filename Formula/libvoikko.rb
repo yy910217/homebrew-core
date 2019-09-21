@@ -1,24 +1,21 @@
 class Libvoikko < Formula
   desc "Linguistic software and Finnish dictionary"
   homepage "https://voikko.puimula.org/"
-  url "https://www.puimula.org/voikko-sources/libvoikko/libvoikko-4.1.1.tar.gz"
-  sha256 "bb179360abdb92f9459f4d4090e56c9d9d8a3ebe9161a4c4bcd19971d59f9124"
+  url "https://www.puimula.org/voikko-sources/libvoikko/libvoikko-4.2.tar.gz"
+  sha256 "f13c59825f36152f388cd96f638e447744199775277f4e6bcd0b9483f0eebeca"
   revision 1
 
   bottle do
     cellar :any
-    sha256 "33c8fc6bc91efd0288cbc470b7c39aa2a9ab47dcfc75a5f7d09ccd493411eafb" => :high_sierra
-    sha256 "7f734e1e1b0e20858d744b654975c403679ba3833cae41f5214c4e5ae31e4847" => :sierra
-    sha256 "8ce41d927ef6b6cc3e27bfd40bb898efeb069c2314ac9d9a2b349246ec0165e6" => :el_capitan
-    sha256 "b0f9d5753691aa1af8bb864f5b3ca8cc753da9e2dfdf47f4dad98394f2201811" => :yosemite
+    sha256 "00d30a497ca4a6887f88cdefdd459fed0ca503a3b485d3586660767b0be885c5" => :mojave
+    sha256 "af7ed79bbb228c0b422c0956d4ec4acf95a7832482b835c900501bb77b8aebb6" => :high_sierra
+    sha256 "91b08ddb3f25562420d1b135cf5dd026698c27d5c0dbd4fc5dc5000e6585e932" => :sierra
   end
 
+  depends_on "foma" => :build
   depends_on "pkg-config" => :build
   depends_on "python" => :build
-  depends_on "foma" => :build
   depends_on "hfstospell"
-
-  needs :cxx11
 
   resource "voikko-fi" do
     url "https://www.puimula.org/voikko-sources/voikko-fi/voikko-fi-2.1.tar.gz"

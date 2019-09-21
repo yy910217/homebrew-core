@@ -3,22 +3,20 @@ class Supersonic < Formula
   homepage "https://code.google.com/archive/p/supersonic/"
   url "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/supersonic/supersonic-0.9.4.tar.gz"
   sha256 "1592dfd2dc73f0b97298e0d25e51528dc9a94e9e7f4ab525569f63db0442d769"
-  revision 7
+  revision 11
 
   bottle do
     cellar :any
-    sha256 "34c2702ea62cfd75c2c5cab31fef4e85c416ccd84ebc70c2a7953a6a4a31dfcc" => :high_sierra
-    sha256 "01ed3df20216556094e8a22209a08a1f60a5b01848f9b52ddbe65fd90e1e6e5e" => :sierra
-    sha256 "9bd0c97e669fb3a06c16c8b2118c4cb1535db4403c481c5d2f4a7fc2e200315d" => :el_capitan
+    sha256 "00cc0ceaf8dd32e31f007ab2722c862d3ffb0e05fb9271af854766bb9de31a8c" => :mojave
+    sha256 "e7a73d26fc55cc2f9dde20db4fe258904cc0f1f43e07d86115f9d86a6cd32563" => :high_sierra
+    sha256 "a3bd8df521302b7f8c896c54844cb8e8bdcf5fe75948af758c11798a062eabd8" => :sierra
   end
 
   depends_on "pkg-config" => :build
   depends_on "boost"
-  depends_on "glog"
   depends_on "gflags"
-  depends_on "protobuf"
-
-  needs :cxx11
+  depends_on "glog"
+  depends_on "protobuf@3.1"
 
   def install
     ENV.cxx11
@@ -106,7 +104,11 @@ class Supersonic < Formula
           return 0;
       }
     EOS
-    system ENV.cxx, "test.cpp", "-std=c++1y", "-stdlib=libc++", "-L#{lib}", "-lsupersonic", "-lglog", "-lprotobuf", "-lboost_system", "-o", "test"
+    system ENV.cxx, "test.cpp", "-std=c++1y", "-stdlib=libc++", "-L#{lib}", "-lsupersonic",
+                    "-L#{Formula["glog"].opt_lib}", "-lglog",
+                    "-I#{Formula["protobuf@3.1"].opt_include}",
+                    "-L#{Formula["protobuf@3.1"].opt_lib}", "-lprotobuf",
+                    "-L#{Formula["boost"].opt_lib}", "-lboost_system", "-o", "test"
     system "./test"
   end
 end

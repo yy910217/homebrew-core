@@ -1,23 +1,33 @@
 class Gtkspell3 < Formula
   desc "Gtk widget for highlighting and replacing misspelled words"
   homepage "https://gtkspell.sourceforge.io/"
-  url "https://downloads.sourceforge.net/project/gtkspell/3.0.9/gtkspell3-3.0.9.tar.xz"
-  sha256 "a4f4a4a2789f7499563e26d96b22d8085222ebe278da47d026b2de782b8b4d26"
-  revision 3
+  url "https://downloads.sourceforge.net/project/gtkspell/3.0.10/gtkspell3-3.0.10.tar.xz"
+  sha256 "b040f63836b347eb344f5542443dc254621805072f7141d49c067ecb5a375732"
+  revision 1
 
   bottle do
-    sha256 "ab277eb4f040f5032fdcf73dc1c7ba270398753c2e0c1cd994df348226bc0740" => :high_sierra
-    sha256 "faf983f8d91c4419199e27a3ccb49c8427b4d51d488cf1734c7db6b3f39f72b3" => :sierra
-    sha256 "63b6f8d3dc5fc4b01348f91b79013ff3db1b834163c93476609dfd13e6e0930f" => :el_capitan
+    rebuild 1
+    sha256 "72058aac10dc67a621514f4eb341b0a3c803755935915d77aef815f8d4c1845b" => :mojave
+    sha256 "9c986007e2fc1c21b827700ef8630b147598c170445da5bdbb714c1f8a472a73" => :high_sierra
+    sha256 "3bda502ee3a1a491fba935ad79b7651e55bf65b903b85d55c3761943e4ef433c" => :sierra
   end
 
-  depends_on "pkg-config" => :build
+  depends_on "autoconf" => :build
+  depends_on "automake" => :build
+  depends_on "gobject-introspection" => :build
   depends_on "intltool" => :build
-  depends_on "gtk+3"
+  depends_on "libtool" => :build
+  depends_on "pkg-config" => :build
+  depends_on "vala" => :build
   depends_on "enchant"
+  depends_on "gtk+3"
 
   def install
-    system "./configure", "--disable-debug", "--prefix=#{prefix}"
+    system "autoreconf", "-fi"
+    system "./configure", "--disable-dependency-tracking",
+                          "--disable-debug",
+                          "--enable-vala",
+                          "--prefix=#{prefix}"
     system "make", "install"
   end
 
@@ -39,6 +49,7 @@ class Gtkspell3 < Formula
     gettext = Formula["gettext"]
     glib = Formula["glib"]
     gtkx3 = Formula["gtk+3"]
+    harfbuzz = Formula["harfbuzz"]
     libepoxy = Formula["libepoxy"]
     libpng = Formula["libpng"]
     pango = Formula["pango"]
@@ -55,6 +66,7 @@ class Gtkspell3 < Formula
       -I#{glib.opt_include}/glib-2.0
       -I#{glib.opt_lib}/glib-2.0/include
       -I#{gtkx3.opt_include}/gtk-3.0
+      -I#{harfbuzz.opt_include}/harfbuzz
       -I#{include}/gtkspell-3.0
       -I#{libepoxy.opt_include}
       -I#{libpng.opt_include}/libpng16

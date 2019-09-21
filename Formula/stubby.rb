@@ -1,14 +1,14 @@
 class Stubby < Formula
   desc "DNS privacy enabled stub resolver service based on getdns"
   homepage "https://dnsprivacy.org/wiki/display/DP/DNS+Privacy+Daemon+-+Stubby"
-  url "https://github.com/getdnsapi/stubby/archive/v0.2.3.tar.gz"
-  sha256 "5fbe10f421f1313b5e2259b0eec96785af0c5b460431cf86bb6450a11cb3f473"
+  url "https://github.com/getdnsapi/stubby/archive/v0.2.6.tar.gz"
+  sha256 "634b0b9fb8f36416e210fa65800a6c1672bcf9f4f276a042ccf89567ad8ef781"
   head "https://github.com/getdnsapi/stubby.git", :branch => "develop"
 
   bottle do
-    sha256 "0a09202232898b51e34ccf898e794eca7ebe920209b535a32b224c28cc188552" => :high_sierra
-    sha256 "e027e65ca40fbc66101c7e18889588a825d7b2f528238a616f441c42d297807f" => :sierra
-    sha256 "7a1223ce531d26cd4c97690b2c966ef583b8350e508623dee27da418917a0597" => :el_capitan
+    sha256 "aa05e8445978d4d7391addd20666f7ab141e9587e4585d7873052acb68aed123" => :mojave
+    sha256 "e336da47ce50d92a0c3f445db4200dad8f99ba406ef454abfffb4085601e9e71" => :high_sierra
+    sha256 "685cec7e37bf310b77da3680fa81d1bfc920928289c4905eb5c6899e40f6f801" => :sierra
   end
 
   depends_on "autoconf" => :build
@@ -30,7 +30,7 @@ class Stubby < Formula
 
   def plist; <<~EOS
     <?xml version="1.0" encoding="UTF-8"?>
-    <!DOCTYPE plist PUBLIC "-/Apple/DTD PLIST 1.0/EN" "http:/www.apple.com/DTDs/PropertyList-1.0.dtd">
+    <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
     <plist version="1.0">
       <dict>
         <key>Label</key>
@@ -44,7 +44,6 @@ class Stubby < Formula
           <string>#{opt_bin}/stubby</string>
           <string>-C</string>
           <string>#{etc}/stubby/stubby.yml</string>
-          <string>-l</string>
         </array>
         <key>StandardErrorPath</key>
         <string>#{var}/log/stubby/stubby.log</string>
@@ -52,7 +51,7 @@ class Stubby < Formula
         <string>#{var}/log/stubby/stubby.log</string>
       </dict>
     </plist>
-    EOS
+  EOS
   end
 
   test do

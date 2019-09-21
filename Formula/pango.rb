@@ -1,45 +1,39 @@
 class Pango < Formula
   desc "Framework for layout and rendering of i18n text"
-  homepage "http://www.pango.org/"
-  url "https://download.gnome.org/sources/pango/1.42/pango-1.42.1.tar.xz"
-  sha256 "915a6756b298578ff27c7a6393f8c2e62e6e382f9411f2504d7af1a13c7bce32"
+  homepage "https://www.pango.org/"
+  url "https://download.gnome.org/sources/pango/1.44/pango-1.44.6.tar.xz"
+  sha256 "3e1e41ba838737e200611ff001e3b304c2ca4cdbba63d200a20db0b0ddc0f86c"
 
   bottle do
-    sha256 "74825fefb505c6d581915966256fbd11039e4e6ff169a49dcd0ffa67dbb970f6" => :high_sierra
-    sha256 "e437556a5d9271325d90a82680919673889809d0b5da758830230f27ee0f98c8" => :sierra
-    sha256 "27a07f281416d178c5178cb0d63fd8a80c72b2c54aad68f0508c52850fc6289a" => :el_capitan
+    sha256 "e0a6d660cfe84def4210dd7576760e5d823638f5c175997f0794575cce76de53" => :mojave
+    sha256 "0b8db1ab6163b3df21e502f292d36208360b973d7cf2f068d25c5ebc7ae72cbc" => :high_sierra
+    sha256 "1454816fc5d14ac948d5c2f8b211651650a01515c57407d332cc7d3e40b7221b" => :sierra
   end
 
   head do
-    url "https://git.gnome.org/browse/pango.git"
-
-    depends_on "automake" => :build
-    depends_on "autoconf" => :build
-    depends_on "libtool" => :build
-    depends_on "gtk-doc" => :build
+    url "https://gitlab.gnome.org/GNOME/pango.git"
   end
 
   depends_on "gobject-introspection" => :build
+  depends_on "meson" => :build
+  depends_on "ninja" => :build
   depends_on "pkg-config" => :build
   depends_on "cairo"
-  depends_on "fribidi"
   depends_on "fontconfig"
+  depends_on "fribidi"
   depends_on "glib"
   depends_on "harfbuzz"
 
   def install
-    system "./autogen.sh" if build.head?
-    system "./configure", "--disable-dependency-tracking",
-                          "--disable-silent-rules",
-                          "--prefix=#{prefix}",
-                          "--with-html-dir=#{share}/doc",
-                          "--enable-introspection=yes",
-                          "--enable-man",
-                          "--enable-static",
-                          "--without-xft"
-
-    system "make"
-    system "make", "install"
+    mkdir "build" do
+      system "meson", "--prefix=#{prefix}",
+                      "-Ddefault_library=both",
+                      "-Dintrospection=true",
+                      "-Duse_fontconfig=true",
+                      ".."
+      system "ninja", "-v"
+      system "ninja", "install", "-v"
+    end
   end
 
   test do
@@ -62,6 +56,7 @@ class Pango < Formula
     freetype = Formula["freetype"]
     gettext = Formula["gettext"]
     glib = Formula["glib"]
+    harfbuzz = Formula["harfbuzz"]
     libpng = Formula["libpng"]
     pixman = Formula["pixman"]
     flags = %W[
@@ -71,6 +66,7 @@ class Pango < Formula
       -I#{gettext.opt_include}
       -I#{glib.opt_include}/glib-2.0
       -I#{glib.opt_lib}/glib-2.0/include
+      -I#{harfbuzz.opt_include}/harfbuzz
       -I#{include}/pango-1.0
       -I#{libpng.opt_include}/libpng16
       -I#{pixman.opt_include}/pixman-1

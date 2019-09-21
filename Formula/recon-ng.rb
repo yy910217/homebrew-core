@@ -3,17 +3,18 @@ class ReconNg < Formula
 
   desc "Web Reconnaissance Framework"
   homepage "https://bitbucket.org/LaNMaSteR53/recon-ng"
-  url "https://bitbucket.org/LaNMaSteR53/recon-ng/get/v4.9.3.tar.gz"
-  sha256 "e841bc43c5097f3506d548d23a538411f9e5712ec5dbdb2be2d3fb0a863f7faf"
+  url "https://bitbucket.org/LaNMaSteR53/recon-ng/get/v4.9.6.tar.gz"
+  sha256 "0192a9882bb9800f2177fcdb31cda8031bbc3895db9fe4a0966ebdd771b66915"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "1f64d3f5bbfb90e586bf9330544206b38006a4a71ce84bd96f5d9214bd39d6f1" => :high_sierra
-    sha256 "2c68dcdf33ff768dca3197e71836fdf24fc1a7078d06590c46ab1e9a64cac6ad" => :sierra
-    sha256 "6ec0a0c8e4b4340e0e53baa5e944c61e3096caa1391fce82fd4763584c67bc98" => :el_capitan
+    sha256 "cc15ed1f3df302f56e265086bef3605644c5ef54b9b74a96c824f1f04f75210f" => :mojave
+    sha256 "6c91d9d22ee6325bdecf8e7b54a4c12db28c5dbc660b8be2794f08ae9c81d9c7" => :high_sierra
+    sha256 "eb34c9aeab620bbc24b7eb14524fc03000a494df266818f45a8a07bfe4e01221" => :sierra
   end
 
-  depends_on "python@2"
+  # Dependency "mechanize" only support Python 2
+  depends_on "python@2" # does not support Python 3
 
   ### setup_requires dependencies
   resource "dicttoxml" do
@@ -22,13 +23,13 @@ class ReconNg < Formula
   end
 
   resource "dnspython" do
-    url "https://files.pythonhosted.org/packages/e4/96/a598fa35f8a625bc39fed50cdbe3fd8a52ef215ef8475c17cabade6656cb/dnspython-1.15.0.zip"
-    sha256 "40f563e1f7a7b80dc5a4e76ad75c23da53d62f1e15e6e517293b04e1f84ead7c"
+    url "https://files.pythonhosted.org/packages/ec/c5/14bcd63cb6d06092a004793399ec395405edf97c2301dfdc146dfbd5beed/dnspython-1.16.0.zip"
+    sha256 "36c5e8e38d4369a08b6780b7f27d790a292b2b08eea01607865bf0936c558e01"
   end
 
   resource "Flask" do
-    url "https://files.pythonhosted.org/packages/eb/12/1c7bd06fcbd08ba544f25bf2c6612e305a70ea51ca0eda8007344ec3f123/Flask-0.12.2.tar.gz"
-    sha256 "49f44461237b69ecd901cc7ce66feea0319b9158743dd27a2899962ab214dac1"
+    url "https://files.pythonhosted.org/packages/e9/96/8f6d83828a77306a119e12b215a7b0637c955b408fb1c161311a6891b958/Flask-1.0.3.tar.gz"
+    sha256 "ad7c6d841e64296b962296c2c2dabc6543752985727af86a975072dea984b6f3"
   end
 
   resource "jsonrpclib" do
@@ -37,18 +38,18 @@ class ReconNg < Formula
   end
 
   resource "lxml" do
-    url "https://files.pythonhosted.org/packages/e1/4c/d83979fbc66a2154850f472e69405572d89d2e6a6daee30d18e83e39ef3a/lxml-4.1.1.tar.gz"
-    sha256 "940caef1ec7c78e0c34b0f6b94fe42d0f2022915ffc78643d28538a5cfd0f40e"
+    url "https://files.pythonhosted.org/packages/da/b5/d3e0d22649c63e92cb0902847da9ae155c1e801178ab5d272308f35f726e/lxml-4.3.4.tar.gz"
+    sha256 "3ce1c49d4b4a7bc75fb12acb3a6247bb7a91fe420542e6d671ba9187d12a12c2"
   end
 
   resource "mechanize" do
-    url "https://files.pythonhosted.org/packages/a7/ac/7f54bcf39b62cd56dec461f4c5e2d7c096508ab2b283c7ee099a466e1b9f/mechanize-0.3.6.tar.gz"
-    sha256 "654e705157156c1f316601ea4f7ab27e96713a8a4dabe1604e6cc8d48e0aa1e8"
+    url "https://files.pythonhosted.org/packages/79/6b/c256ffe2abd560a2857bd66131e01ddfb4b123510a0100a495ded8f191cc/mechanize-0.4.2.tar.gz"
+    sha256 "b680ca1b4fabe5ef52024d120f40b8e2ed7d175ed4d67225d2c477dac7c7a58b"
   end
 
   resource "olefile" do
-    url "https://files.pythonhosted.org/packages/d3/8a/e0f0e56d6a542dd987f9290ef7b5164636ee597ce8c2932c19c78292d5ec/olefile-0.45.1.zip"
-    sha256 "2b6575f5290de8ab1086f8c5490591f7e0885af682c7c1793bdaf6e64078d385"
+    url "https://files.pythonhosted.org/packages/34/81/e1ac43c6b45b4c5f8d9352396a14144bba52c8fec72a80f425f6a4d653ad/olefile-0.46.zip"
+    sha256 "133b031eaf8fd2c9399b78b8bc5b8fcbe4c31e85295749bb17a87cba8f3c3964"
   end
 
   resource "PyPDF2" do
@@ -67,8 +68,8 @@ class ReconNg < Formula
   end
 
   resource "XlsxWriter" do
-    url "https://files.pythonhosted.org/packages/e4/63/e53deacc293c7fadf95b840471f4bd56573d084af993e6aeeee2d5f1bd32/XlsxWriter-1.0.2.tar.gz"
-    sha256 "a26bbbafff88abffce592ffd5dfaa4c9f08dc44ef4afbf45c70d3e270325f856"
+    url "https://files.pythonhosted.org/packages/39/2f/9018f9980416afaef326c2399c2c583f292cfb4a15f0b67059f4c0f9aa99/XlsxWriter-1.1.8.tar.gz"
+    sha256 "5ec6aa71f6ae4b6298376d8b6a56ca9cdcb8b80323a444212226447aed4fa10f"
   end
 
   def install

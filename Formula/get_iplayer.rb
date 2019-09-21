@@ -1,22 +1,21 @@
 class GetIplayer < Formula
   desc "Utility for downloading TV and radio programmes from BBC iPlayer"
   homepage "https://github.com/get-iplayer/get_iplayer"
-  url "https://github.com/get-iplayer/get_iplayer/archive/v3.14.tar.gz"
-  sha256 "6436a942b819aaa4b3df56f990812124909476142febe6432304e7a621411522"
-  revision 1
+  url "https://github.com/get-iplayer/get_iplayer/archive/v3.22.tar.gz"
+  sha256 "299de0686f7a4848e2aef22f0647ba35b8114f573334dd3e1a7e331052145593"
   head "https://github.com/get-iplayer/get_iplayer.git", :branch => "develop"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "0ba5c91219bcc6591fef339adc2911e8586417dc2a1bb9c1ad714a1c19e17cd4" => :high_sierra
-    sha256 "db39518eb4fe8a45613c164377c7a87a4816b0c3ac72883066279774d13422c4" => :sierra
-    sha256 "91f8d9272c2b4e760559d038e2d034236e69c654f787e307445409ea2a9e1d14" => :el_capitan
+    sha256 "57c44b5c966174dd88c6e3f88692dbe39f53ac71a356f97ef3b547014709df55" => :mojave
+    sha256 "09d4fd76bd60877e1919495b70080ef96e71e5128c6c9d1d7ddf641c01a99b42" => :high_sierra
+    sha256 "66759745236dcb18d3b829ae22fe8d449389667dd02378e57df1b2842bad6e09" => :sierra
   end
 
-  depends_on "atomicparsley" => :recommended
-  depends_on "ffmpeg" => :recommended
-
+  depends_on "atomicparsley"
+  depends_on "ffmpeg"
   depends_on :macos => :yosemite
+  uses_from_macos "libxml2"
 
   resource "IO::Socket::IP" do
     url "https://cpan.metacpan.org/authors/id/P/PE/PEVANS/IO-Socket-IP-0.39.tar.gz"
@@ -24,13 +23,13 @@ class GetIplayer < Formula
   end
 
   resource "IO::Socket::SSL" do
-    url "https://cpan.metacpan.org/authors/id/S/SU/SULLR/IO-Socket-SSL-2.056.tar.gz"
-    sha256 "91451ecc28b243a78b438f0a42db24c4b60a86f088879b38e40bdbd697818259"
+    url "https://cpan.metacpan.org/authors/id/S/SU/SULLR/IO-Socket-SSL-2.066.tar.gz"
+    sha256 "0d47064781a545304d5dcea5dfcee3acc2e95a32e1b4884d80505cde8ee6ebcd"
   end
 
   resource "Mojolicious" do
-    url "https://cpan.metacpan.org/authors/id/S/SR/SRI/Mojolicious-7.77.tar.gz"
-    sha256 "b6416de94938ee621e355c36fd837704dd7cf15846148dfbbfb82e8710af846b"
+    url "https://cpan.metacpan.org/authors/id/S/SR/SRI/Mojolicious-7.94.tar.gz"
+    sha256 "171a1741f3ea57519657bfb1e40a5290149d7c7d69a1131464c7db23029e8f6e"
   end
 
   resource "Mozilla::CA" do

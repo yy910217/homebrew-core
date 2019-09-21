@@ -1,14 +1,15 @@
 class GstPluginsUgly < Formula
   desc "Library for constructing graphs of media-handling components"
   homepage "https://gstreamer.freedesktop.org/"
-  url "https://gstreamer.freedesktop.org/src/gst-plugins-ugly/gst-plugins-ugly-1.14.0.tar.xz"
-  sha256 "3fb9ea5fc8a2de4b3eaec4128d71c6a2d81dd19befe1cd87cb833b98bcb542d1"
+  url "https://gstreamer.freedesktop.org/src/gst-plugins-ugly/gst-plugins-ugly-1.16.0.tar.xz"
+  sha256 "e30964c5f031c32289e0b25e176c3c95a5737f2052dfc81d0f7427ef0233a4c2"
   revision 1
 
   bottle do
-    sha256 "c044dce7cd68dcd9a1771c580ccc09c7a112c11cf0157a685c200b79b47ddef7" => :high_sierra
-    sha256 "cc8902278d517194478ed6beabba0920cced90b9b502def335f6bb3002ada28d" => :sierra
-    sha256 "a89ea2c077a7d99a81b549af1afe7b663249756bab460b0cc5c08edbf10b9e36" => :el_capitan
+    rebuild 1
+    sha256 "d61a54c074e563f514f059689458d42929d6ffd19792d53cc1e02944dc4c9c86" => :mojave
+    sha256 "3fb3fe752386d5ac0aad12fdaaa7f28bba2637c32407a382fccc569cb03433ce" => :high_sierra
+    sha256 "800581491a681c457a5be6046c3d3d8965cfbbe93e74deccd8523a5381c85e06" => :sierra
   end
 
   head do
@@ -20,33 +21,16 @@ class GstPluginsUgly < Formula
   end
 
   depends_on "pkg-config" => :build
+  depends_on "flac"
   depends_on "gettext"
   depends_on "gst-plugins-base"
-
-  # The set of optional dependencies is based on the intersection of
-  # gst-plugins-ugly-0.10.17/REQUIREMENTS and Homebrew formulae
-  depends_on "jpeg" => :recommended
-  depends_on "dirac" => :optional
-  depends_on "mad" => :optional
-  depends_on "libvorbis" => :optional
-  depends_on "cdparanoia" => :optional
-  depends_on "lame" => :optional
-  depends_on "two-lame" => :optional
-  depends_on "libshout" => :optional
-  depends_on "aalib" => :optional
-  depends_on "libcaca" => :optional
-  depends_on "libdvdread" => :optional
-  depends_on "libmpeg2" => :optional
-  depends_on "a52dec" => :optional
-  depends_on "liboil" => :optional
-  depends_on "flac" => :optional
-  depends_on "gtk+" => :optional
-  depends_on "pango" => :optional
-  depends_on "theora" => :optional
-  depends_on "libmms" => :optional
-  depends_on "x264" => :optional
-  depends_on "opencore-amr" => :optional
-  # Does not work with libcdio 0.9
+  depends_on "jpeg"
+  depends_on "libmms"
+  depends_on "libshout"
+  depends_on "libvorbis"
+  depends_on "pango"
+  depends_on "theora"
+  depends_on "x264"
 
   def install
     args = %W[
@@ -54,22 +38,13 @@ class GstPluginsUgly < Formula
       --mandir=#{man}
       --disable-debug
       --disable-dependency-tracking
+      --disable-amrnb
+      --disable-amrwb
     ]
 
     if build.head?
       ENV["NOCONFIGURE"] = "yes"
       system "./autogen.sh"
-    end
-
-    if build.with? "opencore-amr"
-      # Fixes build error, missing includes.
-      # https://github.com/Homebrew/homebrew/issues/14078
-      nbcflags = `pkg-config --cflags opencore-amrnb`.chomp
-      wbcflags = `pkg-config --cflags opencore-amrwb`.chomp
-      ENV["AMRNB_CFLAGS"] = nbcflags + "-I#{HOMEBREW_PREFIX}/include/opencore-amrnb"
-      ENV["AMRWB_CFLAGS"] = wbcflags + "-I#{HOMEBREW_PREFIX}/include/opencore-amrwb"
-    else
-      args << "--disable-amrnb" << "--disable-amrwb"
     end
 
     system "./configure", *args

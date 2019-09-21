@@ -1,26 +1,23 @@
 class Blink1 < Formula
   desc "Control blink(1) indicator light"
   homepage "https://blink1.thingm.com/"
-  url "https://github.com/todbot/blink1.git",
-      :tag => "v1.98a",
-      :revision => "de6c0a951af253cb4827604ef3ae89b1643efe28"
-  version "1.98a"
-  head "https://github.com/todbot/blink1.git"
+  url "https://github.com/todbot/blink1-tool.git",
+      :tag      => "v2.0.3",
+      :revision => "8a6503846da3bd4ca342674b07ae7dc3df8c2f88"
+  head "https://github.com/todbot/blink1-tool.git"
 
   bottle do
     cellar :any
-    sha256 "4aef741b64215b16bb51483efd8a7a17f4cdfba14c266b820e17c7e536314e03" => :high_sierra
-    sha256 "6ece9848387309cce4fa52d91600ea4ab28dc4fcc2564f8883672eb5d56ec45f" => :sierra
-    sha256 "707f84ee9c301ff3f3736ed5a4b0decba0533caa115241f43118839c445c7278" => :el_capitan
+    sha256 "a2846d908090afcb7263f40ad7417c075a1d410434daef733e3891880ffa65ff" => :mojave
+    sha256 "e653c071bae006ae27f1452f7f824529ca43a8adfe04412020999371a2d64983" => :high_sierra
+    sha256 "35d89ca09af8184a60a70b83fb41a88f436463ecb4f0461e6f91b8cd04770075" => :sierra
   end
 
   def install
-    cd "commandline" do
-      system "make"
-      bin.install "blink1-tool"
-      lib.install "libBlink1.dylib"
-      include.install "blink1-lib.h"
-    end
+    system "make"
+    bin.install "blink1-tool"
+    lib.install "libBlink1.dylib"
+    include.install "blink1-lib.h"
   end
 
   test do

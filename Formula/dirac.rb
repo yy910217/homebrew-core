@@ -3,12 +3,13 @@ class Dirac < Formula
   homepage "https://sourceforge.net/projects/dirac/"
   url "https://downloads.sourceforge.net/project/dirac/dirac-codec/Dirac-1.0.2/dirac-1.0.2.tar.gz"
   mirror "https://launchpad.net/ubuntu/+archive/primary/+files/dirac_1.0.2.orig.tar.gz"
-  mirror "https://mirrors.ocf.berkeley.edu/debian/pool/main/d/dirac/dirac_1.0.2.orig.tar.gz"
+  mirror "https://deb.debian.org/debian/pool/main/d/dirac/dirac_1.0.2.orig.tar.gz"
   sha256 "816b16f18d235ff8ccd40d95fc5b4fad61ae47583e86607932929d70bf1f00fd"
 
   bottle do
     cellar :any
     rebuild 1
+    sha256 "c018586bbfdeb10487adc1c62bdd74138b9d11195064bd2a07d458a55d770a06" => :mojave
     sha256 "9413ec8e068d4c8e30d679a62af9779a09de385e2287acebacf9e5c56e80a50a" => :high_sierra
     sha256 "09b846fe4069e971ec6d10668d97ac599cb555e5799f3ba3076d0d088e1f78cf" => :sierra
     sha256 "8f4414614755f863d3ba0f43d6415684fbc00976ae24c7e45c88fe736be918d2" => :el_capitan

@@ -2,21 +2,18 @@ class Ipfs < Formula
   desc "Peer-to-peer hypermedia protocol"
   homepage "https://ipfs.io/"
   url "https://github.com/ipfs/go-ipfs.git",
-      :tag => "v0.4.15",
-      :revision => "7853e53860805e08a212d78c4baa5d59bff99ba8"
+      :tag      => "v0.4.22",
+      :revision => "4e981576b71665f2a9ba71fbf479204802a03a37"
   head "https://github.com/ipfs/go-ipfs.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "93256caf3062d307bd1fffe99c7dbb5dd5d454f36ec2611594be54c0a63ab7f2" => :high_sierra
-    sha256 "6112ae0ca442b1b664022c4d39d75b8fef1a1b86d3fb9d117422b8ee20c1a959" => :sierra
-    sha256 "88504f1f55c3a4e7a7253f1c9efa1e1b58e576ec79b308146c44cd9913eb8c74" => :el_capitan
+    sha256 "b855c4ffc4c1261fb1a33960498f87ec4d17a6f48262a60fb6983311e8e3e87c" => :mojave
+    sha256 "0e20eda5b040aa8ce134d95284e16cd8913438046321a867908372dfa8941350" => :high_sierra
+    sha256 "16a0b8ca56ea1b6e90f2d489c298075c34bffabed60b14cb2d7c31d0e492a1b3" => :sierra
   end
 
   depends_on "go" => :build
-  depends_on "godep" => :build
-  depends_on "gx"
-  depends_on "gx-go"
 
   def install
     ENV["GOPATH"] = buildpath
@@ -43,10 +40,10 @@ class Ipfs < Formula
       <true/>
     </dict>
     </plist>
-    EOS
+  EOS
   end
 
   test do
-    system bin/"ipfs", "version"
+    assert_match "initializing IPFS node", shell_output(bin/"ipfs init")
   end
 end
